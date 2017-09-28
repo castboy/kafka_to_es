@@ -25,6 +25,7 @@ func kafkaToEs(topic string, partition int) {
 		if nil == alertErr && nil == xdrErr {
 			obj := esObj(bytes, alert, xdr)
 			fmt.Println(obj)
+			toEs(obj)
 		} else {
 			time.Sleep(5 * time.Second)
 		}

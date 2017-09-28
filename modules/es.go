@@ -1,7 +1,10 @@
 package modules
 
 import (
+	"context"
 	"encoding/json"
+
+	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 func parseAlert(msg []byte) (VdsAlert, error) {
@@ -23,4 +26,20 @@ func esObj(msg []byte, alert VdsAlert, xdr BackendObj) VdsAlert {
 	alert.Xdr = xdrSlice
 
 	return alert
+}
+
+func toEs(obj VdsAlert) {
+	ctx := context.Background()
+	client, err := elastic.NewClient(elastic.SetURL("http://10.88.1.102:9200"))
+	if err != nil {
+	}
+
+	_, err = client.Index().
+		Index("apt").
+		Type("vds_alert").
+		BodyJson(obj).
+		Do(ctx)
+	if err != nil {
+		panic(err)
+	}
 }
