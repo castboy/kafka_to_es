@@ -10,4 +10,7 @@ import (
 func main() {
 	//	go RecordStatus()
 	modules.Kafka()
+	modules.Parallel()
+
+	modules.Wg.Wait()
 }

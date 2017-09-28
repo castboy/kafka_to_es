@@ -1,10 +1,8 @@
 package modules
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/optiopay/kafka"
 )
@@ -54,40 +52,19 @@ func initConsumers() {
 	}
 }
 
-func consume(consumer kafka.Consumer) {
-	for {
-		msg, err := consumer.Consume()
-		if nil != err {
-			time.Sleep(5 * time.Second)
-			fmt.Println("no data in topic")
-		} else {
-			var obj VdsAlertObj
-			err := json.Unmarshal(msg.Value, &obj)
-			if nil != err {
-				fmt.Println("alert decode err")
-			}
-			fmt.Println(obj.Alert)
-
-			var backendobj BackendObj
-			err = json.Unmarshal(msg.Value, &backendobj)
-			if nil != err {
-				fmt.Println("alert decode err")
-			}
-                        
-                        var xdrSlice = make([]BackendObj, 0)
-                        xdrSlice = append(xdrSlice, backendobj)
-
-                        obj.Alert.Xdr = xdrSlice
-                        
-			fmt.Println(obj.Alert)
-		}
+func consume(consumer kafka.Consumer) []byte {
+	var bytes []byte
+	msg, err := consumer.Consume()
+	if nil != err {
+	} else {
+		bytes = msg.Value
 	}
-
+	return bytes
 }
 
 func Kafka() {
 	host := conf.GetValue("kafka", "host")
 	initBroker(host)
 	initConsumers()
-	consume(consumers["vds-alert"][0])
+	//	consume(consumers["vds-alert"][0])
 }

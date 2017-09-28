@@ -15,20 +15,21 @@ type WafAlert struct {
 	Tags      []string     `json:"Tags"`
 	Rule      WafAlertRule `json:"Rule"`
 	Version   string       `json:"Version"`
+	Xdr       []BackendObj `json:"xdr"`
 }
 
 type VdsAlert struct {
-	Threatname       string `json:"Threatname"`
-	Local_threatname string `json:"Local_threatname"`
-	Local_vtype      string `json:"Local_vtype"`
-	Local_platfrom   string `json:"Local_platfrom"`
-	Local_vname      string `json:"Local_vname"`
-	Local_extent     string `json:"Local_extent"`
-	Local_enginetype string `json:"Local_enginetype"`
-	Local_logtype    string `json:"Local_logtype"`
-	Local_time       int    `json:"Local_time"`
-	Local_engineip   string `json:"Local_engineip"`
-        Xdr              []BackendObj `json:"xdr"`
+	Threatname       string       `json:"Threatname"`
+	Local_threatname string       `json:"Local_threatname"`
+	Local_vtype      string       `json:"Local_vtype"`
+	Local_platfrom   string       `json:"Local_platfrom"`
+	Local_vname      string       `json:"Local_vname"`
+	Local_extent     string       `json:"Local_extent"`
+	Local_enginetype string       `json:"Local_enginetype"`
+	Local_logtype    string       `json:"Local_logtype"`
+	Local_time       int          `json:"Local_time"`
+	Local_engineip   string       `json:"Local_engineip"`
+	Xdr              []BackendObj `json:"xdr"`
 }
 
 type WafAlertObj struct {
