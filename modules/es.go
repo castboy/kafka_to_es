@@ -32,9 +32,9 @@ func toEs(topic string, obj VdsAlert) {
 	var esType string
 	switch topic {
 	case "waf-alert":
-		esType := "waf_alert"
+		esType = "waf_alert"
 	case "vds-alert":
-		esType := "vds_alert"
+		esType = "vds_alert"
 	}
 
 	ctx := context.Background()
