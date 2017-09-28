@@ -27,7 +27,7 @@ func kafkaToEs(topic string, partition int) {
 			obj := esObj(bytes, alert, xdr)
 			bytes, _ := json.Marshal(obj)
 			fmt.Println(string(bytes))
-			toEs(obj)
+			toEs(topic, obj)
 		} else {
 			time.Sleep(5 * time.Second)
 		}

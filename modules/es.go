@@ -28,7 +28,15 @@ func esObj(msg []byte, alert VdsAlert, xdr BackendObj) VdsAlert {
 	return alert
 }
 
-func toEs(obj VdsAlert) {
+func toEs(topic string, obj VdsAlert) {
+	var esType string
+	switch topic {
+	case "waf-alert":
+		esType := "waf_alert"
+	case "vds-alert":
+		esType := "vds_alert"
+	}
+
 	ctx := context.Background()
 	client, err := elastic.NewClient(elastic.SetURL("http://10.88.1.102:9200"))
 	if err != nil {
@@ -36,7 +44,7 @@ func toEs(obj VdsAlert) {
 
 	_, err = client.Index().
 		Index("apt").
-		Type("vds_alert").
+		Type(esType).
 		BodyJson(obj).
 		Do(ctx)
 	if err != nil {
