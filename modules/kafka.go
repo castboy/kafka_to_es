@@ -3,6 +3,7 @@ package modules
 import (
 	"fmt"
 	"log"
+        "time"
 
 	"github.com/optiopay/kafka"
 )
@@ -40,9 +41,14 @@ func initBroker(localhost string) {
 }
 
 func initConsumers() {
+        for k, _ := range consumers {
+            consumers[k] = make([]kafka.Consumer, 0)
+        }
+
 	for t, v := range status {
 		for p, s := range v {
-			consumers[t][p], _ = initConsumer(t, int32(p), s)
+                        c, _ := initConsumer(t, int32(p), s)
+			consumers[t] = append(consumers[t], c)
 		}
 	}
 }
@@ -51,9 +57,11 @@ func consume(consumer kafka.Consumer) {
 	for {
 		msg, err := consumer.Consume()
 		if nil != err {
-			fmt.Println("no data in topic")
-		}
-		fmt.Println(msg.Value)
+                    time.Sleep(5 * time.Second)
+                    fmt.Println("no data in topic")
+		} else {
+                    fmt.Println(msg.Value)
+                }
 	}
 
 }
