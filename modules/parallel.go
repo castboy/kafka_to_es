@@ -3,6 +3,7 @@ package modules
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 var Wg sync.WaitGroup
@@ -19,7 +20,13 @@ func Parallel() {
 func kafkaToEs(topic string, partition int) {
 	for {
 		bytes := consume(consumers[topic][partition])
-		obj := esObj(bytes)
-		fmt.Println(obj)
+		alert, alertErr := parseAlert(bytes)
+		xdr, xdrErr := parseXdr(bytes)
+		if nil == alertErr && nil == xdrErr {
+			obj := esObj(bytes, alert, xdr)
+			fmt.Println(obj)
+		} else {
+			time.Sleep(5 * time.Second)
+		}
 	}
 }

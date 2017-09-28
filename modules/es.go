@@ -2,26 +2,25 @@ package modules
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
-func esObj(msg []byte) VdsAlert {
-	var obj VdsAlertObj
-	err := json.Unmarshal(msg, &obj)
-	if nil != err {
-		fmt.Println("alert decode err")
-	}
+func parseAlert(msg []byte) (VdsAlert, error) {
+	var alert VdsAlertObj
+	err := json.Unmarshal(msg, &alert)
+	return alert.Alert, err
+}
 
+func parseXdr(msg []byte) (BackendObj, error) {
 	var xdr BackendObj
-	err = json.Unmarshal(msg, &xdr)
-	if nil != err {
-		fmt.Println("alert decode err")
-	}
+	err := json.Unmarshal(msg, &xdr)
+	return xdr, err
+}
 
+func esObj(msg []byte, alert VdsAlert, xdr BackendObj) VdsAlert {
 	var xdrSlice = make([]BackendObj, 0)
 	xdrSlice = append(xdrSlice, xdr)
 
-	obj.Alert.Xdr = xdrSlice
+	alert.Xdr = xdrSlice
 
-	return obj.Alert
+	return alert
 }
