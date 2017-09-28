@@ -1,9 +1,10 @@
 package modules
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
-        "time"
+	"time"
 
 	"github.com/optiopay/kafka"
 )
@@ -41,13 +42,13 @@ func initBroker(localhost string) {
 }
 
 func initConsumers() {
-        for k, _ := range consumers {
-            consumers[k] = make([]kafka.Consumer, 0)
-        }
+	for k, _ := range consumers {
+		consumers[k] = make([]kafka.Consumer, 0)
+	}
 
 	for t, v := range status {
 		for p, s := range v {
-                        c, _ := initConsumer(t, int32(p), s)
+			c, _ := initConsumer(t, int32(p), s)
 			consumers[t] = append(consumers[t], c)
 		}
 	}
@@ -57,17 +58,21 @@ func consume(consumer kafka.Consumer) {
 	for {
 		msg, err := consumer.Consume()
 		if nil != err {
-                    time.Sleep(5 * time.Second)
-                    fmt.Println("no data in topic")
+			time.Sleep(5 * time.Second)
+			fmt.Println("no data in topic")
 		} else {
-                    fmt.Println(msg.Value)
-                }
+			var obj VdsAlertObj
+			err := json.Unmarshal(msg.Value, &obj)
+			if nil != err {
+				fmt.Println("alert decode err")
+			}
+			fmt.Println(obj)
+		}
 	}
 
 }
 
 func Kafka() {
-	fmt.Println("Kafka")
 	host := conf.GetValue("kafka", "host")
 	initBroker(host)
 	initConsumers()
