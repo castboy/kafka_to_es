@@ -2,7 +2,7 @@ package modules
 
 import (
 	"encoding/json"
-	"fmt"
+	//	"fmt"
 	"io/ioutil"
 	"log"
 )
@@ -13,13 +13,12 @@ type statusMsg struct {
 	Offset    int64
 }
 
-var status = make(map[string][]int64)
 var statusCh = make(chan statusMsg, 100)
 
-func recordStatus() {
+func RecordStatus() {
 	for {
 		msg := <-statusCh
-		status[mgs.Topic][msg.Partition] = msg.Offset
+		status[msg.Topic][msg.Partition] = msg.Offset
 		record()
 	}
 }

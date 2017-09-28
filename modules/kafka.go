@@ -19,6 +19,7 @@ func initConsumer(topic string, partition int32, start int64) (kafka.Consumer, e
 	if err != nil {
 		errLog := fmt.Sprintf("cannot initConsumer of %s %d partition", topic, partition)
 		Log("Err", errLog)
+		log.Fatalln(errLog)
 	}
 
 	return consumer, err
@@ -26,23 +27,41 @@ func initConsumer(topic string, partition int32, start int64) (kafka.Consumer, e
 
 func initBroker(localhost string) {
 	var kafkaAddrs []string = []string{localhost + ":9092", localhost + ":9093"}
-	conf := kafka.NewBrokerConf("agent")
+	conf := kafka.NewBrokerConf("kafka_to_es")
 	conf.AllowTopicCreation = false
 
 	var err error
 	broker, err = kafka.Dial(kafkaAddrs, conf)
 	if err != nil {
-		Log("Err", "cannot connect to kafka cluster")
 		log.Fatalf("cannot connect to kafka cluster: %s", err)
 	}
 
 	defer broker.Close()
 }
 
-func initConsumers(partition int32) {
-	for t, v := range topic {
-		for p, _ := range v {
-			consumers[t][p] = initConsumer(t, p)
+func initConsumers() {
+	for t, v := range status {
+		for p, s := range v {
+			consumers[t][p], _ = initConsumer(t, int32(p), s)
 		}
 	}
+}
+
+func consume(consumer kafka.Consumer) {
+	for {
+		msg, err := consumer.Consume()
+		if nil != err {
+			fmt.Println("no data in topic")
+		}
+		fmt.Println(msg.Value)
+	}
+
+}
+
+func Kafka() {
+	fmt.Println("Kafka")
+	host := conf.GetValue("kafka", "host")
+	initBroker(host)
+	initConsumers()
+	consume(consumers["vds-alert"][0])
 }

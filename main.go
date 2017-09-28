@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
+	//	"fmt"
 
+	"./modules"
 	_ "./modules"
 )
 
 func main() {
-	fmt.Println("main()")
+	//	go RecordStatus()
+	modules.Kafka()
 }
