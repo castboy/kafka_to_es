@@ -66,7 +66,20 @@ func consume(consumer kafka.Consumer) {
 			if nil != err {
 				fmt.Println("alert decode err")
 			}
-			fmt.Println(obj)
+			fmt.Println(obj.Alert)
+
+			var backendobj BackendObj
+			err = json.Unmarshal(msg.Value, &backendobj)
+			if nil != err {
+				fmt.Println("alert decode err")
+			}
+                        
+                        var xdrSlice = make([]BackendObj, 0)
+                        xdrSlice = append(xdrSlice, backendobj)
+
+                        obj.Alert.Xdr = xdrSlice
+                        
+			fmt.Println(obj.Alert)
 		}
 	}
 

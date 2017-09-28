@@ -28,6 +28,7 @@ type VdsAlert struct {
 	Local_logtype    string `json:"Local_logtype"`
 	Local_time       int    `json:"Local_time"`
 	Local_engineip   string `json:"Local_engineip"`
+        Xdr              []BackendObj `json:"xdr"`
 }
 
 type WafAlertObj struct {
