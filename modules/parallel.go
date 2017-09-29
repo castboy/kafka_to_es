@@ -25,7 +25,8 @@ func kafkaToEs(topic string, partition int) {
 		if nil == alertErr && nil == xdrErr {
 			obj := esObj(bytes, alert, xdr)
 			toEs(topic, obj)
-			vdsAlert(vdsAlertSql(alert))
+			//			vdsAlert(vdsAlertSql(alert))
+			xdrSql()
 		} else {
 			time.Sleep(5 * time.Second)
 		}
