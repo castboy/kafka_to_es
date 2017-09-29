@@ -46,10 +46,10 @@ func vdsAlertSql(alert VdsAlert) string {
 		local_extent, local_enginetype,local_logtype, local_engineip, 
 		sourceip, destip, sourceport, destport, app_file,http_url) values (
 		%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d,%s, %s)`,
-		"alert_vds", "", alert.Threatname, "", alert.Local_threatname,
+		"alert_vds", 0, alert.Threatname, "", alert.Local_threatname,
 		alert.Local_vtype, alert.Local_platfrom, alert.Local_vname,
 		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype,
-		alert.Local_engineip, "", "", "", "", "", "", "")
+		alert.Local_engineip, "", "", "", 0, 0, "", "")
 
 	return sql
 }
