@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"encoding/json"
 	"fmt"
 	"sync"
 	"time"
@@ -25,9 +24,8 @@ func kafkaToEs(topic string, partition int) {
 		xdr, xdrErr := parseXdr(bytes)
 		if nil == alertErr && nil == xdrErr {
 			obj := esObj(bytes, alert, xdr)
-			bytes, _ := json.Marshal(obj)
-			fmt.Println(string(bytes))
 			toEs(topic, obj)
+			fmt.Println(vdsAlertSql(alert))
 		} else {
 			time.Sleep(5 * time.Second)
 		}

@@ -10,6 +10,7 @@ import (
 func main() {
 	//	go RecordStatus()
 	modules.Kafka()
+	modules.Mysql()
 	modules.Parallel()
 
 	modules.Wg.Wait()
