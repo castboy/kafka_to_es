@@ -31,7 +31,8 @@ func kafkaToEs(topic string, partition int) {
 				log.Fatalf("can not get alert id")
 			}
 			t := alertType(topic)
-			query(xdrSql(xdr, id, t))
+			xdrSql(xdr, id, t)
+			//			query(xdrSql(xdr, id, t))
 		} else {
 			time.Sleep(5 * time.Second)
 		}
