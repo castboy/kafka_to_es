@@ -32,7 +32,7 @@ func kafkaToEs(topic string, partition int) {
 				log.Fatalf("can not get alert id")
 			}
 			t := alertType(topic)
-			xdr = sslCheck(xdr)
+			//			xdr = sslCheck(xdr)
 			xdrSql(xdr, id, t)
 			//			query(xdrSql(xdr, id, t))
 		} else {

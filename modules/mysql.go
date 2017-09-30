@@ -101,38 +101,38 @@ func alertType(topic string) string {
 	return t
 }
 
-func sslCheck(x BackendObj) BackendObj {
-	if nil == x.Ssl.Server.Cert {
-		x.Ssl.Server.Cert.Version = 0
-		x.Ssl.Server.Cert.SerialNumber = ""
-		x.Ssl.Server.Cert.NotBefore = 0
-		x.Ssl.Server.Cert.NotAfter = 0
-		x.Ssl.Server.Cert.KeyUsage = 0
-		x.Ssl.Server.Cert.CountryName = ""
-		x.Ssl.Server.Cert.OrganizationName = ""
-		x.Ssl.Server.Cert.OrganizationUnitName = ""
-		x.Ssl.Server.Cert.CommonName = ""
-		x.Ssl.Server.Cert.FileLocation.DbName = ""
-		x.Ssl.Server.Cert.FileLocation.TableName = ""
-		x.Ssl.Server.Cert.FileLocation.Signature = ""
-	}
-	if nil == x.Ssl.Client.Cert {
-		x.Ssl.Client.Cert.Version = 0
-		x.Ssl.Client.Cert.SerialNumber = ""
-		x.Ssl.Client.Cert.NotBefore = 0
-		x.Ssl.Client.Cert.NotAfter = 0
-		x.Ssl.Client.Cert.KeyUsage = 0
-		x.Ssl.Client.Cert.CountryName = ""
-		x.Ssl.Client.Cert.OrganizationName = ""
-		x.Ssl.Client.Cert.OrganizationUnitName = ""
-		x.Ssl.Client.Cert.CommonName = ""
-		x.Ssl.Client.Cert.FileLocation.DbName = ""
-		x.Ssl.Client.Cert.FileLocation.TableName = ""
-		x.Ssl.Client.Cert.FileLocation.Signature = ""
-	}
+//func sslCheck(x BackendObj) BackendObj {
+//	if nil == x.Ssl.Server.Cert {
+//		x.Ssl.Server.Cert.Version = 0
+//		x.Ssl.Server.Cert.SerialNumber = ""
+//		x.Ssl.Server.Cert.NotBefore = 0
+//		x.Ssl.Server.Cert.NotAfter = 0
+//		x.Ssl.Server.Cert.KeyUsage = 0
+//		x.Ssl.Server.Cert.CountryName = ""
+//		x.Ssl.Server.Cert.OrganizationName = ""
+//		x.Ssl.Server.Cert.OrganizationUnitName = ""
+//		x.Ssl.Server.Cert.CommonName = ""
+//		x.Ssl.Server.Cert.FileLocation.DbName = ""
+//		x.Ssl.Server.Cert.FileLocation.TableName = ""
+//		x.Ssl.Server.Cert.FileLocation.Signature = ""
+//	}
+//	if nil == x.Ssl.Client.Cert {
+//		x.Ssl.Client.Cert.Version = 0
+//		x.Ssl.Client.Cert.SerialNumber = ""
+//		x.Ssl.Client.Cert.NotBefore = 0
+//		x.Ssl.Client.Cert.NotAfter = 0
+//		x.Ssl.Client.Cert.KeyUsage = 0
+//		x.Ssl.Client.Cert.CountryName = ""
+//		x.Ssl.Client.Cert.OrganizationName = ""
+//		x.Ssl.Client.Cert.OrganizationUnitName = ""
+//		x.Ssl.Client.Cert.CommonName = ""
+//		x.Ssl.Client.Cert.FileLocation.DbName = ""
+//		x.Ssl.Client.Cert.FileLocation.TableName = ""
+//		x.Ssl.Client.Cert.FileLocation.Signature = ""
+//	}
 
-	return x
-}
+//	return x
+//}
 func vdsAlertSql(alert VdsAlert) string {
 	sql := fmt.Sprintf(`insert into %s (log_time, threatname, subfile, 
 		local_threatname, local_vtype, local_platfrom, local_vname, 

@@ -226,11 +226,11 @@ type Conn_backend struct {
 }
 
 type CertsLink struct {
-	Verfy           bool        `json:"Verfy"`
-	VerfyFailedDesc string      `json:"VerfyFailedDesc,omitempty"`
-	VerfyFailedIdx  uint32      `json:"VerfyFailedIdx,omitempty"`
-	Cert            *CertInfo   `json:"Cert,omitempty"`
-	Certs           []*CertInfo `json:"Certs,omitempty"`
+	Verfy           bool       `json:"Verfy"`
+	VerfyFailedDesc string     `json:"VerfyFailedDesc,omitempty"`
+	VerfyFailedIdx  uint32     `json:"VerfyFailedIdx,omitempty"`
+	Cert            CertInfo   `json:"Cert,omitempty"`
+	Certs           []CertInfo `json:"Certs,omitempty"`
 }
 
 type CertInfo struct {
