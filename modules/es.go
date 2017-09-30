@@ -16,7 +16,7 @@ func parseAlert(msg []byte) (VdsAlert, error) {
 func parseXdr(msg []byte) (BackendObj, error) {
 	var xdr BackendObj
 	err := json.Unmarshal(msg, &xdr)
-	fmt.Println(xdr.Ssl)
+
 	return xdr, err
 }
 
