@@ -1,7 +1,7 @@
 package modules
 
 import (
-	//	"fmt"
+	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -21,6 +21,7 @@ func Parallel() {
 func kafkaToEs(topic string, partition int) {
 	for {
 		bytes := consume(consumers[topic][partition])
+		fmt.Println(string(bytes))
 		alert, alertErr := parseAlert(bytes)
 		xdr, xdrErr := parseXdr(bytes)
 		if nil == alertErr && nil == xdrErr {
