@@ -156,7 +156,7 @@ func xdrSql(x BackendObj, id int64, t string) string {
 	sql = sql[:len(sql)-1]
 
 	sql = fmt.Sprintf(`insert into %s (%s) values (
-		%d, '%s', %d, %d, %d, %d, %d,
+		'%s', %d, %d, %d, %d, %d,
 		'%s', %d, %d, '%s', '%s',
 		%d, %d,
 		%d, %d, %d, %d, %d, %d,
