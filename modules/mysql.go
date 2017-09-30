@@ -134,11 +134,11 @@ func alertType(topic string) string {
 //	return x
 //}
 func vdsAlertSql(alert VdsAlert) string {
-	sql := fmt.Sprintf(`insert into %s (log_time, threatname, subfile, 
-		local_threatname, local_vtype, local_platfrom, local_vname, 
-		local_extent, local_enginetype,local_logtype, local_engineip, 
-		sourceip, destip, sourceport, destport, app_file, http_url) 
-		values (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', 
+	sql := fmt.Sprintf(`insert into %s (log_time, threatname, subfile,
+		local_threatname, local_vtype, local_platfrom, local_vname,
+		local_extent, local_enginetype,local_logtype, local_engineip,
+		sourceip, destip, sourceport, destport, app_file, http_url)
+		values (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s',
 		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s')`,
 		"alert_vds", 0, alert.Threatname, "", alert.Local_threatname,
 		alert.Local_vtype, alert.Local_platfrom, alert.Local_vname,
@@ -156,27 +156,27 @@ func xdrSql(x BackendObj, id int64, t string) string {
 	sql = sql[:len(sql)-1]
 
 	sql = fmt.Sprintf(`insert into %s (%s) values (
-		%d, %s, %d, %d, %d, %d, %d,
-		%s, %d, %d, %s, %s,
-		%d, %d, 
-		%d, %d, %d, %d, %d, %d, 
+		%d, '%s', %d, %d, %d, %d, %d,
+		'%s', %d, %d, '%s', '%s',
+		%d, %d,
+		%d, %d, %d, %d, %d, %d,
 		%d, %d,
 		%d, %d, %d, %d, %d, %d, %d, %d, %d, %d,
 		%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d,
-		%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s, %s, %s, %d, %s, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d,
-		%s, %s, %s, %d, %d, %d, %d, %d, %d, %d, %d,
-		%s, %s, %s, %d, %d, %d, %d, %d, %d, %d,
-		%d, %d, %s, %d, %d, %d, %d, %d, %d,
-		%d, %d, %s, %s, %d, %s, %s, %s, %d,
-		%s, %d, %d, %s, %s, %d, %d, %d, %d, %d, %d, %d,
-		%d, %d, %s,
-		%d, %d, %d, %d, %s, %s, %d, %d, %s,
-		%d, %s, %s, %d, %d, %s, %d, %d, %d, %s, %s, %s, %s,
-		%s, %s, %s,
-		%d, %s, %d,
-		%d, %s, %d, %d, %d, %s, %s, %s, %s,
-		%s, %s, %s,
-		%s, %d, %s
+		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, %d, '%s', '%s', '%s', %d, '%s', '%s', %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d,
+		'%s', '%s', '%s', %d, %d, %d, %d, %d, %d, %d, %d,
+		'%s', '%s', '%s', %d, %d, %d, %d, %d, %d, %d,
+		%d, %d, '%s', %d, %d, %d, %d, %d, %d,
+		%d, %d, '%s', '%s', %d, '%s', '%s', '%s', %d,
+		'%s', %d, %d, '%s', '%s', %d, %d, %d, %d, %d, %d, %d,
+		%d, %d, '%s',
+		%d, %d, %d, %d, '%s, '%s', %d, %d, '%s',
+		%d, '%s', '%s', %d, %d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s',
+		'%s', '%s', '%s',
+		%d, '%s', %d,
+		%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s',
+		'%s', '%s', '%s',
+		'%s', %d, '%s'
 		)`, "xdr", sql,
 		x.Vendor, x.Id, x.Ipv4, x.Class, x.Type, x.Time,
 		x.Conn.Proto, x.Conn.Sport, x.Conn.Dport, x.Conn.Sip, x.Conn.Dip,
