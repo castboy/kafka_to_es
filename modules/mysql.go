@@ -163,7 +163,8 @@ func xdrSql(x BackendObj, id int64, t string) string {
 		x.App.ProtoInfo, x.App.File, x.App.FileLocation.File, x.App.FileLocation.Offset, x.App.FileLocation.Size, x.App.FileLocation.Signature,
 		x.Ssl.FailReason, x.Ssl.Server.Verfy, x.Ssl.Server.VerfyFailedDesc, x.Ssl.Server.VerfyFailedIdx, x.Ssl.Server.Cert.Version, x.Ssl.Server.Cert.SerialNumber, x.Ssl.Server.Cert.NotBefore, x.Ssl.Server.Cert.NotAfter, x.Ssl.Server.Cert.KeyUsage, x.Ssl.Server.Cert.CountryName, x.Ssl.Server.Cert.OrganizationName, x.Ssl.Server.Cert.OrganizationUnitName, x.Ssl.Server.Cert.CommonName,
 		x.Ssl.Server.Cert.FileLocation.DbName, x.Ssl.Server.Cert.FileLocation.TableName, x.Ssl.Server.Cert.FileLocation.Signature,
-		x.Ssl.Client.Verfy, x.Ssl.Client.VerfyFailedDesc, x.Ssl.Client.VerfyFailedIdx, x.Ssl.Client.Cert.Version, x.Ssl.Client.Cert.SerialNumber, x.Ssl.Client.Cert.NotBefore, x.Ssl.Client.Cert.NotAfter, x.Ssl.Client.Cert.KeyUsage, x.Ssl.Client.Cert.CountryName, x.Ssl.Client.Cert.OrganizationName, x.Ssl.Client.Cert.OrganizationUnitName, x.Ssl.Client.Cert.CommonName,
+		x.Ssl.Client.Verfy, x.Ssl.Client.VerfyFailedDesc, x.Ssl.Client.VerfyFailedIdx,
+		x.Ssl.Client.Cert.Version, x.Ssl.Client.Cert.SerialNumber, x.Ssl.Client.Cert.NotBefore, x.Ssl.Client.Cert.NotAfter, x.Ssl.Client.Cert.KeyUsage, x.Ssl.Client.Cert.CountryName, x.Ssl.Client.Cert.OrganizationName, x.Ssl.Client.Cert.OrganizationUnitName, x.Ssl.Client.Cert.CommonName,
 		x.Ssl.Client.Cert.FileLocation.DbName, x.Ssl.Client.Cert.FileLocation.TableName, x.Ssl.Client.Cert.FileLocation.Signature,
 		id, t, "")
 
