@@ -133,6 +133,18 @@ func alertType(topic string) string {
 
 //	return x
 //}
+
+func boolToInt(v bool) int {
+	var i int
+	if v == false {
+		i = 0
+	} else {
+		i = 1
+	}
+
+	return i
+}
+
 func vdsAlertSql(alert VdsAlert) string {
 	sql := fmt.Sprintf(`insert into %s (log_time, threatname, subfile,
 		local_threatname, local_vtype, local_platfrom, local_vname,
@@ -178,19 +190,19 @@ func xdrSql(x BackendObj, id int64, t string) string {
 		'%s', '%s', '%s',
 		'%s', %d, '%s'
 		)`, "xdr", sql,
-		x.Vendor, x.Id, x.Ipv4, x.Class, x.Type, x.Time,
+		x.Vendor, x.Id, boolToInt(x.Ipv4), x.Class, x.Type, x.Time,
 		x.Conn.Proto, x.Conn.Sport, x.Conn.Dport, x.Conn.Sip, x.Conn.Dip,
-		x.ConnEx.Over, x.ConnEx.Dir,
+		boolToInt(x.ConnEx.Over), boolToInt(x.ConnEx.Dir),
 		x.ConnSt.FlowUp, x.ConnSt.FlowDown, x.ConnSt.PktUp, x.ConnSt.PktDown, x.ConnSt.IpFragUp, x.ConnSt.IpFragDown,
 		x.ConnTime.Start, x.ConnTime.End,
 		x.ServSt.FlowUp, x.ServSt.FlowDown, x.ServSt.PktUp, x.ServSt.PktDown, x.ServSt.IpFragUp, x.ServSt.IpFragDown, x.ServSt.TcpDisorderUp, x.ServSt.TcpDisorderDown, x.ServSt.TcpRetranUp, x.ServSt.TcpRetranDown,
-		x.Tcp.DisorderUp, x.Tcp.DisorderDown, x.Tcp.RetranUp, x.Tcp.RetranDown, x.Tcp.SynAckDelay, x.Tcp.AckDelay, x.Tcp.ReportFlag, x.Tcp.CloseReason, x.Tcp.FirstRequestDelay, x.Tcp.FirstResponseDely, x.Tcp.Window, x.Tcp.Mss, x.Tcp.SynCount, x.Tcp.SynAckCount, x.Tcp.AckCount, x.Tcp.SessionOK, x.Tcp.Handshake12, x.Tcp.Handshake23, x.Tcp.Open, x.Tcp.Close,
-		x.Http.Host, x.Http.Url, x.Http.XonlineHost, x.Http.UserAgent, x.Http.ContentType, x.Http.Refer, x.Http.Cookie, x.Http.Location, x.Http.request, x.Http.RequestLocation.File, x.Http.RequestLocation.Offset, x.Http.RequestLocation.Size, x.Http.RequestLocation.Signature, x.Http.response, x.Http.ResponseLocation.File, x.Http.ResponseLocation.Offset, x.Http.ResponseLocation.Size, x.Http.ResponseLocation.Signature, x.Http.RequestTime, x.Http.FirstResponseTime, x.Http.FirstResponseTime, x.Http.LastContentTime, x.Http.ServTime, x.Http.ContentLen, x.Http.StateCode, x.Http.Method, x.Http.Version, x.Http.HeadFlag, x.Http.ServFlag, x.Http.RequestFlag, x.Http.Browser, x.Http.Portal,
-		x.Sip.CallingNo, x.Sip.CalledNo, x.Sip.SessionId, x.Sip.CallDir, x.Sip.CallType, x.Sip.HangupReason, x.Sip.SignalType, x.Sip.StreamCount, x.Sip.Malloc, x.Sip.Bye, x.Sip.Invite,
+		x.Tcp.DisorderUp, x.Tcp.DisorderDown, x.Tcp.RetranUp, x.Tcp.RetranDown, x.Tcp.SynAckDelay, x.Tcp.AckDelay, x.Tcp.ReportFlag, x.Tcp.CloseReason, x.Tcp.FirstRequestDelay, x.Tcp.FirstResponseDely, x.Tcp.Window, x.Tcp.Mss, x.Tcp.SynCount, x.Tcp.SynAckCount, x.Tcp.AckCount, boolToInt(x.Tcp.SessionOK), boolToInt(x.Tcp.Handshake12), boolToInt(x.Tcp.Handshake23), x.Tcp.Open, x.Tcp.Close,
+		x.Http.Host, x.Http.Url, x.Http.XonlineHost, x.Http.UserAgent, x.Http.ContentType, x.Http.Refer, x.Http.Cookie, x.Http.Location, x.Http.request, x.Http.RequestLocation.File, x.Http.RequestLocation.Offset, x.Http.RequestLocation.Size, x.Http.RequestLocation.Signature, x.Http.response, x.Http.ResponseLocation.File, x.Http.ResponseLocation.Offset, x.Http.ResponseLocation.Size, x.Http.ResponseLocation.Signature, x.Http.RequestTime, x.Http.FirstResponseTime, x.Http.FirstResponseTime, x.Http.LastContentTime, x.Http.ServTime, x.Http.ContentLen, x.Http.StateCode, x.Http.Method, x.Http.Version, x.Http.HeadFlag, x.Http.ServFlag, boolToInt(x.Http.RequestFlag), x.Http.Browser, x.Http.Portal,
+		x.Sip.CallingNo, x.Sip.CalledNo, x.Sip.SessionId, x.Sip.CallDir, x.Sip.CallType, x.Sip.HangupReason, x.Sip.SignalType, x.Sip.StreamCount, x.Sip.Malloc, boolToInt(x.Sip.Bye), boolToInt(x.Sip.Invite),
 		x.Rtsp.UserAgent, x.Rtsp.ServerIp, x.Rtsp.ClientBeginPort, x.Rtsp.ClientEndPort, x.Rtsp.ServerBeginPort, x.Rtsp.ServerEndPort, x.Rtsp.VideoStreamCount, x.Rtsp.AudeoStreamCount, x.Rtsp.ResDelay,
 		x.Ftp.State, x.Ftp.UserCount, x.Ftp.CurrentDir, x.Ftp.TransMode, x.Ftp.TransType, x.Ftp.FileCount, x.Ftp.FileSize, x.Ftp.RspTm, x.Ftp.TransTm,
 		x.Mail.MsgType, x.Mail.RspState, x.Mail.UserName, x.Mail.RecverInfo, x.Mail.Len, x.Mail.DomainInfo, x.Mail.RecvAccount, x.Mail.Hdr, x.Mail.AcsType,
-		x.Dns.Domain, x.Dns.IpCount, x.Dns.IpVersion, x.Dns.Ip, x.Dns.Ips, x.Dns.RspCode, x.Dns.RspRecordCount, x.Dns.RspRecordCount, x.Dns.AuthCnttCount, x.Dns.ExtraRecordCount, x.Dns.RspDelay, x.Dns.PktValid,
+		x.Dns.Domain, x.Dns.IpCount, x.Dns.IpVersion, x.Dns.Ip, x.Dns.Ips, x.Dns.RspCode, x.Dns.RspRecordCount, x.Dns.RspRecordCount, x.Dns.AuthCnttCount, x.Dns.ExtraRecordCount, x.Dns.RspDelay, boolToInt(x.Dns.PktValid),
 		x.Vpn.Type, x.Proxy.Type, x.QQ.Number,
 		x.App.ProtoInfo, x.App.Status, x.App.ClassId, x.App.Proto, x.App.File, x.App.FileLocation.File, x.App.FileLocation.Offset, x.App.FileLocation.Size, x.App.FileLocation.Signature,
 		x.Ssl.FailReason,
@@ -207,10 +219,10 @@ func xdrSql(x BackendObj, id int64, t string) string {
 		x.Ssl.Server.Cert.OrganizationUnitName,
 		x.Ssl.Server.Cert.CommonName,
 		x.Ssl.Server.Cert.FileLocation.DbName, x.Ssl.Server.Cert.FileLocation.TableName, x.Ssl.Server.Cert.FileLocation.Signature,
-		x.Ssl.Client.Verfy, x.Ssl.Client.VerfyFailedDesc, x.Ssl.Client.VerfyFailedIdx,
+		boolToInt(x.Ssl.Client.Verfy), x.Ssl.Client.VerfyFailedDesc, x.Ssl.Client.VerfyFailedIdx,
 		x.Ssl.Client.Cert.Version, x.Ssl.Client.Cert.SerialNumber, x.Ssl.Client.Cert.NotBefore, x.Ssl.Client.Cert.NotAfter, x.Ssl.Client.Cert.KeyUsage, x.Ssl.Client.Cert.CountryName, x.Ssl.Client.Cert.OrganizationName, x.Ssl.Client.Cert.OrganizationUnitName, x.Ssl.Client.Cert.CommonName,
 		x.Ssl.Client.Cert.FileLocation.DbName, x.Ssl.Client.Cert.FileLocation.TableName, x.Ssl.Client.Cert.FileLocation.Signature,
-		id, t, "")
+		t, id, "")
 
 	fmt.Println(sql)
 	return sql
