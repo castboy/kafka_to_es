@@ -160,7 +160,7 @@ func xdrSql(x BackendObj, id int64, t string) string {
 		x.Mail.MsgType, x.Mail.RspState, x.Mail.UserName, x.Mail.RecverInfo, x.Mail.Len, x.Mail.DomainInfo, x.Mail.RecvAccount, x.Mail.Hdr, x.Mail.AcsType,
 		x.Dns.Domain, x.Dns.IpCount, x.Dns.IpVersion, x.Dns.Ip, x.Dns.Ips, x.Dns.RspCode, x.Dns.RspRecordCount, x.Dns.RspRecordCount, x.Dns.AuthCnttCount, x.Dns.ExtraRecordCount, x.Dns.RspDelay, x.Dns.PktValid,
 		x.Vpn.Type, x.Proxy.Type, x.QQ.Number,
-		x.App.ProtoInfo, x.App.File, x.App.FileLocation.File, x.App.FileLocation.Offset, x.App.FileLocation.Size, x.App.FileLocation.Signature,
+		x.App.ProtoInfo, x.App.Status, x.App.ClassId, x.App.Proto, x.App.File, x.App.FileLocation.File, x.App.FileLocation.Offset, x.App.FileLocation.Size, x.App.FileLocation.Signature,
 		x.Ssl.FailReason,
 		x.Ssl.Server.Verfy,
 		x.Ssl.Server.VerfyFailedDesc,
