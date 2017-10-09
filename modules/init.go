@@ -33,7 +33,7 @@ func parsePartition(topics map[string]string) {
 }
 
 func initStatus() {
-	for t, _ := range status {
+	for t, _ := range topic {
 		status[t] = make([]int64, 0)
 	}
 
