@@ -77,63 +77,6 @@ func database(usr, pwd, host, port, db string) {
 	}
 }
 
-//func alertLastIdSql(topic string) string {
-//	var table string
-//	switch topic {
-//	case "waf-alert":
-//		table = "waf_alert"
-//	case "vds-alert":
-//		table = "vds_alert"
-//	}
-
-//	return fmt.Sprintf("select max(id) from %s", table)
-//}
-
-func alertType(topic string) string {
-	var t string
-	switch topic {
-	case "waf-alert":
-		t = "waf"
-	case "vds-alert":
-		t = "vds"
-	}
-
-	return t
-}
-
-//func sslCheck(x BackendObj) BackendObj {
-//	if nil == x.Ssl.Server.Cert {
-//		x.Ssl.Server.Cert.Version = 0
-//		x.Ssl.Server.Cert.SerialNumber = ""
-//		x.Ssl.Server.Cert.NotBefore = 0
-//		x.Ssl.Server.Cert.NotAfter = 0
-//		x.Ssl.Server.Cert.KeyUsage = 0
-//		x.Ssl.Server.Cert.CountryName = ""
-//		x.Ssl.Server.Cert.OrganizationName = ""
-//		x.Ssl.Server.Cert.OrganizationUnitName = ""
-//		x.Ssl.Server.Cert.CommonName = ""
-//		x.Ssl.Server.Cert.FileLocation.DbName = ""
-//		x.Ssl.Server.Cert.FileLocation.TableName = ""
-//		x.Ssl.Server.Cert.FileLocation.Signature = ""
-//	}
-//	if nil == x.Ssl.Client.Cert {
-//		x.Ssl.Client.Cert.Version = 0
-//		x.Ssl.Client.Cert.SerialNumber = ""
-//		x.Ssl.Client.Cert.NotBefore = 0
-//		x.Ssl.Client.Cert.NotAfter = 0
-//		x.Ssl.Client.Cert.KeyUsage = 0
-//		x.Ssl.Client.Cert.CountryName = ""
-//		x.Ssl.Client.Cert.OrganizationName = ""
-//		x.Ssl.Client.Cert.OrganizationUnitName = ""
-//		x.Ssl.Client.Cert.CommonName = ""
-//		x.Ssl.Client.Cert.FileLocation.DbName = ""
-//		x.Ssl.Client.Cert.FileLocation.TableName = ""
-//		x.Ssl.Client.Cert.FileLocation.Signature = ""
-//	}
-
-//	return x
-//}
-
 func boolToInt(v bool) int {
 	var i int
 	if v == false {
@@ -145,17 +88,71 @@ func boolToInt(v bool) int {
 	return i
 }
 
-func vdsAlertSql(alert VdsAlert) string {
+func vdsAlertSql(alert VdsAlert, xdr BackendObj) string {
 	sql := fmt.Sprintf(`insert into %s (log_time, threatname, subfile,
 		local_threatname, local_vtype, local_platfrom, local_vname,
 		local_extent, local_enginetype,local_logtype, local_engineip,
 		sourceip, destip, sourceport, destport, app_file, http_url)
 		values (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s',
 		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s')`,
-		"alert_vds", 0, alert.Threatname, "", alert.Local_threatname,
+		"alert_vds", xdr.Time, alert.Threatname, "", alert.Local_threatname,
 		alert.Local_vtype, alert.Local_platfrom, alert.Local_vname,
 		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype,
 		alert.Local_engineip, "", "", 0, 0, "", "")
+
+	return sql
+}
+
+func vdsOfflineAlertSql(alert VdsAlert, xdr BackendObj) string {
+	sql := fmt.Sprintf(`insert into %s (log_time, threatname, subfile,
+		local_threatname, local_vtype, local_platfrom, local_vname,
+		local_extent, local_enginetype,local_logtype, local_engineip,
+		sourceip, destip, sourceport, destport, app_file, http_url)
+		values (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s',
+		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s')`,
+		"alert_vds_offline", xdr.Time, alert.Threatname, "", alert.Local_threatname,
+		alert.Local_vtype, alert.Local_platfrom, alert.Local_vname,
+		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype,
+		alert.Local_engineip, "", "", 0, 0, "", "")
+
+	return sql
+}
+
+func wafAlertSql(alert WafAlert, xdr BackendObj) string {
+	sql := fmt.Sprintf(`insert into %s (time, client, rev, msg, attack,
+		severity, maturity, accuracy, hostname, uri, unique_id, ref, tags,
+		rule_file, rule_line, rule_id, rule_data, rule_ver, version) 
+		values (%d, '%s', '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', 
+		'%s', '%s', '%s', %d, %d, '%s', '%s', '%s')`,
+		"alert_waf", xdr.Time, alert.Client, alert.Rev, alert.Msg, alert.Attack,
+		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname,
+		alert.Uri, alert.Unique_id, alert.Ref, alert.Tags, "", 0, 0, "", "",
+		alert.Version)
+
+	return sql
+}
+
+func wafOfflineAlertSql(alert WafAlert, xdr BackendObj) string {
+	sql := fmt.Sprintf(`insert into %s (time, client, rev, msg, attack,
+		severity, maturity, accuracy, hostname, uri, unique_id, ref, tags,
+		rule_file, rule_line, rule_id, rule_data, rule_ver, version) 
+		values (%d, '%s', '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', 
+		'%s', '%s', '%s', %d, %d, '%s', '%s', '%s')`,
+		"alert_waf_offline", xdr.Time, alert.Client, alert.Rev, alert.Msg, alert.Attack,
+		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname,
+		alert.Uri, alert.Unique_id, alert.Ref, alert.Tags, "", 0, 0, "", "",
+		alert.Version)
+
+	return sql
+}
+
+func idsAlertSql(alert IdsAlert) string {
+	sql := fmt.Sprintf(`insert into %s (time, src_ip, src_port, dest_ip,
+		dest_port, proto, attack_type, details, severity, engine, byzoro_type) 
+		values (%d, '%s', %d, '%s', %d, '%s', '%s', '%s', %d, '%s', '%s')`,
+		alert.Time, alert.Src_ip, alert.Src_port, alert.Dest_ip, alert.Dest_port,
+		alert.Proto, alert.Attack_type, alert.Details, alert.Severity, alert.Engine,
+		alert.Byzoro_type)
 
 	return sql
 }
@@ -230,4 +227,40 @@ func query(sql string) sql.Result {
 	}
 
 	return rs
+}
+
+func vdsToMysql(alert VdsAlert, topic string, xdr BackendObj) {
+	sql := ""
+	if "" == xdr.Task_Id {
+		sql = vdsAlertSql(alert, xdr)
+	} else {
+		sql = vdsOfflineAlertSql(alert, xdr)
+	}
+
+	id, err := query(sql).LastInsertId()
+	if nil != err {
+		log.Fatalf("can not get vds-alert id")
+	}
+	t := alertType(topic)
+	query(xdrSql(xdr, id, t))
+}
+
+func wafToMysql(alert WafAlert, topic string, xdr BackendObj) {
+	sql := ""
+	if "" == xdr.Task_Id {
+		sql = wafAlertSql(alert, xdr)
+	} else {
+		sql = wafOfflineAlertSql(alert, xdr)
+	}
+
+	id, err := query(sql).LastInsertId()
+	if nil != err {
+		log.Fatalf("can not get waf-alert id")
+	}
+	t := alertType(topic)
+	query(xdrSql(xdr, id, t))
+}
+
+func idsToMysql(alert IdsAlert) {
+	query(idsAlertSql(alert))
 }

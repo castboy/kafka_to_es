@@ -1,5 +1,19 @@
 package modules
 
+type IdsAlert struct {
+	Time        uint64 `json:Time`
+	Src_ip      string `json:"Src_ip"`
+	Src_port    uint32 `json:"Src_port"`
+	Dest_ip     string `json:"Src_ip"`
+	Dest_port   uint32 `json:"Src_port"`
+	Proto       uint32 `json:"Proto"`
+	Byzoro_type string `json:"Byzoro_type"`
+	Attack_type string `json:"Attack_type"`
+	Details     string `json:"Details"`
+	Severity    uint32 `json:"Severity"`
+	Engine      string `json:"engine"`
+}
+
 type WafAlert struct {
 	Client    string       `json:"Client"`
 	Rev       string       `json:"Rev"`
@@ -19,6 +33,7 @@ type WafAlert struct {
 }
 
 type VdsAlert struct {
+	Log_time         int          `json:"Log_time"`
 	Threatname       string       `json:"Threatname"`
 	Local_threatname string       `json:"Local_threatname"`
 	Local_vtype      string       `json:"Local_vtype"`
@@ -27,7 +42,6 @@ type VdsAlert struct {
 	Local_extent     string       `json:"Local_extent"`
 	Local_enginetype string       `json:"Local_enginetype"`
 	Local_logtype    string       `json:"Local_logtype"`
-	Local_time       int          `json:"Local_time"`
 	Local_engineip   string       `json:"Local_engineip"`
 	Xdr              []BackendObj `json:"xdr"`
 }

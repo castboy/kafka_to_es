@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	//	go RecordStatus()
+	go modules.SendRecordStatusMsg(5)
+	go modules.RecordStatus()
 	modules.Kafka()
 	modules.Mysql()
 	modules.Parallel()
