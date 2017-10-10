@@ -229,38 +229,63 @@ func query(sql string) sql.Result {
 	return rs
 }
 
-func vdsToMysql(alert VdsAlert, topic string, xdr BackendObj) {
-	sql := ""
-	if "" == xdr.Task_Id {
-		sql = vdsAlertSql(alert, xdr)
-	} else {
-		sql = vdsOfflineAlertSql(alert, xdr)
-	}
-
-	id, err := query(sql).LastInsertId()
-	if nil != err {
-		log.Fatalf("can not get vds-alert id")
-	}
-	t := alertType(topic)
-	query(xdrSql(xdr, id, t))
+func vdsToMysql(alert VdsAlert, topic string, xdr BackendObj, alertType string) {
+	res := vdsAlertToMysql(alert, xdr)
+	xdrToMysql(res, xdr, alertType)
 }
 
-func wafToMysql(alert WafAlert, topic string, xdr BackendObj) {
-	sql := ""
+func wafToMysql(alert WafAlert, topic string, xdr BackendObj, alertType string) {
+	res := wafAlertToMysql(alert, xdr)
+	xdrToMysql(res, xdr, alertType)
+}
+
+func isOffline(xdr BackendObj) bool {
 	if "" == xdr.Task_Id {
-		sql = wafAlertSql(alert, xdr)
-	} else {
-		sql = wafOfflineAlertSql(alert, xdr)
+		return false
 	}
 
-	id, err := query(sql).LastInsertId()
+	return true
+}
+
+func vdsAlertToMysql(alert VdsAlert, xdr BackendObj) sql.Result {
+	sql := ""
+	if isOffline(xdr) {
+		sql = vdsOfflineAlertSql(alert, xdr)
+	} else {
+		sql = vdsAlertSql(alert, xdr)
+	}
+	return query(sql)
+}
+
+func wafAlertToMysql(alert WafAlert, xdr BackendObj) sql.Result {
+	sql := ""
+	if isOffline(xdr) {
+		sql = wafOfflineAlertSql(alert, xdr)
+	} else {
+		sql = wafAlertSql(alert, xdr)
+	}
+	return query(sql)
+}
+
+func xdrToMysql(alertToMysqlRes sql.Result, xdr BackendObj, alertType string) {
+	id, err := alertToMysqlRes.LastInsertId()
 	if nil != err {
 		log.Fatalf("can not get waf-alert id")
 	}
-	t := alertType(topic)
-	query(xdrSql(xdr, id, t))
+	query(xdrSql(xdr, id, alertType))
 }
 
 func idsToMysql(alert IdsAlert) {
 	query(idsAlertSql(alert))
+}
+
+func toMysql(alert interface{}, xdr BackendObj, topic string, alertType string) {
+	switch Alert := alert.(type) {
+	case VdsAlert:
+		vdsToMysql(Alert, topic, xdr, alertType)
+	case WafAlert:
+		wafToMysql(Alert, topic, xdr, alertType)
+	case IdsAlert:
+		idsToMysql(Alert)
+	}
 }

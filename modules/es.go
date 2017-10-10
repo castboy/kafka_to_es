@@ -3,26 +3,28 @@ package modules
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-func parseVdsAlert(msg []byte) (VdsAlert, error) {
-	var alert VdsAlertObj
-	err := json.Unmarshal(msg, &alert)
-	return alert.Alert, err
-}
+func parseAlert(msg []byte, alertType string) (interface{}, error) {
+	switch alertType {
+	case "ids":
+		var alert IdsAlertObj
+		err := json.Unmarshal(msg, &alert)
+		return alert, err
+	case "waf":
+		var alert WafAlertObj
+		err := json.Unmarshal(msg, &alert)
+		return alert.Alert, err
+	case "vds":
+		var alert VdsAlertObj
+		err := json.Unmarshal(msg, &alert)
+		return alert.Alert, err
+	}
 
-func parseIdsAlert(msg []byte) (IdsAlert, error) {
-	var alert IdsAlert
-	err := json.Unmarshal(msg, &alert)
-	return alert, err
-}
-
-func parseWafAlert(msg []byte) (WafAlert, error) {
-	var alert WafAlertObj
-	err := json.Unmarshal(msg, &alert)
-	return alert.Alert, err
+	return nil, errors.New("alert type err")
 }
 
 func parseXdr(msg []byte) (BackendObj, error) {
@@ -30,6 +32,16 @@ func parseXdr(msg []byte) (BackendObj, error) {
 	err := json.Unmarshal(msg, &xdr)
 
 	return xdr, err
+}
+
+func parseXdrAlert(bytes []byte, alertType string) (interface{}, BackendObj, error) {
+	alert, alertErr := parseAlert(bytes, alertType)
+	xdr, xdrErr := parseXdr(bytes)
+	if nil == alertErr && nil == xdrErr {
+		return alert, xdr, nil
+	}
+
+	return nil, BackendObj{}, errors.New("parseXdrAlert Err")
 }
 
 func esObj(msg []byte, alert interface{}, xdr BackendObj) interface{} {
@@ -50,16 +62,6 @@ func esObj(msg []byte, alert interface{}, xdr BackendObj) interface{} {
 }
 
 func addEs(topic string, obj interface{}) {
-	var esType string
-	switch topic {
-	case "waf-alert":
-		esType = "waf_alert"
-	case "vds-alert":
-		esType = "vds_alert"
-	case "ids-alert":
-		esType = "ids_alert"
-	}
-
 	ctx := context.Background()
 	client, err := elastic.NewClient(elastic.SetURL("http://10.88.1.102:9200"))
 	if err != nil {
@@ -67,12 +69,25 @@ func addEs(topic string, obj interface{}) {
 
 	_, err = client.Index().
 		Index("apt").
-		Type(esType).
+		Type(esType(topic)).
 		BodyJson(obj).
 		Do(ctx)
 	if err != nil {
 		panic(err)
 	}
+}
+
+func esType(topic string) string {
+	switch topic {
+	case "waf-alert":
+		return "waf_alert"
+	case "vds-alert":
+		return "vds_alert"
+	case "ids-alert":
+		return "ids_alert"
+	}
+
+	return ""
 }
 
 func toEs(msg []byte, alert interface{}, xdr BackendObj, topic string) {

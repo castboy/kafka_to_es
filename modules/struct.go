@@ -46,6 +46,9 @@ type VdsAlert struct {
 	Xdr              []BackendObj `json:"xdr"`
 }
 
+type IdsAlertObj struct {
+	IdsAlert
+}
 type WafAlertObj struct {
 	BackendObj
 	Alert WafAlert `json:"Alert"`
