@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -188,7 +189,7 @@ func xdrSql(x BackendObj, id int64, t string) string {
 		'%s', %d, '%s'
 		)`, "xdr", sql,
 		x.Vendor, x.Id, boolToInt(x.Ipv4), x.Class, x.Type, x.Time,
-		x.Conn.Proto, x.Conn.Sport, x.Conn.Dport, x.Conn.Sip, x.Conn.Dip,
+		strconv.Itoa(int(x.Conn.Proto)), x.Conn.Sport, x.Conn.Dport, x.Conn.Sip, x.Conn.Dip,
 		boolToInt(x.ConnEx.Over), boolToInt(x.ConnEx.Dir),
 		x.ConnSt.FlowUp, x.ConnSt.FlowDown, x.ConnSt.PktUp, x.ConnSt.PktDown, x.ConnSt.IpFragUp, x.ConnSt.IpFragDown,
 		x.ConnTime.Start, x.ConnTime.End,
@@ -230,7 +231,7 @@ func query(sql string) sql.Result {
 }
 
 func vdsToMysql(alert VdsAlert, topic string, xdr BackendObj, alertType string) {
-        fmt.Println("vdsToMysql_______________")
+	fmt.Println("vdsToMysql_______________")
 	res := vdsAlertToMysql(alert, xdr)
 	xdrToMysql(res, xdr, alertType)
 }
@@ -283,14 +284,14 @@ func idsToMysql(alert IdsAlert) {
 func toMysql(alert interface{}, xdr BackendObj, topic string, alertType string) {
 	switch Alert := alert.(type) {
 	case VdsAlert:
-                fmt.Println(Alert)
+		fmt.Println(Alert)
 		vdsToMysql(Alert, topic, xdr, alertType)
 	case WafAlert:
 		wafToMysql(Alert, topic, xdr, alertType)
-                fmt.Println(Alert)
+		fmt.Println(Alert)
 	case IdsAlert:
 		idsToMysql(Alert)
-                fmt.Println(Alert)
+		fmt.Println(Alert)
 	}
-        fmt.Println("toMysql")
+	fmt.Println("toMysql")
 }
