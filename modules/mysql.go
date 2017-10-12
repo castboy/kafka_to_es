@@ -93,7 +93,7 @@ func vdsAlertSql(alert VdsAlert, xdr BackendObj) string {
 	sql := fmt.Sprintf(`insert into %s (log_time, threatname, subfile,
 		local_threatname, local_vtype, local_platfrom, local_vname,
 		local_extent, local_enginetype,local_logtype, local_engineip,
-		srcip, dstip, srcport, dstport, app_file, http_url)
+		src_ip, dst_ip, src_port, dst_port, app_file, http_url)
 		values (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s',
 		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s')`,
 		"alert_vds", xdr.Time, alert.Threatname, "", alert.Local_threatname,
