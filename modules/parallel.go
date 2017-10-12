@@ -35,6 +35,7 @@ func alertType(topic string) string {
 func toDb(topic string, partition int32, alertType string) {
 	for {
 		bytes := consume(consumers[topic][partition])
+		fmt.Println(bytes)
 		alert, xdr, err := parseXdrAlert(bytes, alertType)
 		if nil != err {
 			toEs(bytes, alert, xdr, topic)
