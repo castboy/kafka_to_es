@@ -230,6 +230,7 @@ func query(sql string) sql.Result {
 }
 
 func vdsToMysql(alert VdsAlert, topic string, xdr BackendObj, alertType string) {
+        fmt.Println("vdsToMysql_______________")
 	res := vdsAlertToMysql(alert, xdr)
 	xdrToMysql(res, xdr, alertType)
 }
@@ -282,10 +283,14 @@ func idsToMysql(alert IdsAlert) {
 func toMysql(alert interface{}, xdr BackendObj, topic string, alertType string) {
 	switch Alert := alert.(type) {
 	case VdsAlert:
+                fmt.Println(Alert)
 		vdsToMysql(Alert, topic, xdr, alertType)
 	case WafAlert:
 		wafToMysql(Alert, topic, xdr, alertType)
+                fmt.Println(Alert)
 	case IdsAlert:
 		idsToMysql(Alert)
+                fmt.Println(Alert)
 	}
+        fmt.Println("toMysql")
 }
