@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"log"
 
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -65,6 +67,7 @@ func addEs(topic string, obj interface{}) {
 	ctx := context.Background()
 	client, err := elastic.NewClient(elastic.SetURL("http://10.88.1.102:9200"))
 	if err != nil {
+		log.Fatal("can not conn es")
 	}
 
 	_, err = client.Index().
@@ -74,6 +77,8 @@ func addEs(topic string, obj interface{}) {
 		Do(ctx)
 	if err != nil {
 		panic(err)
+	} else {
+		fmt.Println("success to es")
 	}
 }
 
