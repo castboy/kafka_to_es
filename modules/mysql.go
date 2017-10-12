@@ -186,7 +186,7 @@ func xdrSql(x BackendObj, id int64, t string) string {
 		'%s', %d, %d, '%s', '%s', %d, %d, %d, %d, %d, %d, %d,
 		%d, %d, '%s',
 		%d, %d, %d, %d, '%s, '%s', %d, %d, '%s',
-		%d, '%s', '%s', %d, %d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s',
+		%d, %d, '%s', %d, %d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s',
 		'%s', '%s', '%s',
 		%d, '%s', %d,
 		%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s',
