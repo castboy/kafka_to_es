@@ -119,6 +119,7 @@ type BackendObj struct {
 	} `json:Tcp`
 	Http struct {
 		Host              string `json:Host`
+		HostIpInfo        IpInfo `json:IpInfo`
 		Url               string `json:Url`
 		XonlineHost       string `json:XonlineHost`
 		UserAgent         string `json:UserAgent`
@@ -198,7 +199,9 @@ type BackendObj struct {
 		IpCount   uint8    `json:"IpCount,omitempty"`
 		IpVersion uint8    `json:"IpVersion,omitempty"`
 		Ip        string   `json:"Ip,omitempty"`
+		IpInfo    IpInfo   `json:"IpInfo,omitempty"`
 		Ips       []string `json:"Ips,omitempty"`
+		IpInfos   []IpInfo `json:"IpInfos,omitempty"`
 		//Ipv4             string   `json:Ipv4`
 		//Ipv6             string   `json:Ipv6`
 		RspCode          uint8  `json:"RspCode,omitempty"`
@@ -235,11 +238,13 @@ type BackendObj struct {
 }
 
 type Conn_backend struct {
-	Proto uint8  `json:Proto`
-	Sport uint16 `json:Sport`
-	Dport uint16 `json:Dport`
-	Sip   string `json:Sip`
-	Dip   string `json:Dip`
+	Proto   uint8  `json:Proto`
+	Sport   uint16 `json:Sport`
+	Dport   uint16 `json:Dport`
+	Sip     string `json:Sip`
+	SipInfo IpInfo `json:SipInfo`
+	Dip     string `json:Dip`
+	DipInfo IpInfo `json:DipInfo`
 }
 
 type CertsLink struct {
@@ -283,4 +288,20 @@ type mysqlLocation struct {
 	DbName    string
 	TableName string
 	Signature string
+}
+
+type IpInfo struct {
+	Country         string `json:"Country,omitempty"`
+	Province        string `json:"Province,omitempty"`
+	City            string `json:"City,omitempty"`
+	Organization    string `json:"Organization,omitempty"`
+	Network         string `json:"Network,omitempty"`
+	Lng             string `json:"Lng,omitempty"`
+	Lat             string `json:"Lat,omitempty"`
+	TimeZone        string `json:"TimeZone,omitempty"`
+	UTC             string `json:"UTC,omitempty"`
+	RegionalismCode string `json:"RegionalismCode,omitempty"`
+	PhoneCode       string `json:"PhoneCode,omitempty"`
+	CountryCode     string `json:"CountryCode,omitempty"`
+	ContinentCode   string `json:"ContinentCode,omitempty"`
 }
