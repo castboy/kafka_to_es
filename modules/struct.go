@@ -275,8 +275,8 @@ type WafAlertRule struct {
 	Ver  string `json:"Ver"`
 	Data string `json:"Data"`
 	File string `json:"File"`
-	Line string `json:"Line"`
-	Id   string `json:"Id"`
+	Line uint64 `json:"Line"`
+	Id   uint64 `json:"Id"`
 }
 
 type mysqlLocation struct {
