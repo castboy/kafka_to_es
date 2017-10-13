@@ -158,7 +158,7 @@ func wafOfflineAlertSql(alert WafAlert, xdr BackendObj) string {
 func idsAlertSql(alert IdsAlert) string {
 	sql := fmt.Sprintf(`insert into %s (time, src_ip, src_port, dest_ip,
 		dest_port, proto, attack_type, details, severity, engine, byzoro_type) 
-		values (%d, '%s', %d, '%s', %d, '%s', '%s', '%s', %d, '%s', '%s')`,
+		values (%d, '%s', %d, '%s', %d, '%s', '%s', '%s', %d, '%s', '%s')`, "alert_ids",
 		alert.Time, alert.Src_ip, alert.Src_port, alert.Dest_ip, alert.Dest_port,
 		alert.Proto, alert.Attack_type, alert.Details, alert.Severity, alert.Engine,
 		alert.Byzoro_type)
