@@ -13,7 +13,7 @@ import (
 func parseAlert(msg []byte, alertType string) (interface{}, error) {
 	switch alertType {
 	case "ids":
-		var alert IdsAlertObj
+		var alert IdsAlert
 		err := json.Unmarshal(msg, &alert)
 		return alert, err
 	case "waf":
