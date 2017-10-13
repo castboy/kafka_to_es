@@ -40,7 +40,7 @@ func parseXdrAlert(bytes []byte, alertType string) (interface{}, BackendObj, err
 	alert, alertErr := parseAlert(bytes, alertType)
 	fmt.Println("alertErr:", alertErr)
 	xdr, xdrErr := parseXdr(bytes)
-	fmt.Prinln("xdrErr:", xdrErr)
+	fmt.Println("xdrErr:", xdrErr)
 	if nil == alertErr && nil == xdrErr {
 		return alert, xdr, nil
 	}
