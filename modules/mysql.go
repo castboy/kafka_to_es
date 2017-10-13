@@ -302,7 +302,7 @@ func toMysql(alert interface{}, xdr BackendObj, topic string, alertType string) 
 		fmt.Println(Alert)
 	case IdsAlert:
 		idsToMysql(Alert)
-		fmt.Println(Alert)
+		fmt.Println(Alert, "toMysql______________________________________")
 	}
 	fmt.Println("toMysql")
 }

@@ -33,6 +33,7 @@ func alertType(topic string) string {
 }
 
 func toDb(topic string, partition int32, alertType string) {
+	fmt.Println("alertType:_____________", alertType)
 	for {
 		bytes := consume(consumers[topic][partition])
 		fmt.Println(string(bytes))
