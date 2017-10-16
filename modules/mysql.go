@@ -285,6 +285,7 @@ func vdsToMysql(alert VdsAlert, topic string, xdr BackendObj, alertType string) 
 }
 
 func wafToMysql(alert WafAlert, topic string, xdr BackendObj, alertType string) {
+	fmt.Prinln("wafToMysql___________________")
 	res := wafAlertToMysql(alert, xdr)
 	xdrToMysql(res, xdr, alertType)
 }
@@ -326,6 +327,7 @@ func xdrToMysql(alertToMysqlRes sql.Result, xdr BackendObj, alertType string) {
 }
 
 func idsToMysql(alert IdsAlert) {
+	fmt.Println("idsToMysql_______________")
 	query(idsAlertSql(alert))
 }
 
