@@ -279,15 +279,15 @@ func query(sql string) sql.Result {
 }
 
 func vdsToMysql(alert VdsAlert, topic string, xdr BackendObj, alertType string) {
-	fmt.Println("vdsToMysql_______________")
 	res := vdsAlertToMysql(alert, xdr)
 	xdrToMysql(res, xdr, alertType)
+	fmt.Println("vdsToMysql success")
 }
 
 func wafToMysql(alert WafAlert, topic string, xdr BackendObj, alertType string) {
-	fmt.Prinln("wafToMysql___________________")
 	res := wafAlertToMysql(alert, xdr)
 	xdrToMysql(res, xdr, alertType)
+	fmt.Println("wafToMysql success")
 }
 
 func isOffline(xdr BackendObj) bool {
@@ -327,8 +327,8 @@ func xdrToMysql(alertToMysqlRes sql.Result, xdr BackendObj, alertType string) {
 }
 
 func idsToMysql(alert IdsAlert) {
-	fmt.Println("idsToMysql_______________")
 	query(idsAlertSql(alert))
+	fmt.Println("idsToMysql success")
 }
 
 func toMysql(alert interface{}, xdr BackendObj, topic string, alertType string) {
