@@ -101,13 +101,19 @@ func vdsAlertSql(alert VdsAlert, xdr BackendObj) string {
 	sql := fmt.Sprintf(`insert into %s (time, threatname, subfile,
 		local_threatname, local_vtype, local_platfrom, local_vname,
 		local_extent, local_enginetype,local_logtype, local_engineip,
-		src_ip, dest_ip, src_port, dest_port, app_file, http_url)
+		src_ip, dest_ip, src_port, dest_port, app_file, http_url,
+		src_country, src_province, src_city, src_latitude, src_longitude,
+		dest_country, dest_province, dest_city, dest_latitude, dest_longitude)
 		values (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s')`,
+		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s',
+		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
 		"alert_vds", xdr.Time, alert.Threatname, "", alert.Local_threatname,
 		alert.Local_vtype, alert.Local_platfrom, alert.Local_vname,
 		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype,
-		alert.Local_engineip, "", "", 0, 0, "", "")
+		alert.Local_engineip, "", "", 0, 0, "", "",
+		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
+		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng
+	)
 
 	return sql
 }
@@ -116,13 +122,18 @@ func vdsOfflineAlertSql(alert VdsAlert, xdr BackendObj) string {
 	sql := fmt.Sprintf(`insert into %s (time, threatname, subfile,
 		local_threatname, local_vtype, local_platfrom, local_vname,
 		local_extent, local_enginetype,local_logtype, local_engineip,
-		src_ip, dest_ip, src_port, dest_port, app_file, http_url)
+		src_ip, dest_ip, src_port, dest_port, app_file, http_url,
+		src_country, src_province, src_city, src_latitude, src_longitude,
+		dest_country, dest_province, dest_city, dest_latitude, dest_longitude)
 		values (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s')`,
+		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s',
+		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
 		"alert_vds_offline", xdr.Time, alert.Threatname, "", alert.Local_threatname,
 		alert.Local_vtype, alert.Local_platfrom, alert.Local_vname,
 		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype,
-		alert.Local_engineip, "", "", 0, 0, "", "")
+		alert.Local_engineip, "", "", 0, 0, "", "",
+		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
+		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng)
 
 	return sql
 }
@@ -130,13 +141,18 @@ func vdsOfflineAlertSql(alert VdsAlert, xdr BackendObj) string {
 func wafAlertSql(alert WafAlert, xdr BackendObj) string {
 	sql := fmt.Sprintf(`insert into %s (time, client, rev, msg, attack,
 		severity, maturity, accuracy, hostname, uri, unique_id, ref, tags,
-		rule_file, rule_line, rule_id, rule_data, rule_ver, version) 
+		rule_file, rule_line, rule_id, rule_data, rule_ver, version,
+		src_country, src_province, src_city, src_latitude, src_longitude,
+		dest_country, dest_province, dest_city, dest_latitude, dest_longitude) 
 		values (%d, '%s', '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', 
-		'%s', '%s', '%s', %d, %d, '%s', '%s', '%s')`,
+		'%s', '%s', '%s', %d, %d, '%s', '%s', '%s',
+		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
 		"alert_waf", xdr.Time, alert.Client, alert.Rev, alert.Msg, alert.Attack,
 		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname,
 		alert.Uri, alert.Unique_id, alert.Ref, alert.Tags, "", 0, 0, "", "",
-		alert.Version)
+		alert.Version,
+		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
+		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng)
 
 	return sql
 }
@@ -144,24 +160,34 @@ func wafAlertSql(alert WafAlert, xdr BackendObj) string {
 func wafOfflineAlertSql(alert WafAlert, xdr BackendObj) string {
 	sql := fmt.Sprintf(`insert into %s (time, client, rev, msg, attack,
 		severity, maturity, accuracy, hostname, uri, unique_id, ref, tags,
-		rule_file, rule_line, rule_id, rule_data, rule_ver, version) 
+		rule_file, rule_line, rule_id, rule_data, rule_ver, version,
+		src_country, src_province, src_city, src_latitude, src_longitude,
+		dest_country, dest_province, dest_city, dest_latitude, dest_longitude) 
 		values (%d, '%s', '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', 
-		'%s', '%s', '%s', %d, %d, '%s', '%s', '%s')`,
+		'%s', '%s', '%s', %d, %d, '%s', '%s', '%s',
+		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
 		"alert_waf_offline", xdr.Time, alert.Client, alert.Rev, alert.Msg, alert.Attack,
 		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname,
 		alert.Uri, alert.Unique_id, alert.Ref, alert.Tags, "", 0, 0, "", "",
-		alert.Version)
+		alert.Version,
+		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
+		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng)
 
 	return sql
 }
 
 func idsAlertSql(alert IdsAlert) string {
 	sql := fmt.Sprintf(`insert into %s (time, src_ip, src_port, dest_ip,
-		dest_port, proto, attack_type, details, severity, engine, byzoro_type) 
-		values (%d, '%s', %d, '%s', %d, '%s', '%s', '%s', %d, '%s', '%s')`, "alert_ids",
+		dest_port, proto, attack_type, details, severity, engine, byzoro_type,
+		src_country, src_province, src_city, src_latitude, src_longitude,
+		dest_country, dest_province, dest_city, dest_latitude, dest_longitude) 
+		values (%d, '%s', %d, '%s', %d, '%s', '%s', '%s', %d, '%s', '%s',
+		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`, "alert_ids",
 		alert.Time, alert.Src_ip, alert.Src_port, alert.Dest_ip, alert.Dest_port,
 		alert.Proto, alert.Attack_type, alert.Details, alert.Severity, alert.Engine,
-		alert.Byzoro_type)
+		alert.Byzoro_type,
+		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
+		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng)
 
 	return sql
 }
