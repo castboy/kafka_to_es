@@ -112,8 +112,7 @@ func vdsAlertSql(alert VdsAlert, xdr BackendObj) string {
 		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype,
 		alert.Local_engineip, "", "", 0, 0, "", "",
 		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
-		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng
-	)
+		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng)
 
 	return sql
 }
@@ -186,8 +185,8 @@ func idsAlertSql(alert IdsAlert) string {
 		alert.Time, alert.Src_ip, alert.Src_port, alert.Dest_ip, alert.Dest_port,
 		alert.Proto, alert.Attack_type, alert.Details, alert.Severity, alert.Engine,
 		alert.Byzoro_type,
-		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
-		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng)
+		"", "", "", "", "",
+		"", "", "", "", "")
 
 	return sql
 }
