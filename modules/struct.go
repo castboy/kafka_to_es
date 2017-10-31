@@ -1,48 +1,50 @@
 package modules
 
 type IdsAlert struct {
-	Time        uint64 `json:Time`
-	Src_ip      string `json:"Src_ip"`
-	Src_port    uint32 `json:"Src_port"`
-	Dest_ip     string `json:"Src_ip"`
-	Dest_port   uint32 `json:"Src_port"`
-	Proto       uint32 `json:"Proto"`
-	Byzoro_type string `json:"Byzoro_type"`
-	Attack_type string `json:"Attack_type"`
-	Details     string `json:"Details"`
-	Severity    uint32 `json:"Severity"`
-	Engine      string `json:"engine"`
+	Time         uint64 `json:time`
+	Src_ip       string `json:srcIp`
+	Src_ip_info  IpInfo `json:src_ip_info`
+	Src_port     uint32 `json:srcPort`
+	Dest_ip      string `json:destIp`
+	Dest_ip_info IpInfo `json:dst_ip_info`
+	Dest_port    uint32 `json:destPort`
+	Proto        uint32 `json:protocol`
+	Byzoro_type  string `json:byzoroType`
+	Attack_type  string `json:attackType`
+	Details      string `json:details`
+	Severity     uint32 `json:severity`
+	Engine       string `json:engine`
 }
 
 type WafAlert struct {
-	Client    string       `json:"Client"`
-	Rev       string       `json:"Rev"`
-	Msg       string       `json:"Msg"`
-	Attack    string       `json:"Attack"`
-	Severity  int32        `json:"Severity"`
-	Maturity  int32        `json:"Maturity"`
-	Accuracy  int32        `json:"Accuracy"`
-	Hostname  string       `json:"Hostname"`
-	Uri       string       `json:"Uri"`
-	Unique_id string       `json:"Unique_id"`
-	Ref       string       `json:"Ref"`
-	Tags      []string     `json:"Tags"`
+	Client    string       `json:"client"`
+	Rev       string       `json:"rev"`
+	Msg       string       `json:"msg"`
+	Attack    string       `json:"attack"`
+	Severity  int32        `json:"severity"`
+	Maturity  int32        `json:"maturity"`
+	Accuracy  int32        `json:"accuracy"`
+	Hostname  string       `json:"hostName"`
+	Uri       string       `json:"uri"`
+	Unique_id string       `json:"unique_id"`
+	Ref       string       `json:"ref"`
+	Tags      []string     `json:"tags"`
 	Rule      WafAlertRule `json:"Rule"`
-	Version   string       `json:"Version"`
+	Version   string       `json:"version"`
 	Xdr       []BackendObj `json:"xdr"`
 }
 
 type VdsAlert struct {
-	Log_time         int          `json:"Log_time"`
-	Threatname       string       `json:"Threatname"`
-	Local_threatname string       `json:"Local_threatname"`
-	Local_vtype      string       `json:"Local_vtype"`
-	Local_platfrom   string       `json:"Local_platfrom"`
-	Local_vname      string       `json:"Local_vname"`
-	Local_extent     string       `json:"Local_extent"`
-	Local_enginetype string       `json:"Local_enginetype"`
-	Local_logtype    string       `json:"Local_logtype"`
-	Local_engineip   string       `json:"Local_engineip"`
+	Log_time         int          `json:"LogTime"`
+	Threatname       string       `json:"threatName"`
+	Local_threatname string       `json:"localThreatName"`
+	Local_vtype      string       `json:"localVType"`
+	Local_platfrom   string       `json:"localPlatfrom"`
+	Local_vname      string       `json:"localVName"`
+	Local_extent     string       `json:"localExtent"`
+	Local_enginetype string       `json:"localEngineType"`
+	Local_logtype    string       `json:"localLogType"`
+	Local_engineip   string       `json:"localEngineIp"`
 	Xdr              []BackendObj `json:"xdr"`
 }
 
@@ -274,11 +276,11 @@ type LocationHdfs struct {
 }
 
 type WafAlertRule struct {
-	Ver  string `json:"Ver"`
-	Data string `json:"Data"`
-	File string `json:"File"`
-	Line uint64 `json:"Line"`
-	Id   uint64 `json:"Id"`
+	Ver  string `json:"ruleVersion"`
+	Data string `json:"ruleData"`
+	File string `json:"ruleFile"`
+	Line uint64 `json:"ruleLine"`
+	Id   uint64 `json:"ruleId"`
 }
 
 type mysqlLocation struct {
@@ -301,4 +303,36 @@ type IpInfo struct {
 	PhoneCode       string `json:"PhoneCode,omitempty"`
 	CountryCode     string `json:"CountryCode,omitempty"`
 	ContinentCode   string `json:"ContinentCode,omitempty"`
+}
+
+type SIpInfo struct {
+	Country         string `json:"srcCountry,omitempty"`
+	Province        string `json:"srcProvince,omitempty"`
+	City            string `json:"srcCity,omitempty"`
+	Organization    string `json:"srcOrganization,omitempty"`
+	Network         string `json:"srcNetwork,omitempty"`
+	Lng             string `json:"srcLng,omitempty"`
+	Lat             string `json:"srcLat,omitempty"`
+	TimeZone        string `json:"srcTimeZone,omitempty"`
+	UTC             string `json:"srcUTC,omitempty"`
+	RegionalismCode string `json:"srcRegionalismCode,omitempty"`
+	PhoneCode       string `json:"srcPhoneCode,omitempty"`
+	CountryCode     string `json:"srcCountryCode,omitempty"`
+	ContinentCode   string `json:"srcContinentCode,omitempty"`
+}
+
+type DIpInfo struct {
+	Country         string `json:"destCountry,omitempty"`
+	Province        string `json:"destProvince,omitempty"`
+	City            string `json:"destCity,omitempty"`
+	Organization    string `json:"destOrganization,omitempty"`
+	Network         string `json:"destNetwork,omitempty"`
+	Lng             string `json:"destLng,omitempty"`
+	Lat             string `json:"destLat,omitempty"`
+	TimeZone        string `json:"destTimeZone,omitempty"`
+	UTC             string `json:"destUTC,omitempty"`
+	RegionalismCode string `json:"destRegionalismCode,omitempty"`
+	PhoneCode       string `json:"destPhoneCode,omitempty"`
+	CountryCode     string `json:"destCountryCode,omitempty"`
+	ContinentCode   string `json:"destContinentCode,omitempty"`
 }
