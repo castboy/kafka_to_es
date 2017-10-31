@@ -1,19 +1,35 @@
 package modules
 
 type IdsAlert struct {
-	Time         uint64  `json:time`
-	Src_ip       string  `json:srcIp`
-	Src_ip_info  SIpInfo `json:src_ip_info`
-	Src_port     uint32  `json:srcPort`
-	Dest_ip      string  `json:destIp`
-	Dest_ip_info DIpInfo `json:dst_ip_info`
-	Dest_port    uint32  `json:destPort`
-	Proto        uint32  `json:protocol`
-	Byzoro_type  string  `json:byzoroType`
-	Attack_type  string  `json:attackType`
-	Details      string  `json:details`
-	Severity     uint32  `json:severity`
-	Engine       string  `json:engine`
+	Time         uint64
+	Src_ip       string
+	Src_ip_info  SIpInfo
+	Src_port     uint32
+	Dest_ip      string
+	Dest_ip_info DIpInfo
+	Dest_port    uint32
+	Proto        uint32
+	Byzoro_type  string
+	Attack_type  string
+	Details      string
+	Severity     uint32
+	Engine       string
+}
+
+type IdsAlertTo struct {
+	Time         uint64    `json:"time"`
+	Src_ip       string    `json:"srcIp"`
+	Src_ip_info  SIpInfoTo `json:"src_ip_info"`
+	Src_port     uint32    `json:"srcPort"`
+	Dest_ip      string    `json:"destIp"`
+	Dest_ip_info DIpInfoTo `json:"dst_ip_info"`
+	Dest_port    uint32    `json:"destPort"`
+	Proto        uint32    `json:"protocol"`
+	Byzoro_type  string    `json:"byzoroType"`
+	Attack_type  string    `json:"attackType"`
+	Details      string    `json:"details"`
+	Severity     uint32    `json:"severity"`
+	Engine       string    `json:"engine"`
 }
 
 type WafAlert struct {
@@ -306,33 +322,65 @@ type IpInfo struct {
 }
 
 type SIpInfo struct {
-	Country         string `json:srcCountry`
-	Province        string `json:srcProvince`
-	City            string `json:srcCity`
-	Organization    string `json:srcOrganization`
-	Network         string `json:srcNetwork`
-	Lng             string `json:srcLng`
-	Lat             string `json:srcLat`
-	TimeZone        string `json:srcTimeZone`
-	UTC             string `json:srcUTC`
-	RegionalismCode string `json:srcRegionalismCode`
-	PhoneCode       string `json:srcPhoneCode`
-	CountryCode     string `json:srcCountryCode`
-	ContinentCode   string `json:srcContinentCode`
+	Country         string
+	Province        string
+	City            string
+	Organization    string
+	Network         string
+	Lng             string
+	Lat             string
+	TimeZone        string
+	UTC             string
+	RegionalismCode string
+	PhoneCode       string
+	CountryCode     string
+	ContinentCode   string
+}
+
+type SIpInfoTo struct {
+	Country         string `json:"srcCountry"`
+	Province        string `json:"srcProvince"`
+	City            string `json:"srcCity"`
+	Organization    string `json:"srcOrganization"`
+	Network         string `json:"srcNetwork"`
+	Lng             string `json:"srcLng"`
+	Lat             string `json:"srcLat"`
+	TimeZone        string `json:"srcTimeZone"`
+	UTC             string `json:"srcUTC"`
+	RegionalismCode string `json:"srcRegionalismCode"`
+	PhoneCode       string `json:"srcPhoneCode"`
+	CountryCode     string `json:"srcCountryCode"`
+	ContinentCode   string `json:"srcContinentCode"`
 }
 
 type DIpInfo struct {
-	Country         string `json:destCountry`
-	Province        string `json:destProvince`
-	City            string `json:destCity`
-	Organization    string `json:destOrganization`
-	Network         string `json:destNetwork`
-	Lng             string `json:destLng`
-	Lat             string `json:destLat`
-	TimeZone        string `json:destTimeZone`
-	UTC             string `json:destUTC`
-	RegionalismCode string `json:destRegionalismCode`
-	PhoneCode       string `json:destPhoneCode`
-	CountryCode     string `json:destCountryCode`
-	ContinentCode   string `json:destContinentCode`
+	Country         string
+	Province        string
+	City            string
+	Organization    string
+	Network         string
+	Lng             string
+	Lat             string
+	TimeZone        string
+	UTC             string
+	RegionalismCode string
+	PhoneCode       string
+	CountryCode     string
+	ContinentCode   string
+}
+
+type DIpInfoTo struct {
+	Country         string `json:"destCountry"`
+	Province        string `json:"destProvince"`
+	City            string `json:"destCity"`
+	Organization    string `json:"destOrganization"`
+	Network         string `json:"destNetwork"`
+	Lng             string `json:"destLng"`
+	Lat             string `json:"destLat"`
+	TimeZone        string `json:"destTimeZone"`
+	UTC             string `json:"destUTC"`
+	RegionalismCode string `json:"destRegionalismCode"`
+	PhoneCode       string `json:"destPhoneCode"`
+	CountryCode     string `json:"destCountryCode"`
+	ContinentCode   string `json:'destContinentCode"`
 }
