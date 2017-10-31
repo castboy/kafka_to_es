@@ -306,33 +306,33 @@ type IpInfo struct {
 }
 
 type SIpInfo struct {
-	Country         string `json:"srcCountry,omitempty"`
-	Province        string `json:"srcProvince,omitempty"`
-	City            string `json:"srcCity,omitempty"`
-	Organization    string `json:"srcOrganization,omitempty"`
-	Network         string `json:"srcNetwork,omitempty"`
-	Lng             string `json:"srcLng,omitempty"`
-	Lat             string `json:"srcLat,omitempty"`
-	TimeZone        string `json:"srcTimeZone,omitempty"`
-	UTC             string `json:"srcUTC,omitempty"`
-	RegionalismCode string `json:"srcRegionalismCode,omitempty"`
-	PhoneCode       string `json:"srcPhoneCode,omitempty"`
-	CountryCode     string `json:"srcCountryCode,omitempty"`
-	ContinentCode   string `json:"srcContinentCode,omitempty"`
+	Country         string `json:srcCountry`
+	Province        string `json:srcProvince`
+	City            string `json:srcCity`
+	Organization    string `json:srcOrganization`
+	Network         string `json:srcNetwork`
+	Lng             string `json:srcLng`
+	Lat             string `json:srcLat`
+	TimeZone        string `json:srcTimeZone`
+	UTC             string `json:srcUTC`
+	RegionalismCode string `json:srcRegionalismCode`
+	PhoneCode       string `json:srcPhoneCode`
+	CountryCode     string `json:srcCountryCode`
+	ContinentCode   string `json:srcContinentCode`
 }
 
 type DIpInfo struct {
-	Country         string `json:"destCountry,omitempty"`
-	Province        string `json:"destProvince,omitempty"`
-	City            string `json:"destCity,omitempty"`
-	Organization    string `json:"destOrganization,omitempty"`
-	Network         string `json:"destNetwork,omitempty"`
-	Lng             string `json:"destLng,omitempty"`
-	Lat             string `json:"destLat,omitempty"`
-	TimeZone        string `json:"destTimeZone,omitempty"`
-	UTC             string `json:"destUTC,omitempty"`
-	RegionalismCode string `json:"destRegionalismCode,omitempty"`
-	PhoneCode       string `json:"destPhoneCode,omitempty"`
-	CountryCode     string `json:"destCountryCode,omitempty"`
-	ContinentCode   string `json:"destContinentCode,omitempty"`
+	Country         string `json:destCountry`
+	Province        string `json:destProvince`
+	City            string `json:destCity`
+	Organization    string `json:destOrganization`
+	Network         string `json:destNetwork`
+	Lng             string `json:destLng`
+	Lat             string `json:destLat`
+	TimeZone        string `json:destTimeZone`
+	UTC             string `json:destUTC`
+	RegionalismCode string `json:destRegionalismCode`
+	PhoneCode       string `json:destPhoneCode`
+	CountryCode     string `json:destCountryCode`
+	ContinentCode   string `json:destContinentCode`
 }
