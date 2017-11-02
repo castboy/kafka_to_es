@@ -3,10 +3,10 @@ package modules
 type IdsAlert struct {
 	Time         uint64
 	Src_ip       string
-	Src_ip_info  SIpInfo
+	Src_ip_info  IpInfo
 	Src_port     uint32
 	Dest_ip      string
-	Dest_ip_info DIpInfo
+	Dest_ip_info IpInfo
 	Dest_port    uint32
 	Proto        uint32
 	Byzoro_type  string
@@ -16,52 +16,37 @@ type IdsAlert struct {
 	Engine       string
 }
 
-type IdsAlertTo struct {
-	Time         uint64    `json:"time"`
-	Src_ip       string    `json:"srcIp"`
-	Src_ip_info  SIpInfoTo `json:"src_ip_info"`
-	Src_port     uint32    `json:"srcPort"`
-	Dest_ip      string    `json:"destIp"`
-	Dest_ip_info DIpInfoTo `json:"dst_ip_info"`
-	Dest_port    uint32    `json:"destPort"`
-	Proto        uint32    `json:"protocol"`
-	Byzoro_type  string    `json:"byzoroType"`
-	Attack_type  string    `json:"attackType"`
-	Details      string    `json:"details"`
-	Severity     uint32    `json:"severity"`
-	Engine       string    `json:"engine"`
-}
-
 type WafAlert struct {
-	Client    string       `json:"client"`
-	Rev       string       `json:"rev"`
-	Msg       string       `json:"msg"`
-	Attack    string       `json:"attack"`
-	Severity  int32        `json:"severity"`
-	Maturity  int32        `json:"maturity"`
-	Accuracy  int32        `json:"accuracy"`
-	Hostname  string       `json:"hostName"`
-	Uri       string       `json:"uri"`
-	Unique_id string       `json:"unique_id"`
-	Ref       string       `json:"ref"`
-	Tags      []string     `json:"tags"`
-	Rule      WafAlertRule `json:"Rule"`
-	Version   string       `json:"version"`
-	Xdr       []BackendObj `json:"xdr"`
+	Client    string
+	Rev       string
+	Msg       string
+	Attack    string
+	Severity  int32
+	Maturity  int32
+	Accuracy  int32
+	Hostname  string
+	Uri       string
+	Unique_id string
+	Ref       string
+	Tags      []string
+	Rule      WafAlertRule
+	Version   string
+	Xdr       []BackendObj
 }
 
 type VdsAlert struct {
-	Log_time         int          `json:"logTime"`
-	Threatname       string       `json:"threatName"`
-	Local_threatname string       `json:"localThreatName"`
-	Local_vtype      string       `json:"localVType"`
-	Local_platfrom   string       `json:"localPlatfrom"`
-	Local_vname      string       `json:"localVName"`
-	Local_extent     string       `json:"localExtent"`
-	Local_enginetype string       `json:"localEngineType"`
-	Local_logtype    string       `json:"localLogType"`
-	Local_engineip   string       `json:"localEngineIp"`
-	Xdr              []BackendObj `json:"xdr"`
+	Subfile          string
+	Log_time         int
+	Threatname       string
+	Local_threatname string
+	Local_vtype      string
+	Local_platfrom   string
+	Local_vname      string
+	Local_extent     string
+	Local_enginetype string
+	Local_logtype    string
+	Local_engineip   string
+	Xdr              []BackendObj
 }
 
 type WafAlertObj struct {
@@ -292,11 +277,11 @@ type LocationHdfs struct {
 }
 
 type WafAlertRule struct {
-	Ver  string `json:"ruleVersion"`
-	Data string `json:"ruleData"`
-	File string `json:"ruleFile"`
-	Line uint64 `json:"ruleLine"`
-	Id   uint64 `json:"ruleId"`
+	Ver  string
+	Data string
+	File string
+	Line uint64
+	Id   uint64
 }
 
 type mysqlLocation struct {
@@ -319,68 +304,4 @@ type IpInfo struct {
 	PhoneCode       string `json:"PhoneCode,omitempty"`
 	CountryCode     string `json:"CountryCode,omitempty"`
 	ContinentCode   string `json:"ContinentCode,omitempty"`
-}
-
-type SIpInfo struct {
-	Country         string
-	Province        string
-	City            string
-	Organization    string
-	Network         string
-	Lng             string
-	Lat             string
-	TimeZone        string
-	UTC             string
-	RegionalismCode string
-	PhoneCode       string
-	CountryCode     string
-	ContinentCode   string
-}
-
-type SIpInfoTo struct {
-	Country         string `json:"srcCountry"`
-	Province        string `json:"srcProvince"`
-	City            string `json:"srcCity"`
-	Organization    string `json:"srcOrganization"`
-	Network         string `json:"srcNetwork"`
-	Lng             string `json:"srcLng"`
-	Lat             string `json:"srcLat"`
-	TimeZone        string `json:"srcTimeZone"`
-	UTC             string `json:"srcUTC"`
-	RegionalismCode string `json:"srcRegionalismCode"`
-	PhoneCode       string `json:"srcPhoneCode"`
-	CountryCode     string `json:"srcCountryCode"`
-	ContinentCode   string `json:"srcContinentCode"`
-}
-
-type DIpInfo struct {
-	Country         string
-	Province        string
-	City            string
-	Organization    string
-	Network         string
-	Lng             string
-	Lat             string
-	TimeZone        string
-	UTC             string
-	RegionalismCode string
-	PhoneCode       string
-	CountryCode     string
-	ContinentCode   string
-}
-
-type DIpInfoTo struct {
-	Country         string `json:"destCountry"`
-	Province        string `json:"destProvince"`
-	City            string `json:"destCity"`
-	Organization    string `json:"destOrganization"`
-	Network         string `json:"destNetwork"`
-	Lng             string `json:"destLng"`
-	Lat             string `json:"destLat"`
-	TimeZone        string `json:"destTimeZone"`
-	UTC             string `json:"destUTC"`
-	RegionalismCode string `json:"destRegionalismCode"`
-	PhoneCode       string `json:"destPhoneCode"`
-	CountryCode     string `json:"destCountryCode"`
-	ContinentCode   string `json:'destContinentCode"`
 }
