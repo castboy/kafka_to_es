@@ -10,65 +10,12 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-func idsAlertObj(alert IdsAlert) IdsAlertTo {
-	src_ip_info := SIpInfoTo{
-		Country:         alert.Src_ip_info.Country,
-		Province:        alert.Src_ip_info.Province,
-		City:            alert.Src_ip_info.City,
-		Organization:    alert.Src_ip_info.Organization,
-		Network:         alert.Src_ip_info.Network,
-		Lng:             alert.Src_ip_info.Lng,
-		Lat:             alert.Src_ip_info.Lat,
-		TimeZone:        alert.Src_ip_info.TimeZone,
-		UTC:             alert.Src_ip_info.UTC,
-		RegionalismCode: alert.Src_ip_info.RegionalismCode,
-		PhoneCode:       alert.Src_ip_info.PhoneCode,
-		CountryCode:     alert.Src_ip_info.CountryCode,
-		ContinentCode:   alert.Src_ip_info.ContinentCode,
-	}
-
-	dest_ip_info := DIpInfoTo{
-		Country:         alert.Dest_ip_info.Country,
-		Province:        alert.Dest_ip_info.Province,
-		City:            alert.Dest_ip_info.City,
-		Organization:    alert.Dest_ip_info.Organization,
-		Network:         alert.Dest_ip_info.Network,
-		Lng:             alert.Dest_ip_info.Lng,
-		Lat:             alert.Dest_ip_info.Lat,
-		TimeZone:        alert.Dest_ip_info.TimeZone,
-		UTC:             alert.Dest_ip_info.UTC,
-		RegionalismCode: alert.Dest_ip_info.RegionalismCode,
-		PhoneCode:       alert.Dest_ip_info.PhoneCode,
-		CountryCode:     alert.Dest_ip_info.CountryCode,
-		ContinentCode:   alert.Dest_ip_info.ContinentCode,
-	}
-
-	obj := IdsAlertTo{
-		Time:         alert.Time,
-		Src_ip:       alert.Src_ip,
-		Src_ip_info:  src_ip_info,
-		Src_port:     alert.Src_port,
-		Dest_ip:      alert.Dest_ip,
-		Dest_ip_info: dest_ip_info,
-		Dest_port:    alert.Dest_port,
-		Proto:        alert.Proto,
-		Byzoro_type:  alert.Byzoro_type,
-		Attack_type:  alert.Attack_type,
-		Details:      alert.Details,
-		Severity:     alert.Severity,
-		Engine:       alert.Engine,
-	}
-
-	return obj
-}
-
 func parseAlert(msg []byte, alertType string) (interface{}, error) {
 	switch alertType {
 	case "ids":
 		var alert IdsAlert
 		err := json.Unmarshal(msg, &alert)
-		alertObj := idsAlertObj(alert)
-		return alertObj, err
+		return alert, err
 	case "waf":
 		var alert WafAlertObj
 		err := json.Unmarshal(msg, &alert)
