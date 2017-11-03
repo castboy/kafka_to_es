@@ -109,8 +109,8 @@ func vdsAlertSql(alert VdsAlert, xdr BackendObj) string {
 		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
 		"alert_vds", xdr.Time, alert.Threatname, "", alert.Local_threatname,
 		alert.Local_vtype, alert.Local_platfrom, alert.Local_vname,
-		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype,
-		alert.Local_engineip, "", "", 0, 0, "", "",
+		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype, alert.Local_engineip,
+		xdr.Conn.Sip, xdr.Conn.Dip, xdr.Conn.Sport, xdr.Conn.Dport, xdr.App.File, xdr.Http.Url,
 		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
 		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng)
 
