@@ -10,6 +10,44 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
+func attackMerge(alert interface{}) interface{} {
+	switch rt := alert.(type) {
+	case IdsAlert:
+		switch rt.Attack_type {
+		case "DOS", "DDOS":
+			rt.Attack_type = "DDOS"
+		case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
+			rt.Attack_type = "scaning"
+		default:
+		}
+
+		return rt
+	case WafAlert:
+		switch rt.Attack {
+		case "DOS", "DDOS":
+			rt.Attack = "DDOS"
+		case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
+			rt.Attack = "scaning"
+		default:
+		}
+
+		return rt
+	case VdsAlert:
+		switch rt.Local_vtype {
+		case "DOS", "DDOS":
+			rt.Local_vtype = "DDOS"
+		case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
+			rt.Local_vtype = "scaning"
+		default:
+		}
+
+		return rt
+	default:
+	}
+
+	return nil
+}
+
 func parseAlert(msg []byte, alertType string) (interface{}, error) {
 	switch alertType {
 	case "ids":
@@ -38,6 +76,7 @@ func parseXdr(msg []byte) (BackendObj, error) {
 
 func parseXdrAlert(bytes []byte, alertType string) (interface{}, BackendObj, error) {
 	alert, alertErr := parseAlert(bytes, alertType)
+	alert = attackMerge(alert)
 	xdr, xdrErr := parseXdr(bytes)
 	if nil == alertErr && nil == xdrErr {
 		return alert, xdr, nil
