@@ -4,16 +4,17 @@ type IdsAlert struct {
 	Time         uint64
 	Src_ip       string
 	Src_ip_info  IpInfo
-	Src_port     uint32
+	Src_port     uint16
 	Dest_ip      string
 	Dest_ip_info IpInfo
-	Dest_port    uint32
-	Proto        uint32
+	Dest_port    uint16
+	Proto        uint8
 	Byzoro_type  string
 	Attack_type  string
 	Details      string
 	Severity     uint32
 	Engine       string
+	Xdr          []BackendObj
 }
 
 type WafAlert struct {

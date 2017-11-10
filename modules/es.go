@@ -96,10 +96,22 @@ func esObj(msg []byte, alert interface{}, xdr BackendObj) interface{} {
 		rt.Xdr = xdrSlice
 		alert = rt
 	case IdsAlert:
-		alert = rt
+		alert = idsXdr(&rt)
 	}
 
 	return alert
+}
+
+func idsXdr(i *IdsAlert) IdsAlert {
+	i.Xdr[0].Conn.Dip = i.Dest_ip
+	i.Xdr[0].Conn.Dport = i.Dest_port
+	i.Xdr[0].Conn.DipInfo = i.Dest_ip_info
+	i.Xdr[0].Conn.Sip = i.Src_ip
+	i.Xdr[0].Conn.Sport = i.Src_port
+	i.Xdr[0].Conn.SipInfo = i.Src_ip_info
+	i.Xdr[0].Conn.Proto = i.Proto
+
+	return *i
 }
 
 func addEs(topic string, obj interface{}) {
