@@ -10,6 +10,7 @@ type IdsAlert struct {
 	Dest_port    uint16
 	Proto        uint8
 	Byzoro_type  string
+	Attack       string
 	Attack_type  string
 	Details      string
 	Severity     uint32
@@ -18,6 +19,7 @@ type IdsAlert struct {
 }
 
 type BackendObjIds struct {
+	Time uint64       `json:Time`
 	Conn Conn_backend `json:Conn`
 }
 
@@ -45,6 +47,7 @@ type VdsAlert struct {
 	Threatname       string
 	Local_threatname string
 	Local_vtype      string
+	Attack           string
 	Local_platfrom   string
 	Local_vname      string
 	Local_extent     string

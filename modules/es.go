@@ -90,20 +90,29 @@ func esObj(msg []byte, alert interface{}, xdr BackendObj) interface{} {
 	xdrSlice = append(xdrSlice, xdr)
 	switch rt := alert.(type) {
 	case VdsAlert:
-		rt.Xdr = xdrSlice
-		alert = rt
+		alert = alertVds(&rt, xdrSlice)
 	case WafAlert:
 		rt.Xdr = xdrSlice
 		alert = rt
 	case IdsAlert:
-		alert = idsXdr(&rt)
+		alert = alertIds(&rt)
 	}
 
 	return alert
 }
 
-func idsXdr(i *IdsAlert) IdsAlert {
+func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
+	v.Attack = v.Local_vtype
+	v.Xdr = s
+
+	return *v
+}
+
+func alertIds(i *IdsAlert) IdsAlert {
+	i.Attack = i.Byzoro_type
+
 	xdr := BackendObjIds{
+		Time: i.Time,
 		Conn: Conn_backend{
 			Proto:   i.Proto,
 			Sip:     i.Src_ip,
