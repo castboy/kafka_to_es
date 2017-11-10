@@ -103,7 +103,7 @@ func esObj(msg []byte, alert interface{}, xdr BackendObj) interface{} {
 }
 
 func idsXdr(i *IdsAlert) IdsAlert {
-	xdr := BackendObj{
+	xdr := BackendObjIds{
 		Conn: Conn_backend{
 			Proto:   i.Proto,
 			Sip:     i.Src_ip,

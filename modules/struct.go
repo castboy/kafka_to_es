@@ -14,7 +14,11 @@ type IdsAlert struct {
 	Details      string
 	Severity     uint32
 	Engine       string
-	Xdr          []BackendObj
+	Xdr          []BackendObjIds
+}
+
+type BackendObjIds struct {
+	Conn Conn_backend `json:Conn`
 }
 
 type WafAlert struct {
