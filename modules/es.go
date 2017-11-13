@@ -92,8 +92,7 @@ func esObj(msg []byte, alert interface{}, xdr BackendObj) interface{} {
 	case VdsAlert:
 		alert = alertVds(&rt, xdrSlice)
 	case WafAlert:
-		rt.Xdr = xdrSlice
-		alert = rt
+		alert = alertWaf(&rt, xdrSlice)
 	case IdsAlert:
 		alert = alertIds(&rt)
 	}
@@ -103,6 +102,14 @@ func esObj(msg []byte, alert interface{}, xdr BackendObj) interface{} {
 
 func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 	v.Attack = v.Local_vtype
+	v.SeverityAppend = severityVds(v.Local_extent)
+	v.Xdr = s
+
+	return *v
+}
+
+func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
+	v.SeverityAppend = severityWaf(v.Severity)
 	v.Xdr = s
 
 	return *v
@@ -110,6 +117,7 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 
 func alertIds(i *IdsAlert) IdsAlert {
 	i.Attack = i.Byzoro_type
+	i.SeverityAppend = severityIds(i.Severity)
 
 	xdr := BackendObjIds{
 		Time: i.Time,
@@ -127,6 +135,45 @@ func alertIds(i *IdsAlert) IdsAlert {
 	i.Xdr = append(i.Xdr, xdr)
 
 	return *i
+}
+
+func severityWaf(s int32) string {
+	switch s {
+	case 0, 1, 2:
+		return "高"
+	case 3, 4:
+		return "中"
+	case 5, 6, 7:
+		return "低"
+	default:
+		panic("wrong waf severity")
+	}
+}
+
+func severityIds(s uint32) string {
+	switch s {
+	case 0, 1, 2:
+		return "高"
+	case 3, 4:
+		return "中"
+	case 5, 6, 7:
+		return "低"
+	default:
+		panic("wrong waf severity")
+	}
+}
+
+func severityVds(s string) string {
+	switch s {
+	case "High":
+		return "高"
+	case "Medium":
+		return "中"
+	case "Low":
+		return "低"
+	default:
+		panic("wrong vds severity")
+	}
 }
 
 func addEs(topic string, obj interface{}) {

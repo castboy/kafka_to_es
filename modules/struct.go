@@ -1,21 +1,22 @@
 package modules
 
 type IdsAlert struct {
-	Time         uint64
-	Src_ip       string
-	Src_ip_info  IpInfo
-	Src_port     uint16
-	Dest_ip      string
-	Dest_ip_info IpInfo
-	Dest_port    uint16
-	Proto        uint8
-	Byzoro_type  string
-	Attack       string
-	Attack_type  string
-	Details      string
-	Severity     uint32
-	Engine       string
-	Xdr          []BackendObjIds
+	Time           uint64
+	Src_ip         string
+	Src_ip_info    IpInfo
+	Src_port       uint16
+	Dest_ip        string
+	Dest_ip_info   IpInfo
+	Dest_port      uint16
+	Proto          uint8
+	Byzoro_type    string
+	Attack         string
+	Attack_type    string
+	Details        string
+	Severity       uint32
+	SeverityAppend string
+	Engine         string
+	Xdr            []BackendObjIds
 }
 
 type BackendObjIds struct {
@@ -24,21 +25,22 @@ type BackendObjIds struct {
 }
 
 type WafAlert struct {
-	Client    string
-	Rev       string
-	Msg       string
-	Attack    string
-	Severity  int32
-	Maturity  int32
-	Accuracy  int32
-	Hostname  string
-	Uri       string
-	Unique_id string
-	Ref       string
-	Tags      []string
-	Rule      WafAlertRule
-	Version   string
-	Xdr       []BackendObj
+	Client         string
+	Rev            string
+	Msg            string
+	Attack         string
+	Severity       int32
+	SeverityAppend string
+	Maturity       int32
+	Accuracy       int32
+	Hostname       string
+	Uri            string
+	Unique_id      string
+	Ref            string
+	Tags           []string
+	Rule           WafAlertRule
+	Version        string
+	Xdr            []BackendObj
 }
 
 type VdsAlert struct {
@@ -51,6 +53,7 @@ type VdsAlert struct {
 	Local_platfrom   string
 	Local_vname      string
 	Local_extent     string
+	SeverityAppend   string
 	Local_enginetype string
 	Local_logtype    string
 	Local_engineip   string
