@@ -20,8 +20,9 @@ type IdsAlert struct {
 }
 
 type BackendObjIds struct {
-	Time uint64       `json:Time`
-	Conn Conn_backend `json:Conn`
+	Time       uint64 `json:Time`
+	TimeAppend string
+	Conn       Conn_backend `json:Conn`
 }
 
 type WafAlert struct {
@@ -69,12 +70,13 @@ type VdsAlertObj struct {
 	Alert VdsAlert `json:"Alert"`
 }
 type BackendObj struct {
-	Vendor      string       `json:Verdor`
-	Id          uint64       `json:id`
-	Ipv4        bool         `json:Ipv4`
-	Class       uint8        `json:Class`
-	Type        uint32       `json:Type`
-	Time        uint64       `json:Time`
+	Vendor      string `json:Verdor`
+	Id          uint64 `json:id`
+	Ipv4        bool   `json:Ipv4`
+	Class       uint8  `json:Class`
+	Type        uint32 `json:Type`
+	Time        uint64 `json:Time`
+	TimeAppend  string
 	Offline_Tag string       `json:Offline_Tag`
 	Task_Id     string       `json:Task_Id`
 	Conn        Conn_backend `json:Conn`

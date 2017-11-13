@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"time"
 
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -104,6 +105,9 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 	v.Attack = v.Local_vtype
 	v.SeverityAppend = severityVds(v.Local_extent)
 	v.Xdr = s
+	for k, val := range v.Xdr {
+		v.Xdr[k].TimeAppend = timeFormat(val.Time)
+	}
 
 	return *v
 }
@@ -111,6 +115,9 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 	v.SeverityAppend = severityWaf(v.Severity)
 	v.Xdr = s
+	for k, val := range v.Xdr {
+		v.Xdr[k].TimeAppend = timeFormat(val.Time)
+	}
 
 	return *v
 }
@@ -118,9 +125,11 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 func alertIds(i *IdsAlert) IdsAlert {
 	i.Attack = i.Byzoro_type
 	i.SeverityAppend = severityIds(i.Severity)
+	t := timeFormat(i.Time)
 
 	xdr := BackendObjIds{
-		Time: i.Time,
+		Time:       i.Time,
+		TimeAppend: t,
 		Conn: Conn_backend{
 			Proto:   i.Proto,
 			Sip:     i.Src_ip,
@@ -174,6 +183,13 @@ func severityVds(s string) string {
 	default:
 		panic("wrong vds severity")
 	}
+}
+
+func timeFormat(t uint64) string {
+	tp := t / 1000000
+	tm := time.Unix(int64(tp), 0)
+
+	return tm.Format("2006-01-02 03:04:05")
 }
 
 func addEs(topic string, obj interface{}) {
