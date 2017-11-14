@@ -105,6 +105,7 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 	v.Attack = v.Local_vtype
 	v.SeverityAppend = severityVds(v.Local_extent)
 	v.Xdr = s
+	v.Type = "vds"
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend = timeFormat(val.Time)
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
@@ -116,6 +117,7 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 	v.SeverityAppend = severityWaf(v.Severity)
 	v.Xdr = s
+	v.Type = "waf"
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend = timeFormat(val.Time)
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
@@ -127,6 +129,7 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 func alertIds(i *IdsAlert) IdsAlert {
 	i.Attack = i.Byzoro_type
 	i.SeverityAppend = severityIds(i.Severity)
+	i.Type = "ids"
 	t := timeFormat(i.Time)
 	p := protoFormat(i.Proto)
 

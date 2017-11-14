@@ -16,6 +16,7 @@ type IdsAlert struct {
 	Severity       uint32
 	SeverityAppend string
 	Engine         string
+	Type           string
 	Xdr            []BackendObjIds
 }
 
@@ -41,6 +42,7 @@ type WafAlert struct {
 	Tags           []string
 	Rule           WafAlertRule
 	Version        string
+	Type           string
 	Xdr            []BackendObj
 }
 
@@ -58,6 +60,7 @@ type VdsAlert struct {
 	Local_enginetype string
 	Local_logtype    string
 	Local_engineip   string
+	Type             string
 	Xdr              []BackendObj
 }
 
