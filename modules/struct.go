@@ -251,13 +251,14 @@ type BackendObj struct {
 }
 
 type Conn_backend struct {
-	Proto   uint8  `json:Proto`
-	Sport   uint16 `json:Sport`
-	Dport   uint16 `json:Dport`
-	Sip     string `json:Sip`
-	SipInfo IpInfo `json:SipInfo`
-	Dip     string `json:Dip`
-	DipInfo IpInfo `json:DipInfo`
+	Proto       uint8 `json:Proto`
+	ProtoAppend string
+	Sport       uint16 `json:Sport`
+	Dport       uint16 `json:Dport`
+	Sip         string `json:Sip`
+	SipInfo     IpInfo `json:SipInfo`
+	Dip         string `json:Dip`
+	DipInfo     IpInfo `json:DipInfo`
 }
 
 type CertsLink struct {

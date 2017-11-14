@@ -107,6 +107,7 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 	v.Xdr = s
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend = timeFormat(val.Time)
+		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
 	}
 
 	return *v
@@ -117,6 +118,7 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 	v.Xdr = s
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend = timeFormat(val.Time)
+		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
 	}
 
 	return *v
@@ -126,18 +128,20 @@ func alertIds(i *IdsAlert) IdsAlert {
 	i.Attack = i.Byzoro_type
 	i.SeverityAppend = severityIds(i.Severity)
 	t := timeFormat(i.Time)
+	p := protoFormat(i.Proto)
 
 	xdr := BackendObjIds{
 		Time:       i.Time,
 		TimeAppend: t,
 		Conn: Conn_backend{
-			Proto:   i.Proto,
-			Sip:     i.Src_ip,
-			Sport:   i.Src_port,
-			SipInfo: i.Src_ip_info,
-			Dip:     i.Dest_ip,
-			Dport:   i.Dest_port,
-			DipInfo: i.Dest_ip_info,
+			Proto:       i.Proto,
+			ProtoAppend: p,
+			Sip:         i.Src_ip,
+			Sport:       i.Src_port,
+			SipInfo:     i.Src_ip_info,
+			Dip:         i.Dest_ip,
+			Dport:       i.Dest_port,
+			DipInfo:     i.Dest_ip_info,
 		},
 	}
 
@@ -190,6 +194,14 @@ func timeFormat(t uint64) string {
 	tm := time.Unix(int64(tp), 0)
 
 	return tm.Format("2006-01-02 03:04:05")
+}
+
+func protoFormat(p uint8) string {
+	if 6 == p {
+		return "tcp"
+	}
+
+	return "udp"
 }
 
 func addEs(topic string, obj interface{}) {
