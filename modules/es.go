@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"regexp"
 	"time"
 
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -104,6 +105,7 @@ func esObj(msg []byte, alert interface{}, xdr BackendObj) interface{} {
 func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 	v.Attack = v.Local_vtype
 	v.SeverityAppend = severityVds(v.Local_extent)
+	v.Attack = attackFormat(v.Attack)
 	v.Xdr = s
 	v.Type = "vds"
 	for k, val := range v.Xdr {
@@ -118,6 +120,7 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 	v.SeverityAppend = severityWaf(v.Severity)
 	v.Xdr = s
 	v.Type = "waf"
+	v.Attack = attackFormat(v.Attack)
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend = timeFormat(val.Time)
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
@@ -130,6 +133,7 @@ func alertIds(i *IdsAlert) IdsAlert {
 	i.Attack = i.Byzoro_type
 	i.SeverityAppend = severityIds(i.Severity)
 	i.Type = "ids"
+	i.Attack = attackFormat(i.Attack)
 	t := timeFormat(i.Time)
 	p := protoFormat(i.Proto)
 
@@ -205,6 +209,14 @@ func protoFormat(p uint8) string {
 	}
 
 	return "udp"
+}
+
+func attackFormat(s string) string {
+	if match, _ := regexp.MatchString("attack-.*", s); match {
+		return s[7:]
+	}
+
+	return s
 }
 
 func addEs(topic string, obj interface{}) {
