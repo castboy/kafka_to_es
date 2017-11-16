@@ -3,6 +3,7 @@ package modules
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/optiopay/kafka"
 )
@@ -56,6 +57,7 @@ func consume(consumer kafka.Consumer) []byte {
 	var bytes []byte
 	msg, err := consumer.Consume()
 	if nil != err {
+		time.Sleep(60 * time.Second)
 	} else {
 		bytes = msg.Value
 	}
