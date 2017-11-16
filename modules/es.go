@@ -221,7 +221,7 @@ func attackFormat(s string) string {
 
 func addEs(topic string, obj interface{}) {
 	ctx := context.Background()
-	client, err := elastic.NewClient(elastic.SetURL("http://10.88.1.102:9200"))
+	client, err := elastic.NewClient()
 	if err != nil {
 		log.Fatal("can not conn es")
 	}
