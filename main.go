@@ -3,7 +3,7 @@ package main
 import (
 	//	"fmt"
 
-	"./modules"
+	"kafka_to_es/modules"
 	//	_ "./modules"
 )
 
