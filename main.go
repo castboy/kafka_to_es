@@ -4,7 +4,7 @@ import (
 	//	"fmt"
 
 	"./modules"
-	_ "./modules"
+	//	_ "./modules"
 )
 
 func main() {
