@@ -16,7 +16,7 @@ var client *elastic.Client
 
 func initCli() {
 	var err error
-	client, err = elastic.NewClient(elastic.SetURL(esNode))
+	client, err = elastic.NewClient(elastic.SetURL(esNode + ":" + port))
 
 	if err != nil {
 		log.Fatal("can not conn es")
