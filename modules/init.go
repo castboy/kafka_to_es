@@ -13,6 +13,7 @@ import (
 var topic = make(map[string][]string)
 var status = make(map[string][]int64)
 var conf *goini.Config
+var esNode string
 
 func init() {
 	getConf()
@@ -22,6 +23,9 @@ func init() {
 func getConf() {
 	conf = goini.SetConfig("conf/conf.ini")
 	confList := conf.ReadList()
+	esNode = conf.GetValue("elasticsearch", "host")
+
+	initCli()
 	parsePartition(confList[0]["topic"])
 }
 

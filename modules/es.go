@@ -12,6 +12,17 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
+var client *elastic.Client
+
+func initCli() {
+	var err error
+	client, err = elastic.NewClient(elastic.SetURL(esNode))
+
+	if err != nil {
+		log.Fatal("can not conn es")
+	}
+}
+
 func attackMerge(alert interface{}) interface{} {
 	switch rt := alert.(type) {
 	case IdsAlert:
@@ -221,12 +232,8 @@ func attackFormat(s string) string {
 
 func addEs(topic string, obj interface{}) {
 	ctx := context.Background()
-	client, err := elastic.NewClient()
-	if err != nil {
-		log.Fatal("can not conn es")
-	}
 
-	_, err = client.Index().
+	_, err := client.Index().
 		Index("apt").
 		Type(esType(topic)).
 		BodyJson(obj).
