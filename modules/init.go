@@ -63,7 +63,6 @@ func firstRunStatus() {
 func getStatus() bool {
 	fi, err := os.Open("log/status")
 	if err != nil {
-		log.Fatalln("fail to get run-status of exit last time")
 	}
 
 	defer fi.Close()
