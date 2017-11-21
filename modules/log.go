@@ -7,7 +7,7 @@ import (
 )
 
 func InitLog() {
-	logger, err := seelog.LoggerFromConfigAsFile("seelog.xml")
+	logger, err := seelog.LoggerFromConfigAsFile("conf/seelog.xml")
 
 	if err != nil {
 		log.Fatal("Log Configuration File Does Not Exist")

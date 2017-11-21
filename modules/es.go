@@ -238,7 +238,7 @@ func addEs(topic string, obj interface{}) {
 		BodyJson(obj).
 		Do(ctx)
 	if err != nil {
-		panic(err)
+		Log("ERR", "to es %s err", esType(topic))
 	} else {
 		Log("INF", "%s", "success to es")
 	}
