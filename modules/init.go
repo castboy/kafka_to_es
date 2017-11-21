@@ -18,6 +18,8 @@ var exit = "Shut down due to critical fault."
 
 func init() {
 	getConf()
+	initCli()
+	InitLog()
 	initStatus()
 }
 
@@ -27,7 +29,6 @@ func getConf() {
 	esNode = conf.GetValue("elasticsearch", "host")
 	port = conf.GetValue("elasticsearch", "port")
 
-	initCli()
 	parsePartition(confList[0]["topic"])
 }
 
