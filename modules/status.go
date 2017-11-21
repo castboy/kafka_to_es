@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	//	"fmt"
 	"io/ioutil"
-	"log"
 	"time"
 )
 
@@ -37,10 +36,10 @@ func SendRecordStatusMsg(seconds int) {
 func record() {
 	byte, err := json.Marshal(status)
 	if nil != err {
-		log.Println("json.Marshal err in record()")
+		Log("ERR", "%s", "json.Marshal err in record()")
 	}
 	err = ioutil.WriteFile("log/status", byte, 0666)
 	if nil != err {
-		log.Println("ioutil.WriteFile err in record()")
+		Log("ERR", "%s", "ioutil.WriteFile err in record()")
 	}
 }

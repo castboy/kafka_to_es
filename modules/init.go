@@ -2,7 +2,6 @@ package modules
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -15,6 +14,7 @@ var status = make(map[string][]int64)
 var conf *goini.Config
 var esNode string
 var port string
+var exit = "Shut down due to critical fault."
 
 func init() {
 	getConf()
@@ -52,9 +52,10 @@ func initStatus() {
 
 	bytes, err := json.Marshal(status)
 	if nil != err {
-		fmt.Println("status code err")
+		Log("ERR", "%s", "json.Marshal status err")
 	}
-	fmt.Println(string(bytes))
+
+	Log("INF", "init status: %s", string(bytes))
 }
 
 func firstRunStatus() {
@@ -68,13 +69,14 @@ func firstRunStatus() {
 func getStatus() bool {
 	fi, err := os.Open("log/status")
 	if err != nil {
+		Log("ERR", "%s", "open log/status err")
 	}
 
 	defer fi.Close()
 
 	fd, err := ioutil.ReadAll(fi)
 	if nil != err {
-		fmt.Println("log/status read err")
+		Log("ERR", "%s", "read log/status err")
 	}
 
 	err = json.Unmarshal(fd, &status)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"regexp"
 	"time"
@@ -16,7 +15,7 @@ var client *elastic.Client
 
 func initCli() {
 	var err error
-	client, err = elastic.NewClient(elastic.SetURL("http://"+ esNode + ":" + port))
+	client, err = elastic.NewClient(elastic.SetURL("http://" + esNode + ":" + port))
 
 	if err != nil {
 		log.Fatal("can not conn es")
@@ -241,7 +240,7 @@ func addEs(topic string, obj interface{}) {
 	if err != nil {
 		panic(err)
 	} else {
-		fmt.Println("success to es")
+		Log("INF", "%s", "success to es")
 	}
 }
 

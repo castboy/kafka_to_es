@@ -3,7 +3,6 @@ package modules
 import (
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/optiopay/kafka"
 )
@@ -34,7 +33,8 @@ func initBroker(localhost string) {
 	var err error
 	broker, err = kafka.Dial(kafkaAddrs, conf)
 	if err != nil {
-		log.Fatalf("cannot connect to kafka cluster: %s", err)
+		Log("CRT", "cannot connect to kafka cluster: %s", kafkaAddrs)
+		log.Fatal(exit)
 	}
 
 	defer broker.Close()
@@ -53,15 +53,14 @@ func initConsumers() {
 	}
 }
 
-func consume(consumer kafka.Consumer) []byte {
+func consume(consumer kafka.Consumer) ([]byte, error) {
 	var bytes []byte
 	msg, err := consumer.Consume()
 	if nil != err {
-		time.Sleep(60 * time.Second)
-	} else {
-		bytes = msg.Value
+		return bytes, err
 	}
-	return bytes
+
+	return msg.Value, nil
 }
 
 func Kafka() {

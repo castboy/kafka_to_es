@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"fmt"
 	"regexp"
 	"sync"
 	"time"
@@ -34,15 +33,17 @@ func alertType(topic string) string {
 
 func toDb(topic string, partition int32, alertType string) {
 	for {
-		bytes := consume(consumers[topic][partition])
-		fmt.Println(string(bytes))
-		alert, xdr, err := parseXdrAlert(bytes, alertType)
-		if nil == err {
-			toEs(bytes, alert, xdr, topic)
-			//			toMysql(alert, xdr, topic, alertType)
-			sendStatusMsg(topic, partition)
+		bytes, err := consume(consumers[topic][partition])
+		if nil != err {
+			time.Sleep(60 * time.Second)
+			Log("WRN", "no data in %s %d partiton", topic, partition)
 		} else {
-			time.Sleep(5 * time.Second)
+			alert, xdr, err := parseXdrAlert(bytes, alertType)
+			if nil == err {
+				toEs(bytes, alert, xdr, topic)
+				//			toMysql(alert, xdr, topic, alertType)
+				sendStatusMsg(topic, partition)
+			}
 		}
 	}
 }
