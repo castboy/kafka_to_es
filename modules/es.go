@@ -58,11 +58,11 @@ func initCli() {
 func attackMerge(alert interface{}) interface{} {
 	switch rt := alert.(type) {
 	case IdsAlert:
-		switch attackFormat(rt.Attack_type) {
+		switch attackFormat(rt.Byzoro_type) {
 		case "DOS", "DDOS", "dos", "ddos", "Dos", "DDos":
-			rt.Attack_type = "ddos"
+			rt.Byzoro_type = "ddos"
 		case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
-			rt.Attack_type = "scaning"
+			rt.Byzoro_type = "scaning"
 		default:
 		}
 
@@ -189,7 +189,7 @@ func alertIds(i *IdsAlert) IdsAlert {
 	t := timeFormat(i.Time)
 	p := protoFormat(i.Proto)
 
-	if t, ok := attackTypeFormat[i.Attack_type]; ok {
+	if t, ok := attackTypeFormat[i.Byzoro_type]; ok {
 		i.Attack = t
 	} else {
 		i.Attack = attackTypeFormat["other"]
