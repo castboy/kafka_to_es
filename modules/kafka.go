@@ -22,7 +22,7 @@ func initConsumer(topic string, partition int32, start int64) (kafka.Consumer, e
 		log.Fatalln(errLog)
 	}
 
-	Log("INF", "init consumer ok: %s %d partition", topic, int(partition))
+	Log("INF", "init consumer ok: ", topic, int(partition))
 
 	return consumer, err
 }
