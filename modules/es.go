@@ -288,7 +288,7 @@ func addEs(topic string, obj interface{}) {
 	if err != nil {
 		Log("ERR", "to es %s err", esType(topic))
 	} else {
-		Log("INF", "%s", "success to es")
+		Log("INF", "success to es: %s", esType(topic))
 	}
 }
 

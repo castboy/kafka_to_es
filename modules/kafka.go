@@ -22,6 +22,8 @@ func initConsumer(topic string, partition int32, start int64) (kafka.Consumer, e
 		log.Fatalln(errLog)
 	}
 
+	Log("INF", "init consumer ok: %s %d partition", topic, partition)
+
 	return consumer, err
 }
 
