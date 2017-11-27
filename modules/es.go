@@ -11,6 +11,39 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
+var attackTypeFormat = map[string]string{
+	"disclosure":          "信息泄露",
+	"ddos":                "拒绝服务",
+	"reputation_ip":       "黑名单匹配",
+	"lfi":                 "路径穿越",
+	"sqli":                "SQL注入",
+	"xss":                 "XSS攻击",
+	"injection_php":       "PHP注入",
+	"generic":             "异常访问",
+	"rce":                 "远程命令",
+	"protocol":            "协议攻击",
+	"rfi":                 "远程文件注入",
+	"fixation":            "会话固定",
+	"privilege_gain":      "提权",
+	"web_attack":          "Web攻击",
+	"application_attack":  "应用程序攻击",
+	"candc":               "命令和控制",
+	"malware":             "恶意软件",
+	"misc_attack":         "杂项攻击",
+	"backdoor":            "后门",
+	"trojan":              "木马",
+	"spyware":             "间谍软件",
+	"virus":               "感染型病毒",
+	"worm":                "蠕虫",
+	"hacktool":            "黑客工具",
+	"exploit":             "漏洞利用",
+	"webshell":            "webshell",
+	"exceptionalvisit":    "异常访问",
+	"abnormal_connection": "异常连接",
+	"scaning":             "扫描探测",
+	"other":               "其他",
+}
+
 var client *elastic.Client
 
 func initCli() {
@@ -25,9 +58,9 @@ func initCli() {
 func attackMerge(alert interface{}) interface{} {
 	switch rt := alert.(type) {
 	case IdsAlert:
-		switch rt.Attack_type {
-		case "DOS", "DDOS":
-			rt.Attack_type = "DDOS"
+		switch attackFormat(rt.Attack_type) {
+		case "DOS", "DDOS", "dos", "ddos", "Dos", "DDos":
+			rt.Attack_type = "ddos"
 		case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
 			rt.Attack_type = "scaning"
 		default:
@@ -35,9 +68,9 @@ func attackMerge(alert interface{}) interface{} {
 
 		return rt
 	case WafAlert:
-		switch rt.Attack {
-		case "DOS", "DDOS":
-			rt.Attack = "DDOS"
+		switch attackFormat(rt.Attack) {
+		case "DOS", "DDOS", "dos", "ddos", "Dos", "DDos":
+			rt.Attack = "ddos"
 		case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
 			rt.Attack = "scaning"
 		default:
@@ -45,9 +78,9 @@ func attackMerge(alert interface{}) interface{} {
 
 		return rt
 	case VdsAlert:
-		switch rt.Local_vtype {
-		case "DOS", "DDOS":
-			rt.Local_vtype = "DDOS"
+		switch attackFormat(rt.Local_vtype) {
+		case "DOS", "DDOS", "dos", "ddos", "Dos", "DDos":
+			rt.Local_vtype = "ddos"
 		case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
 			rt.Local_vtype = "scaning"
 		default:
@@ -113,11 +146,16 @@ func esObj(msg []byte, alert interface{}, xdr BackendObj) interface{} {
 }
 
 func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
-	v.Attack = v.Local_vtype
 	v.SeverityAppend = severityVds(v.Local_extent)
-	v.Attack = attackFormat(v.Attack)
 	v.Xdr = s
 	v.Type = "vds"
+
+	if t, ok := attackTypeFormat[v.Local_vtype]; ok {
+		v.Attack = t
+	} else {
+		v.Attack = attackTypeFormat["other"]
+	}
+
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend = timeFormat(val.Time)
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
@@ -130,7 +168,13 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 	v.SeverityAppend = severityWaf(v.Severity)
 	v.Xdr = s
 	v.Type = "waf"
-	v.Attack = attackFormat(v.Attack)
+
+	if t, ok := attackTypeFormat[v.Attack]; ok {
+		v.Attack = t
+	} else {
+		v.Attack = attackTypeFormat["other"]
+	}
+
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend = timeFormat(val.Time)
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
@@ -140,12 +184,16 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 }
 
 func alertIds(i *IdsAlert) IdsAlert {
-	i.Attack = i.Byzoro_type
 	i.SeverityAppend = severityIds(i.Severity)
 	i.Type = "ids"
-	i.Attack = attackFormat(i.Attack)
 	t := timeFormat(i.Time)
 	p := protoFormat(i.Proto)
+
+	if t, ok := attackTypeFormat[i.Attack_type]; ok {
+		i.Attack = t
+	} else {
+		i.Attack = attackTypeFormat["other"]
+	}
 
 	xdr := BackendObjIds{
 		Time:       i.Time,
