@@ -14,7 +14,6 @@ var status = make(map[string][]int64)
 var conf *goini.Config
 var esNode string
 var port string
-var exit = "Shut down due to critical fault."
 
 func init() {
 	getConf()
@@ -70,14 +69,14 @@ func firstRunStatus() {
 func getStatus() bool {
 	fi, err := os.Open("log/status")
 	if err != nil {
-		Log("ERR", "%s", "open log/status err")
+		Log("ERR", "%s", "open log/status")
 	}
 
 	defer fi.Close()
 
 	fd, err := ioutil.ReadAll(fi)
 	if nil != err {
-		Log("ERR", "%s", "read log/status err")
+		Log("ERR", "%s", "read log/status")
 	}
 
 	err = json.Unmarshal(fd, &status)

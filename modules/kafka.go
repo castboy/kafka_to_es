@@ -3,6 +3,7 @@ package modules
 import (
 	"fmt"
 	"log"
+	"strconv"
 
 	"github.com/optiopay/kafka"
 )
@@ -17,9 +18,8 @@ func initConsumer(topic string, partition int32, start int64) (kafka.Consumer, e
 	consumer, err := broker.Consumer(conf)
 
 	if err != nil {
-		errLog := fmt.Sprintf("cannot initConsumer of %s %d partition", topic, partition)
-		Log("Err", errLog)
-		log.Fatalln(errLog)
+		errLog := fmt.Sprintf("can not init consumer of [topic partition] %s", topic, strconv.Itoa(int(partition)))
+		Log("CRT", "%s", errLog)
 	}
 
 	Log("INF", "init consumer ok: ", topic, int(partition))

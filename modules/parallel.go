@@ -2,6 +2,7 @@ package modules
 
 import (
 	"regexp"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -36,7 +37,7 @@ func toDb(topic string, partition int32, alertType string) {
 		bytes, err := consume(consumers[topic][partition])
 		if nil != err {
 			time.Sleep(60 * time.Second)
-			Log("WRN", "no data in %s %d partiton", topic, partition)
+			Log("WRN", "no data in [topic partition] %s", topic, strconv.Itoa(int(partition)))
 		} else {
 			alert, xdr, err := parseXdrAlert(bytes, alertType)
 			if nil == err {
