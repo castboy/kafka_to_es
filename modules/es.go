@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"regexp"
 	"time"
@@ -307,5 +308,7 @@ func esType(topic string) string {
 
 func toEs(msg []byte, alert interface{}, xdr BackendObj, topic string) {
 	obj := esObj(msg, alert, xdr)
+	bytes, _ := json.Marshal(obj)
+	fmt.Println(string(bytes))
 	addEs(topic, obj)
 }
