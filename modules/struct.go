@@ -48,7 +48,6 @@ type WafAlert struct {
 
 type VdsAlert struct {
 	Subfile          string
-	Log_time         int
 	Threatname       string
 	Local_threatname string
 	Local_vtype      string
