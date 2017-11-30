@@ -184,20 +184,20 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 	return *v
 }
 
-func alertIds(i *IdsAlert) IdsAlert {
-	i.SeverityAppend = severityIds(i.Severity)
-	i.Type = "ids"
+func alertIds(i *IdsAlert) IdsAlertEs {
+	var h IdsAlertEs
+
+	h.SeverityAppend = severityIds(i.Severity)
+	h.Type = "ids"
 	t := timeFormat(i.Time)
 	p := protoFormat(i.Proto)
-
 	if t, ok := attackTypeFormat[i.Byzoro_type]; ok {
-		i.Attack = t
+		h.Attack = t
 	} else {
-		i.Attack = attackTypeFormat["other"]
+		h.Attack = attackTypeFormat["other"]
 	}
 
 	xdr := BackendObjIds{
-		Time:       i.Time,
 		TimeAppend: t,
 		Conn: Conn_backend{
 			Proto:       i.Proto,
@@ -210,10 +210,9 @@ func alertIds(i *IdsAlert) IdsAlert {
 			DipInfo:     i.Dest_ip_info,
 		},
 	}
+	h.Xdr = append(h.Xdr, xdr)
 
-	i.Xdr = append(i.Xdr, xdr)
-
-	return *i
+	return h
 }
 
 func severityWaf(s int32) string {

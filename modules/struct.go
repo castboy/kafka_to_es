@@ -1,27 +1,38 @@
 package modules
 
 type IdsAlert struct {
-	Time           uint64
-	Src_ip         string
-	Src_ip_info    IpInfo
-	Src_port       uint16
-	Dest_ip        string
-	Dest_ip_info   IpInfo
-	Dest_port      uint16
-	Proto          uint8
-	Byzoro_type    string
+	Time         uint64
+	Src_ip       string
+	Src_ip_info  IpInfo
+	Src_port     uint16
+	Dest_ip      string
+	Dest_ip_info IpInfo
+	Dest_port    uint16
+	Proto        uint8
+	Byzoro_type  string
+	Attack       string
+	Attack_type  string
+	Details      string
+	Severity     uint32
+	Engine       string
+
+	Xdr []BackendObjIds
+}
+
+type IdsAlertEs struct {
+	Type           string
 	Attack         string
+	Byzoro_type    string
 	Attack_type    string
 	Details        string
-	Severity       uint32
+	Severity       string
 	SeverityAppend string
 	Engine         string
-	Type           string
-	Xdr            []BackendObjIds
+
+	Xdr []BackendObjIds
 }
 
 type BackendObjIds struct {
-	Time       uint64 `json:Time`
 	TimeAppend string
 	Conn       Conn_backend `json:Conn`
 }
