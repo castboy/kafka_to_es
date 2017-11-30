@@ -210,6 +210,13 @@ func alertIds(i *IdsAlert) IdsAlertEs {
 			DipInfo:     i.Dest_ip_info,
 		},
 	}
+	xdr.Conn.SipInfo.PhoneCode = ""
+	xdr.Conn.DipInfo.PhoneCode = ""
+	xdr.Conn.SipInfo.Organization = ""
+	xdr.Conn.DipInfo.Organization = ""
+	xdr.Conn.SipInfo.TimeZone = ""
+	xdr.Conn.DipInfo.TimeZone = ""
+
 	h.Xdr = append(h.Xdr, xdr)
 
 	return h
