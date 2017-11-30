@@ -188,65 +188,65 @@ type BackendObj struct {
 		ResDelay         uint32 `json:ResDelay`
 	} `json:Rtsp`
 	Ftp struct {
-		State      uint16 `json:"State,omitempty"`
-		UserCount  uint64 `json:"UserCount,omitempty"`
-		CurrentDir string `json:"CurrentDir,omitempty"`
-		TransMode  uint8  `json:"TransMode,omitempty"`
-		TransType  uint8  `json:"TransType,omitempty"`
-		FileCount  uint64 `json:"FileCount,omitempty"`
-		FileSize   uint32 `json:"FileSize,omitempty"`
-		RspTm      uint64 `json:"RspTm,omitempty"`
-		TransTm    uint64 `json:"TransTm,omitempty"`
+		State      uint16 `json:"State"`
+		UserCount  uint64 `json:"UserCount"`
+		CurrentDir string `json:"CurrentDir"`
+		TransMode  uint8  `json:"TransMode"`
+		TransType  uint8  `json:"TransType"`
+		FileCount  uint64 `json:"FileCount"`
+		FileSize   uint32 `json:"FileSize"`
+		RspTm      uint64 `json:"RspTm"`
+		TransTm    uint64 `json:"TransTm"`
 	} `json:"Ftp,omitempty"`
 	Mail struct {
-		MsgType     uint16 `json:"MsgType,omitempty"`
-		RspState    uint16 `json:"RspState,omitempty"`
-		UserName    string `json:"UserName,omitempty"`
-		RecverInfo  string `json:"RecverInfo,omitempty"`
-		Len         uint32 `json:"Len,omitempty"`
-		DomainInfo  string `json:"DomainInfo,omitempty"`
-		RecvAccount string `json:"RecvAccount,omitempty"`
-		Hdr         string `json:"Hdr,omitempty"`
-		AcsType     uint8  `json:"AcsType,omitempty"`
+		MsgType     uint16 `json:"MsgType"`
+		RspState    uint16 `json:"RspState"`
+		UserName    string `json:"UserName"`
+		RecverInfo  string `json:"RecverInfo"`
+		Len         uint32 `json:"Len"`
+		DomainInfo  string `json:"DomainInfo"`
+		RecvAccount string `json:"RecvAccount"`
+		Hdr         string `json:"Hdr"`
+		AcsType     uint8  `json:"AcsType"`
 	} `json:"Mail,omitempty"`
 	Dns struct {
-		Domain    string   `json:"Domain,omitempty"`
-		IpCount   uint8    `json:"IpCount,omitempty"`
-		IpVersion uint8    `json:"IpVersion,omitempty"`
-		Ip        string   `json:"Ip,omitempty"`
-		IpInfo    IpInfo   `json:"IpInfo,omitempty"`
-		Ips       []string `json:"Ips,omitempty"`
-		IpInfos   []IpInfo `json:"IpInfos,omitempty"`
+		Domain    string   `json:"Domain"`
+		IpCount   uint8    `json:"IpCount"`
+		IpVersion uint8    `json:"IpVersion"`
+		Ip        string   `json:"Ip"`
+		IpInfo    IpInfo   `json:"IpInfo"`
+		Ips       []string `json:"Ips"`
+		IpInfos   []IpInfo `json:"IpInfos"`
 		//Ipv4             string   `json:Ipv4`
 		//Ipv6             string   `json:Ipv6`
-		RspCode          uint8  `json:"RspCode,omitempty"`
-		ReqCount         uint8  `json:"ReqCount,omitempty"`
-		RspRecordCount   uint8  `json:"RspRecordCount,omitempty"`
-		AuthCnttCount    uint8  `json:"AuthCnttCount,omitempty"`
-		ExtraRecordCount uint8  `json:"ExtraRecordCount,omitempty"`
-		RspDelay         uint32 `json:"RspDelay,omitempty"`
+		RspCode          uint8  `json:"RspCode"`
+		ReqCount         uint8  `json:"ReqCount"`
+		RspRecordCount   uint8  `json:"RspRecordCount"`
+		AuthCnttCount    uint8  `json:"AuthCnttCount"`
+		ExtraRecordCount uint8  `json:"ExtraRecordCount"`
+		RspDelay         uint32 `json:"RspDelay"`
 		PktValid         bool   `json:"PktValid"`
 	} `json:"Dns"`
 	Vpn struct {
-		Type uint64 `json:"Type,omitempty"`
+		Type uint64 `json:"Type"`
 	} `json:"Vpn,omitempty"`
 	Proxy struct {
-		Type uint64 `json:"Type,omitempty"`
+		Type uint64 `json:"Type"`
 	} `json:"Proxy,omitempty"`
 	QQ struct {
-		Number string `json:"Number,omitempty"`
+		Number string `json:"Number"`
 	} `json:"QQ,omitempty"`
 	App struct {
-		ProtoInfo    uint64 `json:"ProtoInfo,omitempty"`
-		Status       uint64 `json:"Status,omitempty"`
-		ClassId      uint64 `json:"ClassId,omitempty"`
-		Proto        uint64 `json:"Proto,omitempty"`
+		ProtoInfo    uint64 `json:"ProtoInfo"`
+		Status       uint64 `json:"Status"`
+		ClassId      uint64 `json:"ClassId"`
+		Proto        uint64 `json:"Proto"`
 		file         []byte
-		File         string       `json:"File,omitempty"`
-		FileLocation LocationHdfs `json:"FileLocation,omitempty"`
+		File         string       `json:"File"`
+		FileLocation LocationHdfs `json:"FileLocation"`
 	} `json:"App,omitempty"`
 	Ssl struct {
-		FailReason uint32    `json:"FailReason,omitempty"`
+		FailReason uint32    `json:"FailReason"`
 		Server     CertsLink `json:"Server"`
 		Client     CertsLink `json:"Client"`
 	}
@@ -265,10 +265,10 @@ type Conn_backend struct {
 
 type CertsLink struct {
 	Verfy           bool       `json:"Verfy"`
-	VerfyFailedDesc string     `json:"VerfyFailedDesc,omitempty"`
-	VerfyFailedIdx  uint32     `json:"VerfyFailedIdx,omitempty"`
-	Cert            CertInfo   `json:"Cert,omitempty"`
-	Certs           []CertInfo `json:"Certs,omitempty"`
+	VerfyFailedDesc string     `json:"VerfyFailedDesc"`
+	VerfyFailedIdx  uint32     `json:"VerfyFailedIdx"`
+	Cert            CertInfo   `json:"Cert"`
+	Certs           []CertInfo `json:"Certs"`
 }
 
 type CertInfo struct {
@@ -282,7 +282,7 @@ type CertInfo struct {
 	OrganizationUnitName string
 	CommonName           string
 	FileLocation         mysqlLocation
-	Data                 []byte `json:"Cert,omitempty"`
+	Data                 []byte `json:"Cert"`
 }
 
 type LocationHdfs struct {
@@ -307,17 +307,17 @@ type mysqlLocation struct {
 }
 
 type IpInfo struct {
-	Country         string `json:"Country,omitempty"`
-	Province        string `json:"Province,omitempty"`
-	City            string `json:"City,omitempty"`
-	Organization    string `json:"Organization,omitempty"`
-	Network         string `json:"Network,omitempty"`
-	Lng             string `json:"Lng,omitempty"`
-	Lat             string `json:"Lat,omitempty"`
-	TimeZone        string `json:"TimeZone,omitempty"`
-	UTC             string `json:"UTC,omitempty"`
-	RegionalismCode string `json:"RegionalismCode,omitempty"`
-	PhoneCode       string `json:"PhoneCode,omitempty"`
-	CountryCode     string `json:"CountryCode,omitempty"`
-	ContinentCode   string `json:"ContinentCode,omitempty"`
+	Country         string `json:"Country"`
+	Province        string `json:"Province"`
+	City            string `json:"City"`
+	Organization    string `json:"Organization"`
+	Network         string `json:"Network"`
+	Lng             string `json:"Lng"`
+	Lat             string `json:"Lat"`
+	TimeZone        string `json:"TimeZone"`
+	UTC             string `json:"UTC"`
+	RegionalismCode string `json:"RegionalismCode"`
+	PhoneCode       string `json:"PhoneCode"`
+	CountryCode     string `json:"CountryCode"`
+	ContinentCode   string `json:"ContinentCode"`
 }
