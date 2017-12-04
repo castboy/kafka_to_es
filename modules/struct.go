@@ -20,6 +20,7 @@ type IdsAlert struct {
 }
 
 type IdsAlertEs struct {
+	TimeAppend     string
 	Type           string
 	Attack         string
 	Byzoro_type    string
@@ -54,6 +55,7 @@ type WafAlert struct {
 	Rule           WafAlertRule
 	Version        string
 	Type           string
+	TimeAppend     string
 	Xdr            []BackendObj
 }
 
@@ -71,6 +73,7 @@ type VdsAlert struct {
 	Local_logtype    string
 	Local_engineip   string
 	Type             string
+	TimeAppend       string
 	Xdr              []BackendObj
 }
 

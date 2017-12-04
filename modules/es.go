@@ -159,6 +159,7 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend = timeFormat(val.Time)
+		v.TimeAppend = v.Xdr[k].TimeAppend
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
 	}
 
@@ -178,6 +179,7 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend = timeFormat(val.Time)
+		v.TimeAppend = v.Xdr[k].TimeAppend
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
 	}
 
@@ -190,6 +192,7 @@ func alertIds(i *IdsAlert) IdsAlertEs {
 	h.SeverityAppend = severityIds(i.Severity)
 	h.Type = "ids"
 	t := timeFormat(i.Time)
+	h.TimeAppend = t
 	p := protoFormat(i.Proto)
 	if t, ok := attackTypeFormat[i.Byzoro_type]; ok {
 		h.Attack = t
@@ -210,14 +213,6 @@ func alertIds(i *IdsAlert) IdsAlertEs {
 			DipInfo:     i.Dest_ip_info,
 		},
 	}
-	xdr.Conn.SipInfo.PhoneCode = ""
-	xdr.Conn.DipInfo.PhoneCode = ""
-	xdr.Conn.SipInfo.Organization = ""
-	xdr.Conn.DipInfo.Organization = ""
-	xdr.Conn.SipInfo.TimeZone = ""
-	xdr.Conn.DipInfo.TimeZone = ""
-	xdr.Conn.SipInfo.RegionalismCode = ""
-	xdr.Conn.DipInfo.RegionalismCode = ""
 
 	h.Xdr = append(h.Xdr, xdr)
 
