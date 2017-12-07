@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"regexp"
 	"time"
@@ -160,6 +161,7 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend, err = timeFormat(val.Time)
+		fmt.Println("vds time: " + v.Xdr[k].TimeAppend)
 		if nil != err {
 			b, _ := json.Marshal(v)
 			Log("CRT", "vds time exceed timestramp: %s", string(b))
@@ -184,6 +186,7 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 
 	for k, val := range v.Xdr {
 		v.Xdr[k].TimeAppend, err = timeFormat(val.Time)
+		fmt.Println("waf time: " + v.Xdr[k].TimeAppend)
 		if nil != err {
 			b, _ := json.Marshal(v)
 			Log("CRT", "waf time exceed timestramp: %s", string(b))
@@ -201,6 +204,7 @@ func alertIds(i *IdsAlert) IdsAlertEs {
 	h.SeverityAppend = severityIds(i.Severity)
 	h.Type = "ids"
 	t, err := timeFormat(i.Time)
+	fmt.Println("ids time: " + t)
 	if nil != err {
 		b, _ := json.Marshal(i)
 		Log("CRT", "ids time exceed timestramp: %s", string(b))
