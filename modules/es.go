@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"regexp"
 	"time"
 
 	elastic "gopkg.in/olivere/elastic.v5"
 )
+
+var err error = errors.New("Err")
 
 var attackTypeFormat = map[string]string{
 	"disclosure":          "信息泄露",
@@ -158,7 +159,11 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 	}
 
 	for k, val := range v.Xdr {
-		v.Xdr[k].TimeAppend = timeFormat(val.Time)
+		v.Xdr[k].TimeAppend, err = timeFormat(val.Time)
+		if nil != err {
+			b, _ := json.Marshal(v)
+			Log("WRN", "vds time exceed timestramp: %s", string(b))
+		}
 		v.TimeAppend = v.Xdr[k].TimeAppend
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
 	}
@@ -178,7 +183,11 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 	}
 
 	for k, val := range v.Xdr {
-		v.Xdr[k].TimeAppend = timeFormat(val.Time)
+		v.Xdr[k].TimeAppend, err = timeFormat(val.Time)
+		if nil != err {
+			b, _ := json.Marshal(v)
+			Log("WRN", "waf time exceed timestramp: %s", string(b))
+		}
 		v.TimeAppend = v.Xdr[k].TimeAppend
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
 	}
@@ -191,7 +200,11 @@ func alertIds(i *IdsAlert) IdsAlertEs {
 
 	h.SeverityAppend = severityIds(i.Severity)
 	h.Type = "ids"
-	t := timeFormat(i.Time)
+	t, err := timeFormat(i.Time)
+	if nil != err {
+		b, _ := json.Marshal(i)
+		Log("WRN", "ids time exceed timestramp: %s", string(b))
+	}
 	h.TimeAppend = t
 	p := protoFormat(i.Proto)
 	if t, ok := attackTypeFormat[i.Byzoro_type]; ok {
@@ -258,11 +271,15 @@ func severityVds(s string) string {
 	}
 }
 
-func timeFormat(t uint64) string {
+func timeFormat(t uint64) (string, error) {
 	tp := t / 1000000
 	tm := time.Unix(int64(tp), 0)
 
-	return tm.Format("2006-01-02 03:04:05")
+	if int64(tp) > time.Now().Unix() {
+		return "", err
+	}
+
+	return tm.Format("2006-01-02 03:04:05"), nil
 }
 
 func protoFormat(p uint8) string {
@@ -311,7 +328,6 @@ func esType(topic string) string {
 
 func toEs(msg []byte, alert interface{}, xdr BackendObj, topic string) {
 	obj := esObj(msg, alert, xdr)
-	bytes, _ := json.Marshal(obj)
-	fmt.Println(string(bytes))
+	json.Marshal(obj)
 	addEs(topic, obj)
 }
