@@ -283,7 +283,7 @@ func timeFormat(t uint64) (string, error) {
 		return "", err
 	}
 
-	return tm.Format("2006-01-02 03:04:05"), nil
+	return tm.Format("2006-01-02 15:04:05"), nil
 }
 
 func protoFormat(p uint8) string {
