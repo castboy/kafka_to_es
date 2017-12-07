@@ -162,7 +162,7 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 		v.Xdr[k].TimeAppend, err = timeFormat(val.Time)
 		if nil != err {
 			b, _ := json.Marshal(v)
-			Log("WRN", "vds time exceed timestramp: %s", string(b))
+			Log("CRT", "vds time exceed timestramp: %s", string(b))
 		}
 		v.TimeAppend = v.Xdr[k].TimeAppend
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
@@ -186,7 +186,7 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 		v.Xdr[k].TimeAppend, err = timeFormat(val.Time)
 		if nil != err {
 			b, _ := json.Marshal(v)
-			Log("WRN", "waf time exceed timestramp: %s", string(b))
+			Log("CRT", "waf time exceed timestramp: %s", string(b))
 		}
 		v.TimeAppend = v.Xdr[k].TimeAppend
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
@@ -203,7 +203,7 @@ func alertIds(i *IdsAlert) IdsAlertEs {
 	t, err := timeFormat(i.Time)
 	if nil != err {
 		b, _ := json.Marshal(i)
-		Log("WRN", "ids time exceed timestramp: %s", string(b))
+		Log("CRT", "ids time exceed timestramp: %s", string(b))
 	}
 	h.TimeAppend = t
 	p := protoFormat(i.Proto)
