@@ -61,32 +61,38 @@ func initCli() {
 func attackMerge(alert interface{}) interface{} {
 	switch rt := alert.(type) {
 	case IdsAlert:
-		switch attackFormat(rt.Byzoro_type) {
+		attack := attackFormat(rt.Byzoro_type)
+		switch attack {
 		case "DOS", "DDOS", "dos", "ddos", "Dos", "DDos":
 			rt.Byzoro_type = "ddos"
 		case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
 			rt.Byzoro_type = "scaning"
 		default:
+			rt.Byzoro_type = attack
 		}
 
 		return rt
 	case WafAlert:
-		switch attackFormat(rt.Attack) {
+		attack := attackFormat(rt.Attack)
+		switch attack {
 		case "DOS", "DDOS", "dos", "ddos", "Dos", "DDos":
 			rt.Attack = "ddos"
 		case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
 			rt.Attack = "scaning"
 		default:
+			rt.Attack = attack
 		}
 
 		return rt
 	case VdsAlert:
-		switch attackFormat(rt.Local_vtype) {
+		attack := attackFormat(rt.Local_vtype)
+		switch attack {
 		case "DOS", "DDOS", "dos", "ddos", "Dos", "DDos":
 			rt.Local_vtype = "ddos"
 		case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
 			rt.Local_vtype = "scaning"
 		default:
+			rt.Local_vtype = attack
 		}
 
 		return rt
