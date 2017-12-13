@@ -53,7 +53,7 @@ var client *elastic.Client
 func esUrls(esNodes string) []string {
 	s := make([]string, 0)
 	for _, v := range strings.Split(esNodes, ",") {
-		s = append(s, "http://"+v+port)
+		s = append(s, "http://"+v+":"+port)
 	}
 
 	return s
@@ -62,6 +62,7 @@ func esUrls(esNodes string) []string {
 func initCli() {
 	var err error
 	urls := esUrls(esNodes)
+        fmt.Println(urls)
 	client, err = elastic.NewClient(elastic.SetURL(urls...))
 
 	if err != nil {

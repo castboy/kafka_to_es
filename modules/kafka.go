@@ -68,7 +68,7 @@ func consume(consumer kafka.Consumer) ([]byte, error) {
 func brokerAddrs(brokers string) []string {
 	s := make([]string, 0)
 	for _, v := range strings.Split(brokers, ",") {
-		s = append(s, "http://"+v+":9092")
+		s = append(s, v+":9092")
 	}
 
 	return s
