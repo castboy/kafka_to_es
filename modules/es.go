@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strings"
 	"time"
 
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -49,9 +50,19 @@ var attackTypeFormat = map[string]string{
 
 var client *elastic.Client
 
+func esUrls(esNodes string) []string {
+	s := make([]string, 0)
+	for _, v := range strings.Split(esNodes, ",") {
+		s = append(s, "http://"+v+port)
+	}
+
+	return s
+}
+
 func initCli() {
 	var err error
-	client, err = elastic.NewClient(elastic.SetURL("http://" + esNode + ":" + port))
+	urls := esUrls(esNodes)
+	client, err = elastic.NewClient(elastic.SetURL(urls...))
 
 	if err != nil {
 		log.Fatal("can not conn es")

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 
 	"github.com/optiopay/kafka"
 )
@@ -27,15 +28,14 @@ func initConsumer(topic string, partition int32, start int64) (kafka.Consumer, e
 	return consumer, err
 }
 
-func initBroker(localhost string) {
-	var kafkaAddrs []string = []string{localhost + ":9092", localhost + ":9093"}
+func initBroker(addrs []string) {
 	conf := kafka.NewBrokerConf("kafka_to_es")
 	conf.AllowTopicCreation = false
 
 	var err error
-	broker, err = kafka.Dial(kafkaAddrs, conf)
+	broker, err = kafka.Dial(addrs, conf)
 	if err != nil {
-		Log("CRT", "cannot connect to kafka cluster: %s", kafkaAddrs)
+		Log("CRT", "cannot connect to kafka cluster: %s", addrs)
 		log.Fatal(exit)
 	}
 
@@ -65,9 +65,19 @@ func consume(consumer kafka.Consumer) ([]byte, error) {
 	return msg.Value, nil
 }
 
+func brokerAddrs(brokers string) []string {
+	s := make([]string, 0)
+	for _, v := range strings.Split(brokers, ",") {
+		s = append(s, "http://"+v+":9092")
+	}
+
+	return s
+}
+
 func Kafka() {
-	host := conf.GetValue("kafka", "host")
-	initBroker(host)
+	brokers := conf.GetValue("kafka", "brokers")
+	addrs := brokerAddrs(brokers)
+	initBroker(addrs)
 	initConsumers()
 	//	consume(consumers["vds-alert"][0])
 }
