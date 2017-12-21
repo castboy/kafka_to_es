@@ -20,6 +20,7 @@ func RecordStatus() {
 		select {
 		case msg := <-statusCh:
 			status[msg.Topic][msg.Partition]++
+			record()
 			//		case <-recordCh:
 			//			record()
 		}
