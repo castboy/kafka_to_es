@@ -68,7 +68,7 @@ func firstRunStatus() {
 }
 
 func getStatus() bool {
-	fi, err := os.Open("log/status")
+	fi, err := os.Open("status/status")
 	if err != nil {
 		Log("ERR", "%s", "open status/status")
 	}
