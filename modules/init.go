@@ -48,8 +48,6 @@ func initStatus() {
 		firstRunStatus()
 	}
 
-	confStatus()
-
 	bytes, err := json.Marshal(status)
 	if nil != err {
 		Log("ERR", "%s", "json.Marshal status err")
@@ -60,12 +58,14 @@ func initStatus() {
 
 func firstRunStatus() {
 	for t, v := range topic {
-		for range v {
-			status[t] = append(status[t], -2)
+		for k, _ := range v {
+			start, _ := offset(t, int32(k))
+			status[t] = append(status[t], start)
 		}
 	}
 
 }
+
 func getStatus() bool {
 	fi, err := os.Open("log/status")
 	if err != nil {
@@ -85,23 +85,4 @@ func getStatus() bool {
 	}
 
 	return true
-}
-
-func confStatus() {
-	start := conf.GetValue("kafka", "start")
-	switch start {
-	case "first":
-		putStatus(-2)
-	case "last":
-		putStatus(-1)
-	default:
-	}
-}
-
-func putStatus(s int64) {
-	for t, v := range status {
-		for p, _ := range v {
-			status[t][p] = s
-		}
-	}
 }

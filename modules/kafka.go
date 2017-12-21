@@ -74,6 +74,13 @@ func brokerAddrs(brokers string) []string {
 	return s
 }
 
+func offset(topic string, partition int32) (int64, int64) {
+	start, _ := broker.OffsetEarliest(topic, partition)
+	end, _ := broker.OffsetLatest(topic, partition)
+
+	return start, end
+}
+
 func Kafka() {
 	brokers := conf.GetValue("kafka", "brokers")
 	addrs := brokerAddrs(brokers)
