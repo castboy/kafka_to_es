@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	//	"fmt"
 	"io/ioutil"
-	"time"
+	//	"time"
 )
 
 type statusMsg struct {
@@ -20,18 +20,18 @@ func RecordStatus() {
 		select {
 		case msg := <-statusCh:
 			status[msg.Topic][msg.Partition]++
-		case <-recordCh:
-			record()
+			//		case <-recordCh:
+			//			record()
 		}
 	}
 }
 
-func SendRecordStatusMsg(seconds int) {
-	ticker := time.NewTicker(time.Second * time.Duration(seconds))
-	for _ = range ticker.C {
-		recordCh <- true
-	}
-}
+//func SendRecordStatusMsg(seconds int) {
+//	ticker := time.NewTicker(time.Second * time.Duration(seconds))
+//	for _ = range ticker.C {
+//		recordCh <- true
+//	}
+//}
 
 func record() {
 	byte, err := json.Marshal(status)
