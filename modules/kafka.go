@@ -28,7 +28,9 @@ func initConsumer(topic string, partition int32, start int64) (kafka.Consumer, e
 	return consumer, err
 }
 
-func initBroker(addrs []string) {
+func initBroker() {
+	brokers := conf.GetValue("kafka", "brokers")
+	addrs := brokerAddrs(brokers)
 	conf := kafka.NewBrokerConf("kafka_to_es")
 	conf.AllowTopicCreation = false
 
@@ -38,8 +40,6 @@ func initBroker(addrs []string) {
 		Log("CRT", "cannot connect to kafka cluster: %s", addrs)
 		log.Fatal(exit)
 	}
-
-	defer broker.Close()
 }
 
 func initConsumers() {
@@ -82,9 +82,5 @@ func offset(topic string, partition int32) (int64, int64) {
 }
 
 func Kafka() {
-	brokers := conf.GetValue("kafka", "brokers")
-	addrs := brokerAddrs(brokers)
-	initBroker(addrs)
 	initConsumers()
-	//	consume(consumers["vds-alert"][0])
 }

@@ -18,6 +18,7 @@ var port string
 func init() {
 	getConf()
 	initCli()
+	initBroker()
 	InitLog()
 	initStatus()
 }
