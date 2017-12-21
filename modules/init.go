@@ -70,7 +70,7 @@ func firstRunStatus() {
 func getStatus() bool {
 	fi, err := os.Open("log/status")
 	if err != nil {
-		Log("ERR", "%s", "open log/status")
+		Log("ERR", "%s", "open status/status")
 	}
 
 	defer fi.Close()

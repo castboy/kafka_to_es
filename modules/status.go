@@ -38,7 +38,7 @@ func record() {
 	if nil != err {
 		Log("ERR", "%s", "json.Marshal err in record()")
 	}
-	err = ioutil.WriteFile("log/status", byte, 0666)
+	err = ioutil.WriteFile("status/status", byte, 0666)
 	if nil != err {
 		Log("ERR", "%s", "ioutil.WriteFile err in record()")
 	}
