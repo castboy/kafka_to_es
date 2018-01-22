@@ -322,7 +322,7 @@ func addEs(topic string, obj interface{}) {
 	ctx := context.Background()
 
 	_, err := client.Index().
-		Index("apt").
+		Index(esIndex).
 		Type(esType(topic)).
 		BodyJson(obj).
 		Do(ctx)

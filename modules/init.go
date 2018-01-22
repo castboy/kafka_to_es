@@ -13,6 +13,7 @@ var topic = make(map[string][]string)
 var status = make(map[string][]int64)
 var conf *goini.Config
 var esNodes string
+var esIndex string
 var port string
 var nameNode string
 
@@ -29,6 +30,7 @@ func getConf() {
 	confList := conf.ReadList()
 	esNodes = conf.GetValue("elasticsearch", "nodes")
 	port = conf.GetValue("elasticsearch", "port")
+	esIndex = conf.GetValue("elasticsearch", "index")
 	nameNode = conf.GetValue("hdfs", "nameNode")
 
 	parsePartition(confList[0]["topic"])
