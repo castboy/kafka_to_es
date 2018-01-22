@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"encoding/base64"
 	"os"
 	"time"
 
@@ -70,7 +71,7 @@ func hdfsRd(topic string, partition int32, file string, offset int64, size int) 
 		Log("ERR", "Read Hdfs, file = %s, offset = %d, size = %d fileSize = %d", file, offset, size, f.Stat().Size())
 	}
 
-	s = string(bytes)
+	s = base64.StdEncoding.EncodeToString(bytes)
 
 	return s
 }
