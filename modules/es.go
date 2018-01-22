@@ -209,7 +209,7 @@ func alertWaf(v *WafAlert, s []BackendObj, topic string, partition int32) WafAle
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
 
 		v.Xdr[k].Http.RequestLocation.ReqCont = hdfsRd(topic, partition, v.Xdr[k].Http.RequestLocation.File, v.Xdr[k].Http.RequestLocation.Offset, v.Xdr[k].Http.RequestLocation.Size)
-		v.Xdr[k].Http.ResponseLocation.ReqCont = hdfsRd(topic, partition, v.Xdr[k].Http.ResponseLocation.File, v.Xdr[k].Http.ResponseLocation.Offset, v.Xdr[k].Http.ResponseLocation.Size)
+		v.Xdr[k].Http.ResponseLocation.ResCont = hdfsRd(topic, partition, v.Xdr[k].Http.ResponseLocation.File, v.Xdr[k].Http.ResponseLocation.Offset, v.Xdr[k].Http.ResponseLocation.Size)
 	}
 
 	return *v
