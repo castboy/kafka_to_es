@@ -64,7 +64,7 @@ func hdfsRd(topic string, partition int32, file string, offset int64, size int) 
 	bytes := make([]byte, size)
 	_, err = f.ReadAt(bytes, offset)
 
-	HdfsClients[topic][partition].Close()
+	f.Close()
 
 	if nil != err {
 		Log("ERR", "Read Hdfs, file = %s, offset = %d, size = %d fileSize = %d", file, offset, size, f.Stat().Size())
