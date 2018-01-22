@@ -149,14 +149,14 @@ func parseXdrAlert(bytes []byte, alertType string) (interface{}, BackendObj, err
 	return nil, BackendObj{}, errors.New("parseXdrAlert Err")
 }
 
-func esObj(msg []byte, alert interface{}, xdr BackendObj) interface{} {
+func esObj(msg []byte, alert interface{}, xdr BackendObj, topic string, partition int32) interface{} {
 	var xdrSlice = make([]BackendObj, 0)
 	xdrSlice = append(xdrSlice, xdr)
 	switch rt := alert.(type) {
 	case VdsAlert:
 		alert = alertVds(&rt, xdrSlice)
 	case WafAlert:
-		alert = alertWaf(&rt, xdrSlice)
+		alert = alertWaf(&rt, xdrSlice, topic, partition)
 	case IdsAlert:
 		alert = alertIds(&rt)
 	}
@@ -188,7 +188,7 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 	return *v
 }
 
-func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
+func alertWaf(v *WafAlert, s []BackendObj, topic string, partition int32) WafAlert {
 	v.SeverityAppend = severityWaf(v.Severity)
 	v.Xdr = s
 	v.Type = "waf"
@@ -207,6 +207,9 @@ func alertWaf(v *WafAlert, s []BackendObj) WafAlert {
 		}
 		v.TimeAppend = v.Xdr[k].TimeAppend
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
+
+		v.Xdr[k].Http.RequestLocation.ReqCont = hdfsRd(topic, partition, v.Xdr[k].Http.RequestLocation.File, v.Xdr[k].Http.RequestLocation.Offset, v.Xdr[k].Http.RequestLocation.Size)
+		v.Xdr[k].Http.ResponseLocation.ReqCont = hdfsRd(topic, partition, v.Xdr[k].Http.ResponseLocation.File, v.Xdr[k].Http.ResponseLocation.Offset, v.Xdr[k].Http.ResponseLocation.Size)
 	}
 
 	return *v
@@ -343,8 +346,8 @@ func esType(topic string) string {
 	return ""
 }
 
-func toEs(msg []byte, alert interface{}, xdr BackendObj, topic string) {
-	obj := esObj(msg, alert, xdr)
+func toEs(msg []byte, alert interface{}, xdr BackendObj, topic string, partition int32) {
+	obj := esObj(msg, alert, xdr, topic, partition)
 	json.Marshal(obj)
 	addEs(topic, obj)
 }

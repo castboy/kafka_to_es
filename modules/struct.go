@@ -304,6 +304,8 @@ type LocationHdfs struct {
 	Size      int
 	Offset    int64
 	File      string
+	ReqCont   string
+	ResCont   string
 }
 
 type WafAlertRule struct {

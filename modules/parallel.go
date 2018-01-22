@@ -41,7 +41,7 @@ func toDb(topic string, partition int32, alertType string) {
 		} else {
 			alert, xdr, err := parseXdrAlert(bytes, alertType)
 			if nil == err {
-				toEs(bytes, alert, xdr, topic)
+				toEs(bytes, alert, xdr, topic, partition)
 				//			toMysql(alert, xdr, topic, alertType)
 				sendStatusMsg(topic, partition)
 			}
