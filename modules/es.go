@@ -183,6 +183,8 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 		}
 		v.TimeAppend = v.Xdr[k].TimeAppend
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
+		v.Xdr[k].Conn.DipInfo.Country = countryFormat(val.Conn.DipInfo.Country)
+		v.Xdr[k].Conn.SipInfo.Country = countryFormat(val.Conn.SipInfo.Country)
 	}
 
 	return *v
@@ -207,6 +209,8 @@ func alertWaf(v *WafAlert, s []BackendObj, topic string, partition int32) WafAle
 		}
 		v.TimeAppend = v.Xdr[k].TimeAppend
 		v.Xdr[k].Conn.ProtoAppend = protoFormat(val.Conn.Proto)
+		v.Xdr[k].Conn.DipInfo.Country = countryFormat(val.Conn.DipInfo.Country)
+		v.Xdr[k].Conn.SipInfo.Country = countryFormat(val.Conn.SipInfo.Country)
 
 		v.Xdr[k].Http.RequestLocation.ReqCont = hdfsRd(topic, partition, v.Xdr[k].Http.RequestLocation.File, v.Xdr[k].Http.RequestLocation.Offset, v.Xdr[k].Http.RequestLocation.Size)
 		v.Xdr[k].Http.ResponseLocation.ResCont = hdfsRd(topic, partition, v.Xdr[k].Http.ResponseLocation.File, v.Xdr[k].Http.ResponseLocation.Offset, v.Xdr[k].Http.ResponseLocation.Size)
@@ -216,6 +220,9 @@ func alertWaf(v *WafAlert, s []BackendObj, topic string, partition int32) WafAle
 }
 
 func alertIds(i *IdsAlert) IdsAlertEs {
+	i.Src_ip_info.Country = countryFormat(i.Src_ip_info.Country)
+	i.Dest_ip_info.Country = countryFormat(i.Dest_ip_info.Country)
+
 	var h IdsAlertEs
 
 	h.SeverityAppend = severityIds(i.Severity)
@@ -289,6 +296,13 @@ func severityVds(s string) string {
 	default:
 		panic("wrong vds severity")
 	}
+}
+
+func countryFormat(s string) string {
+	if "" == s {
+		return "unknow"
+	}
+	return s
 }
 
 func timeFormat(t uint64) (string, error) {
