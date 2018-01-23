@@ -74,14 +74,14 @@ func firstRunStatus() {
 func getStatus() bool {
 	fi, err := os.Open("status")
 	if err != nil {
-		Log("ERR", "%s", "open status/status")
+		Log("ERR", "%s", "open status")
 	}
 
 	defer fi.Close()
 
 	fd, err := ioutil.ReadAll(fi)
 	if nil != err {
-		Log("ERR", "%s", "read log/status")
+		Log("ERR", "%s", "read status")
 	}
 
 	err = json.Unmarshal(fd, &status)
