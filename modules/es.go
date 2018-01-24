@@ -302,6 +302,9 @@ func countryFormat(s string) string {
 	if "" == s {
 		return "未知"
 	}
+	if "APNIC" == s {
+		return "亚太互联网络信息中心(未知)"
+	}
 	return s
 }
 
