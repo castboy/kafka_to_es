@@ -300,7 +300,7 @@ func severityVds(s string) string {
 
 func countryFormat(s string) string {
 	if "" == s {
-		return "unknow"
+		return "未知"
 	}
 	return s
 }
