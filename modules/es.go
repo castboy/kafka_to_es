@@ -344,7 +344,7 @@ func addEs(topic string, obj interface{}) {
 		BodyJson(obj).
 		Do(ctx)
 	if err != nil {
-		Log("CRT", "to es failed topic:%s", esType(topic))
+		Log("CRT", "to es failed topic:%s, %s", esType(topic), err.Error())
 	} else {
 		Log("INF", "success to es %s", esType(topic))
 	}
