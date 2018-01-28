@@ -98,6 +98,17 @@ func boolToInt(v bool) int {
 	return i
 }
 
+func AlertMerge(attack string) string {
+	switch attack {
+	case "DOS", "DDOS", "dos", "ddos", "Dos", "DDos":
+		return "ddos"
+	case "scaningprobe", "reputation_scanner", "repitation_scripting", "reputation_crawler":
+		return "scaning"
+	default:
+	}
+	return attack
+}
+
 func vdsAlertSql(alert VdsAlert, xdr BackendObj) string {
 	sql := fmt.Sprintf(`insert into %s (time, threatname, subfile,
 		local_threatname, local_vtype, local_platfrom, local_vname,
@@ -109,7 +120,7 @@ func vdsAlertSql(alert VdsAlert, xdr BackendObj) string {
 		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s',
 		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
 		"alert_vds", xdr.Time, alert.Threatname, "", alert.Local_threatname,
-		alert.Local_vtype, alert.Local_platfrom, alert.Local_vname,
+		AlertMerge(alert.Local_vtype), alert.Local_platfrom, alert.Local_vname,
 		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype, alert.Local_engineip,
 		xdr.Conn.Sip, xdr.Conn.Dip, xdr.Conn.Sport, xdr.Conn.Dport, xdr.App.File, xdr.Http.Url,
 		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
@@ -129,7 +140,7 @@ func vdsOfflineAlertSql(alert VdsAlert, xdr BackendObj) string {
 		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s',
 		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
 		"alert_vds_offline", xdr.Time, alert.Threatname, "", alert.Local_threatname,
-		alert.Local_vtype, alert.Local_platfrom, alert.Local_vname,
+		AlertMerge(alert.Local_vtype), alert.Local_platfrom, alert.Local_vname,
 		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype,
 		alert.Local_engineip, "", "", 0, 0, "", "",
 		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
@@ -147,7 +158,7 @@ func wafAlertSql(alert WafAlert, xdr BackendObj) string {
 		values (%d, '%s', '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', 
 		'%s', '%s', '%s', %d, %d, '%s', '%s', '%s',
 		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
-		"alert_waf", xdr.Time, alert.Client, alert.Rev, alert.Msg, alert.Attack,
+		"alert_waf", xdr.Time, alert.Client, alert.Rev, alert.Msg, AlertMerge(alert.Attack),
 		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname,
 		alert.Uri, alert.Unique_id, alert.Ref, alert.Tags, "", 0, 0, "", "",
 		alert.Version,
@@ -166,7 +177,7 @@ func wafOfflineAlertSql(alert WafAlert, xdr BackendObj) string {
 		values (%d, '%s', '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', 
 		'%s', '%s', '%s', %d, %d, '%s', '%s', '%s',
 		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
-		"alert_waf_offline", xdr.Time, alert.Client, alert.Rev, alert.Msg, alert.Attack,
+		"alert_waf_offline", xdr.Time, alert.Client, alert.Rev, alert.Msg, AlertMerge(alert.Attack),
 		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname,
 		alert.Uri, alert.Unique_id, alert.Ref, alert.Tags, "", 0, 0, "", "",
 		alert.Version,
@@ -184,7 +195,7 @@ func idsAlertSql(alert IdsAlert) string {
 		values (%d, '%s', %d, '%s', %d, '%s', '%s', '%s', %d, '%s', '%s',
 		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`, "alert_ids",
 		alert.Time, alert.Src_ip, alert.Src_port, alert.Dest_ip, alert.Dest_port,
-		alert.Proto, alert.Attack_type, alert.Details, alert.Severity, alert.Engine,
+		alert.Proto, AlertMerge(alert.Attack_type), alert.Details, alert.Severity, alert.Engine,
 		alert.Byzoro_type,
 		"", "", "", "", "",
 		"", "", "", "", "")
