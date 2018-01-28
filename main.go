@@ -14,7 +14,7 @@ func main() {
 
 	modules.InitHdfsClis()
 
-	//modules.Mysql()
+	modules.Mysql()
 	modules.Parallel()
 
 	modules.Wg.Wait()

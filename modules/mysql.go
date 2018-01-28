@@ -191,12 +191,24 @@ func idsAlertSql(alert IdsAlert) string {
 	return sql
 }
 
-func xdrSql(x BackendObj, id int64, t string) string {
+func xdrSql(x BackendObj, id int64, t string, offline_tag string, off_on string) string {
 	sql := ""
 	for _, v := range xdrField {
 		sql = sql + v + ","
 	}
 	sql = sql[:len(sql)-1]
+
+	tbl := ""
+	if "online" == off_on {
+		tbl = "xdr"
+	} else {
+		if "rule" == offline_tag {
+			tbl = "xdr_offline_rule"
+		} else {
+			tbl = "xdr_offline"
+		}
+	}
+	fmt.Println("table", tbl)
 
 	sql = fmt.Sprintf(`insert into %s (%s) values (
 		'%s', %d, %d, %d, %d, %d,
@@ -240,7 +252,7 @@ func xdrSql(x BackendObj, id int64, t string) string {
 		%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s',
 		'%s', '%s', '%s',
 		'%s', %d, '%s'
-		)`, "xdr", sql,
+		)`, tbl, sql,
 		x.Vendor, x.Id, boolToInt(x.Ipv4), x.Class, x.Type, x.Time,
 		strconv.Itoa(int(x.Conn.Proto)), x.Conn.Sport, x.Conn.Dport, x.Conn.Sip,
 		x.Conn.SipInfo.Country, x.Conn.SipInfo.Province, x.Conn.SipInfo.Organization, x.Conn.SipInfo.Network,
@@ -304,15 +316,28 @@ func query(sql string) sql.Result {
 }
 
 func vdsToMysql(alert VdsAlert, topic string, xdr BackendObj, alertType string) {
-	res := vdsAlertToMysql(alert, xdr)
-	xdrToMysql(res, xdr, alertType)
-	fmt.Println("vdsToMysql success")
+	if isOffline(xdr) {
+		sql := vdsOfflineAlertSql(alert, xdr)
+		res := query(sql)
+		xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "offline")
+	} else {
+		sql := vdsAlertSql(alert, xdr)
+		res := query(sql)
+		xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "online")
+	}
 }
 
 func wafToMysql(alert WafAlert, topic string, xdr BackendObj, alertType string) {
-	res := wafAlertToMysql(alert, xdr)
-	xdrToMysql(res, xdr, alertType)
-	fmt.Println("wafToMysql success")
+	if isOffline(xdr) {
+		sql := wafOfflineAlertSql(alert, xdr)
+		res := query(sql)
+		xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "offline")
+
+	} else {
+		sql := wafAlertSql(alert, xdr)
+		res := query(sql)
+		xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "online")
+	}
 }
 
 func isOffline(xdr BackendObj) bool {
@@ -343,12 +368,12 @@ func wafAlertToMysql(alert WafAlert, xdr BackendObj) sql.Result {
 	return query(sql)
 }
 
-func xdrToMysql(alertToMysqlRes sql.Result, xdr BackendObj, alertType string) {
+func xdrToMysql(alertToMysqlRes sql.Result, xdr BackendObj, alertType string, offline_tag string, off_on string) {
 	id, err := alertToMysqlRes.LastInsertId()
 	if nil != err {
 		log.Fatalf("can not get waf-alert id")
 	}
-	query(xdrSql(xdr, id, alertType))
+	query(xdrSql(xdr, id, alertType, offline_tag, off_on))
 }
 
 func idsToMysql(alert IdsAlert) {
