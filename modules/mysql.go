@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -209,6 +210,8 @@ func xdrSql(x BackendObj, id int64, t string, offline_tag string, off_on string)
 		}
 	}
 	fmt.Println("table", tbl)
+
+	t = strings.ToUpper(t)
 
 	sql = fmt.Sprintf(`insert into %s (%s) values (
 		'%s', %d, %d, %d, %d, %d,
