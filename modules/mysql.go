@@ -116,9 +116,12 @@ func vdsAlertSql(alert VdsAlert, xdr BackendObj) string {
 		src_ip, dest_ip, src_port, dest_port, app_file, http_url,
 		src_country, src_province, src_city, src_latitude, src_longitude,
 		dest_country, dest_province, dest_city, dest_latitude, dest_longitude)
-		values (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
+		values (%d, '%s', '%s', 
+		'%s', '%s', '%s', '%s', 
+		'%s', '%s','%s', '%s', 
+		'%s', '%s', %d, %d, '%s', '%s',
+		'%s', '%s', '%s', '%s', '%s', 
+		'%s', '%s', '%s', '%s', '%s')`,
 		"alert_vds", xdr.Time/1000000, alert.Threatname, "", alert.Local_threatname,
 		AlertMerge(alert.Local_vtype), alert.Local_platfrom, alert.Local_vname,
 		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype, alert.Local_engineip,
@@ -135,16 +138,22 @@ func vdsOfflineAlertSql(alert VdsAlert, xdr BackendObj) string {
 		local_extent, local_enginetype,local_logtype, local_engineip,
 		src_ip, dest_ip, src_port, dest_port, app_file, http_url,
 		src_country, src_province, src_city, src_latitude, src_longitude,
-		dest_country, dest_province, dest_city, dest_latitude, dest_longitude)
-		values (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', %d, %d, '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
+		dest_country, dest_province, dest_city, dest_latitude, dest_longitude,
+		task_id)
+		values (%d, '%s', '%s', 
+		'%s', '%s', '%s', '%s', 
+		'%s', '%s','%s', '%s', 
+		'%s', '%s', %d, %d, '%s', '%s',
+		'%s', '%s', '%s', '%s', '%s', 
+		'%s', '%s', '%s', '%s', '%s',
+		'%s')`,
 		"alert_vds_offline", xdr.Time/1000000, alert.Threatname, "", alert.Local_threatname,
 		AlertMerge(alert.Local_vtype), alert.Local_platfrom, alert.Local_vname,
-		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype,
-		alert.Local_engineip, "", "", 0, 0, "", "",
+		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype, alert.Local_engineip,
+		xdr.Conn.Sip, xdr.Conn.Dip, xdr.Conn.Sport, xdr.Conn.Dport, xdr.App.File, xdr.Http.Url,
 		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
-		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng)
+		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng,
+		xdr.Task_Id)
 
 	return sql
 }
@@ -153,15 +162,19 @@ func wafAlertSql(alert WafAlert, xdr BackendObj) string {
 	sql := fmt.Sprintf(`insert into %s (time, client, rev, msg, attack,
 		severity, maturity, accuracy, hostname, uri, unique_id, ref, tags,
 		rule_file, rule_line, rule_id, rule_data, rule_ver, version,
+		src_ip, src_port, dest_ip, dest_port,
 		src_country, src_province, src_city, src_latitude, src_longitude,
 		dest_country, dest_province, dest_city, dest_latitude, dest_longitude) 
-		values (%d, '%s', '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', 
-		'%s', '%s', '%s', %d, %d, '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
+		values (%d, '%s', '%s', '%s', '%s', 
+		%d, %d, %d, '%s', '%s', '%s', '%s', '%s', 
+		'%s', %d, %d, '%s', '%s', '%s',
+		'%s', %d, '%s', %d,
+		'%s', '%s', '%s', '%s', '%s', 
+		'%s', '%s', '%s', '%s', '%s')`,
 		"alert_waf", xdr.Time/1000000, alert.Client, alert.Rev, alert.Msg, AlertMerge(alert.Attack),
-		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname,
-		alert.Uri, alert.Unique_id, alert.Ref, alert.Tags, "", 0, 0, "", "",
-		alert.Version,
+		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname, alert.Uri, alert.Unique_id, alert.Ref, alert.Tags,
+		alert.Rule.File, alert.Rule.Line, alert.Rule.Id, alert.Rule.Data, alert.Rule.Ver, alert.Version,
+		xdr.Conn.Sip, xdr.Conn.Sport, xdr.Conn.Dip, xdr.Conn.Dport,
 		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
 		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng)
 
@@ -172,17 +185,24 @@ func wafOfflineAlertSql(alert WafAlert, xdr BackendObj) string {
 	sql := fmt.Sprintf(`insert into %s (time, client, rev, msg, attack,
 		severity, maturity, accuracy, hostname, uri, unique_id, ref, tags,
 		rule_file, rule_line, rule_id, rule_data, rule_ver, version,
+		src_ip, src_port, dest_ip, dest_port,
 		src_country, src_province, src_city, src_latitude, src_longitude,
-		dest_country, dest_province, dest_city, dest_latitude, dest_longitude) 
-		values (%d, '%s', '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', 
-		'%s', '%s', '%s', %d, %d, '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`,
+		dest_country, dest_province, dest_city, dest_latitude, dest_longitude,
+		task_id) 
+		values (%d, '%s', '%s', '%s', '%s', 
+		%d, %d, %d, '%s', '%s', '%s', '%s', '%s', 
+		'%s', %d, %d, '%s', '%s', '%s',
+		'%s', %d, '%s', %d,
+		'%s', '%s', '%s', '%s', '%s', 
+		'%s', '%s', '%s', '%s', '%s',
+		%d)`,
 		"alert_waf_offline", xdr.Time/1000000, alert.Client, alert.Rev, alert.Msg, AlertMerge(alert.Attack),
-		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname,
-		alert.Uri, alert.Unique_id, alert.Ref, alert.Tags, "", 0, 0, "", "",
-		alert.Version,
+		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname, alert.Uri, alert.Unique_id, alert.Ref, alert.Tags,
+		alert.Rule.File, alert.Rule.Line, alert.Rule.Id, alert.Rule.Data, alert.Rule.Ver, alert.Version,
+		xdr.Conn.Sip, xdr.Conn.Sport, xdr.Conn.Dip, xdr.Conn.Dport,
 		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
-		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng)
+		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng,
+		xdr.Task_Id)
 
 	return sql
 }
@@ -192,11 +212,12 @@ func idsAlertSql(alert IdsAlert) string {
 		dest_port, proto, attack_type, details, severity, engine, byzoro_type,
 		src_country, src_province, src_city, src_latitude, src_longitude,
 		dest_country, dest_province, dest_city, dest_latitude, dest_longitude) 
-		values (%d, '%s', %d, '%s', %d, '%s', '%s', '%s', %d, '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')`, "alert_ids",
-		alert.Time/1000000, alert.Src_ip, alert.Src_port, alert.Dest_ip, alert.Dest_port,
-		alert.Proto, AlertMerge(alert.Attack_type), alert.Details, alert.Severity, alert.Engine,
-		alert.Byzoro_type,
+		values (%d, '%s', %d, '%s', 
+		%d, '%s', '%s', '%s', %d, '%s', '%s',
+		'%s', '%s', '%s', '%s', '%s', 
+		'%s', '%s', '%s', '%s', '%s')`, "alert_ids",
+		alert.Time/1000000, alert.Src_ip, alert.Src_port, alert.Dest_ip,
+		alert.Dest_port, alert.Proto, AlertMerge(alert.Attack_type), alert.Details, alert.Severity, alert.Engine, alert.Byzoro_type,
 		"", "", "", "", "",
 		"", "", "", "", "")
 
