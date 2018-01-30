@@ -290,7 +290,7 @@ func xdrSql(x BackendObj, id int64, t string, offline_tag string, off_on string)
 		'%s', %d, '%s'
 		)`, tbl, sql,
 		x.Vendor, x.Id, boolToInt(x.Ipv4), x.Class, x.Type, x.Time/1000000,
-		strconv.Itoa(int(x.Conn.Proto)), x.Conn.Sport, x.Conn.Dport, x.Conn.Sip,
+		xdrConnProto(x.Conn.Proto), x.Conn.Sport, x.Conn.Dport, x.Conn.Sip,
 		x.Conn.SipInfo.Country, x.Conn.SipInfo.Province, x.Conn.SipInfo.Organization, x.Conn.SipInfo.Network,
 		x.Conn.SipInfo.Lng, x.Conn.SipInfo.Lat, x.Conn.SipInfo.TimeZone, x.Conn.SipInfo.UTC,
 		x.Conn.SipInfo.RegionalismCode, x.Conn.SipInfo.PhoneCode, x.Conn.SipInfo.CountryCode, x.Conn.SipInfo.ContinentCode,
@@ -333,6 +333,12 @@ func xdrSql(x BackendObj, id int64, t string, offline_tag string, off_on string)
 
 	fmt.Println(sql)
 	return sql
+}
+func xdrConnProto(p uint8) string {
+	if "6" == strconv.Itoa(int(p)) {
+		return "tcp"
+	}
+	return "udp"
 }
 
 func query(sql string) sql.Result {
