@@ -213,13 +213,14 @@ func idsAlertSql(alert IdsAlert) string {
 		src_country, src_province, src_city, src_latitude, src_longitude,
 		dest_country, dest_province, dest_city, dest_latitude, dest_longitude) 
 		values (%d, '%s', %d, '%s', 
-		%d, '%s', '%s', '%s', %d, '%s', '%s',
+		%d, %d, '%s', '%s', %d, '%s', '%s',
 		'%s', '%s', '%s', '%s', '%s', 
 		'%s', '%s', '%s', '%s', '%s')`, "alert_ids",
 		alert.Time/1000000, alert.Src_ip, alert.Src_port, alert.Dest_ip,
 		alert.Dest_port, alert.Proto, AlertMerge(alert.Attack_type), alert.Details, alert.Severity, alert.Engine, alert.Byzoro_type,
-		"", "", "", "", "",
-		"", "", "", "", "")
+
+		alert.Src_ip_info.Country, alert.Src_ip_info.Province, alert.Src_ip_info.City, alert.Src_ip_info.Lat, alert.Src_ip_info.Lng,
+		alert.Dest_ip_info.Country, alert.Dest_ip_info.Province, alert.Dest_ip_info.City, alert.Dest_ip_info.Lat, alert.Dest_ip_info.Lng)
 
 	return sql
 }
