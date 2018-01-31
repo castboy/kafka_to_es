@@ -146,7 +146,7 @@ func vdsOfflineAlertSql(alert VdsAlert, xdr BackendObj) string {
 		'%s', '%s', %d, %d, '%s', '%s',
 		'%s', '%s', '%s', '%s', '%s', 
 		'%s', '%s', '%s', '%s', '%s',
-		'%s')`,
+		%d)`,
 		"alert_vds_offline", xdr.Time/1000000, alert.Threatname, "", alert.Local_threatname,
 		AlertMerge(alert.Local_vtype), alert.Local_platfrom, alert.Local_vname,
 		alert.Local_extent, alert.Local_enginetype, alert.Local_logtype, alert.Local_engineip,
@@ -383,11 +383,11 @@ func wafToMysql(alert WafAlert, topic string, xdr BackendObj, alertType string) 
 }
 
 func isOffline(xdr BackendObj) bool {
-	if "" == xdr.Task_Id {
-		return false
+	if "" != xdr.Task_Id {
+		return true
 	}
 
-	return true
+	return false
 }
 
 func vdsAlertToMysql(alert VdsAlert, xdr BackendObj) sql.Result {
