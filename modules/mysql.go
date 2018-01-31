@@ -181,7 +181,14 @@ func wafAlertSql(alert WafAlert, xdr BackendObj) string {
 	return sql
 }
 
-func wafOfflineAlertSql(alert WafAlert, xdr BackendObj) string {
+func wafOfflineAlertSql(alert WafAlert, xdr BackendObj, offline_tag string) string {
+	tbl := ""
+	if "rule" == offline_tag {
+		tbl = "alert_waf_offline_rule"
+	} else {
+		tbl = "alert_waf_offline"
+	}
+
 	sql := fmt.Sprintf(`insert into %s (time, client, rev, msg, attack,
 		severity, maturity, accuracy, hostname, uri, unique_id, ref, tags,
 		rule_file, rule_line, rule_id, rule_data, rule_ver, version,
@@ -196,7 +203,7 @@ func wafOfflineAlertSql(alert WafAlert, xdr BackendObj) string {
 		'%s', '%s', '%s', '%s', '%s', 
 		'%s', '%s', '%s', '%s', '%s',
 		%d)`,
-		"alert_waf_offline", xdr.Time/1000000, alert.Client, alert.Rev, alert.Msg, AlertMerge(alert.Attack),
+		tbl, xdr.Time/1000000, alert.Client, alert.Rev, alert.Msg, AlertMerge(alert.Attack),
 		alert.Severity, alert.Maturity, alert.Accuracy, alert.Hostname, alert.Uri, alert.Unique_id, alert.Ref, alert.Tags,
 		alert.Rule.File, alert.Rule.Line, alert.Rule.Id, alert.Rule.Data, alert.Rule.Ver, alert.Version,
 		xdr.Conn.Sip, xdr.Conn.Sport, xdr.Conn.Dip, xdr.Conn.Dport,
@@ -381,7 +388,7 @@ func vdsToMysql(alert VdsAlert, topic string, xdr BackendObj, alertType string) 
 
 func wafToMysql(alert WafAlert, topic string, xdr BackendObj, alertType string) {
 	if isOffline(xdr) {
-		sql := wafOfflineAlertSql(alert, xdr)
+		sql := wafOfflineAlertSql(alert, xdr, xdr.Offline_Tag)
 		res := query(sql)
 		xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "offline")
 
@@ -398,26 +405,6 @@ func isOffline(xdr BackendObj) bool {
 	}
 
 	return false
-}
-
-func vdsAlertToMysql(alert VdsAlert, xdr BackendObj) sql.Result {
-	sql := ""
-	if isOffline(xdr) {
-		sql = vdsOfflineAlertSql(alert, xdr)
-	} else {
-		sql = vdsAlertSql(alert, xdr)
-	}
-	return query(sql)
-}
-
-func wafAlertToMysql(alert WafAlert, xdr BackendObj) sql.Result {
-	sql := ""
-	if isOffline(xdr) {
-		sql = wafOfflineAlertSql(alert, xdr)
-	} else {
-		sql = wafAlertSql(alert, xdr)
-	}
-	return query(sql)
 }
 
 func xdrToMysql(alertToMysqlRes sql.Result, xdr BackendObj, alertType string, offline_tag string, off_on string) {
