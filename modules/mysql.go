@@ -153,7 +153,7 @@ func vdsOfflineAlertSql(alert VdsAlert, xdr BackendObj) string {
 		xdr.Conn.Sip, xdr.Conn.Dip, xdr.Conn.Sport, xdr.Conn.Dport, xdr.App.File, xdr.Http.Url,
 		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
 		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng,
-		xdr.Task_Id)
+		taskId(xdr.Task_Id))
 
 	return sql
 }
@@ -202,7 +202,7 @@ func wafOfflineAlertSql(alert WafAlert, xdr BackendObj) string {
 		xdr.Conn.Sip, xdr.Conn.Sport, xdr.Conn.Dip, xdr.Conn.Dport,
 		xdr.Conn.SipInfo.Country, xdr.Conn.SipInfo.Province, xdr.Conn.SipInfo.City, xdr.Conn.SipInfo.Lat, xdr.Conn.SipInfo.Lng,
 		xdr.Conn.DipInfo.Country, xdr.Conn.DipInfo.Province, xdr.Conn.DipInfo.City, xdr.Conn.DipInfo.Lat, xdr.Conn.DipInfo.Lng,
-		xdr.Task_Id)
+		taskId(xdr.Task_Id))
 
 	return sql
 }
@@ -223,6 +223,16 @@ func idsAlertSql(alert IdsAlert) string {
 		alert.Dest_ip_info.Country, alert.Dest_ip_info.Province, alert.Dest_ip_info.City, alert.Dest_ip_info.Lat, alert.Dest_ip_info.Lng)
 
 	return sql
+}
+
+func taskId(s string) int {
+	i, err := strconv.Atoi(s)
+	if nil != err {
+		Log("Task_Id ERR %s", s)
+		return 0
+	}
+
+	return i
 }
 
 func xdrSql(x BackendObj, id int64, t string, offline_tag string, off_on string) string {
