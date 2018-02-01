@@ -235,7 +235,7 @@ func idsAlertSql(alert IdsAlert) string {
 func taskId(s string) int {
 	i, err := strconv.Atoi(s)
 	if nil != err {
-		Log("Task_Id ERR %s", s)
+		Log("ERR", "Task_Id ERR %s", s)
 		return 0
 	}
 
