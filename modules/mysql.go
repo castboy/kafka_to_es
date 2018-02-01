@@ -259,7 +259,7 @@ func xdrSql(x BackendObj, id int64, t string, offline_tag string, off_on string)
 			tbl = "xdr_offline"
 		}
 	}
-	fmt.Println("table", tbl)
+	//	fmt.Println("table", tbl)
 
 	t = strings.ToUpper(t)
 
@@ -348,7 +348,7 @@ func xdrSql(x BackendObj, id int64, t string, offline_tag string, off_on string)
 		x.Ssl.Client.Cert.FileLocation.DbName, x.Ssl.Client.Cert.FileLocation.TableName, x.Ssl.Client.Cert.FileLocation.Signature,
 		t, id, "")
 
-	fmt.Println(sql)
+	//	fmt.Println(sql)
 	return sql
 }
 func xdrConnProto(p uint8) string {
@@ -417,20 +417,20 @@ func xdrToMysql(alertToMysqlRes sql.Result, xdr BackendObj, alertType string, of
 
 func idsToMysql(alert IdsAlert) {
 	query(idsAlertSql(alert))
-	fmt.Println("idsToMysql success")
+	//	fmt.Println("idsToMysql success")
 }
 
 func toMysql(alert interface{}, xdr BackendObj, topic string, alertType string) {
 	switch Alert := alert.(type) {
 	case VdsAlert:
-		fmt.Println(Alert)
+		//		fmt.Println(Alert)
 		vdsToMysql(Alert, topic, xdr, alertType)
 	case WafAlert:
 		wafToMysql(Alert, topic, xdr, alertType)
-		fmt.Println(Alert)
+		//		fmt.Println(Alert)
 	case IdsAlert:
 		idsToMysql(Alert)
-		fmt.Println(Alert)
+		//		fmt.Println(Alert)
 	}
-	fmt.Println("toMysql")
+	//	fmt.Println("toMysql")
 }

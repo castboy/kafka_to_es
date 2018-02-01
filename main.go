@@ -9,7 +9,7 @@ import (
 
 func main() {
 	//	go modules.SendRecordStatusMsg(5)
-	go modules.RecordStatus()
+	//	go modules.RecordStatus()
 	modules.Kafka()
 
 	modules.InitHdfsClis()
