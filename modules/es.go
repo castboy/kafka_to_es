@@ -68,6 +68,10 @@ func initCli() {
 	}
 }
 
+func millisTimestramp() int64 {
+	return int64(time.Now().UnixNano() / 1000000)
+}
+
 func attackMerge(alert interface{}) interface{} {
 	switch rt := alert.(type) {
 	case IdsAlert:
@@ -168,6 +172,7 @@ func alertVds(v *VdsAlert, s []BackendObj) VdsAlert {
 	v.SeverityAppend = severityVds(v.Local_extent)
 	v.Xdr = s
 	v.Type = "vds"
+	v.TimeIntoDb = millisTimestramp()
 
 	if t, ok := attackTypeFormat[v.Local_vtype]; ok {
 		v.Attack = t
@@ -194,6 +199,7 @@ func alertWaf(v *WafAlert, s []BackendObj, topic string, partition int32) WafAle
 	v.SeverityAppend = severityWaf(v.Severity)
 	v.Xdr = s
 	v.Type = "waf"
+	v.TimeIntoDb = millisTimestramp()
 
 	if t, ok := attackTypeFormat[v.Attack]; ok {
 		v.Attack = t
@@ -228,6 +234,9 @@ func alertIds(i *IdsAlert) IdsAlertEs {
 	h.SeverityAppend = severityIds(i.Severity)
 	h.Type = "ids"
 	t, err := timeFormat(i.Time)
+
+	h.TimeIntoDb = millisTimestramp()
+
 	if nil != err {
 		b, _ := json.Marshal(i)
 		Log("CRT", "ids time exceed timestramp: %s", string(b))

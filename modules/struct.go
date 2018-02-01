@@ -21,6 +21,7 @@ type IdsAlert struct {
 
 type IdsAlertEs struct {
 	TimeAppend     string
+	TimeIntoDb     int64
 	Type           string
 	Attack         string
 	Byzoro_type    string
@@ -56,6 +57,7 @@ type WafAlert struct {
 	Version        string
 	Type           string
 	TimeAppend     string
+	TimeIntoDb     int64
 	Xdr            []BackendObj
 }
 
@@ -74,6 +76,7 @@ type VdsAlert struct {
 	Local_engineip   string
 	Type             string
 	TimeAppend       string
+	TimeIntoDb       int64
 	Xdr              []BackendObj
 }
 
