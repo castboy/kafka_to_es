@@ -3,7 +3,6 @@ package modules
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -80,12 +79,12 @@ func database(usr, pwd, host, port, db string) {
 	connParams := usr + ":" + pwd + "@tcp(" + host + ":" + port + ")/" + db
 	dbHdl, err = sql.Open("mysql", connParams)
 	if err != nil {
-		log.Fatal(err)
+		Log("CRT", "sql.Open error %s", err.Error())
 	}
 
 	err = dbHdl.Ping()
 	if err != nil {
-		log.Fatal(err)
+		Log("CRT", "db.Ping err %s", err.Error())
 	}
 }
 
@@ -363,14 +362,14 @@ func xdrConnProto(p uint8) string {
 func query(sql string) sql.Result {
 	stmt, err := dbHdl.Prepare(sql)
 	if err != nil {
-		log.Fatal(err)
+		Log("ERR", "query db.Prepare err %s", err.Error())
 	}
 
 	defer stmt.Close()
 
 	rs, err := stmt.Exec()
 	if err != nil {
-		log.Fatal(err)
+		Log("ERR", "query stmt.Exec err %s", err.Error())
 	}
 
 	return rs
@@ -412,7 +411,7 @@ func isOffline(xdr BackendObj) bool {
 func xdrToMysql(alertToMysqlRes sql.Result, xdr BackendObj, alertType string, offline_tag string, off_on string) {
 	id, err := alertToMysqlRes.LastInsertId()
 	if nil != err {
-		log.Fatalf("can not get waf-alert id")
+		Log("ERR", "can not get waf-alert id %s", err.Error())
 	}
 	query(xdrSql(xdr, id, alertType, offline_tag, off_on))
 }

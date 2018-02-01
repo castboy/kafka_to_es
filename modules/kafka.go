@@ -2,7 +2,6 @@ package modules
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -38,7 +37,6 @@ func initBroker() {
 	broker, err = kafka.Dial(addrs, conf)
 	if err != nil {
 		Log("CRT", "cannot connect to kafka cluster: %s", addrs)
-		log.Fatal(exit)
 	}
 }
 

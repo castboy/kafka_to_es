@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"log"
 	"regexp"
 	"strings"
 	"time"
@@ -64,7 +63,7 @@ func initCli() {
 	client, err = elastic.NewClient(elastic.SetURL(urls...))
 
 	if err != nil {
-		log.Fatal("can not conn es")
+		Log("CRT", "can not connec es, %s", err.Error())
 	}
 }
 
