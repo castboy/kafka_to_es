@@ -58,8 +58,10 @@ var xdrField = []string{"vendor", "xdr_id", "ipv4", "class",
 	"cc_floc_tbnam", "cc_floc_sgnt", "alert_type", "alert_id", "xdr_details"}
 
 func Mysql() {
-	user, pwd, host, port, db := mysqlConf()
-	database(user, pwd, host, port, db)
+	if intoMysql {
+		user, pwd, host, port, db := mysqlConf()
+		database(user, pwd, host, port, db)
+	}
 }
 
 func mysqlConf() (user, pwd, host, port, db string) {

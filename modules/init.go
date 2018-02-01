@@ -2,6 +2,7 @@ package modules
 
 import (
 	"encoding/json"
+	"strconv"
 	"strings"
 
 	"github.com/widuu/goini"
@@ -19,6 +20,7 @@ var esNodes string
 var esIndex string
 var port string
 var nameNode string
+var intoMysql bool
 
 func init() {
 	getConf()
@@ -36,6 +38,7 @@ func getConf() {
 	port = conf.GetValue("elasticsearch", "port")
 	esIndex = conf.GetValue("elasticsearch", "index")
 	nameNode = conf.GetValue("hdfs", "nameNode")
+	intoMysql, _ = strconv.ParseBool(conf.GetValue("insertDb", "mysql"))
 
 	parsePartition(confList[0]["topic"])
 }

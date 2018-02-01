@@ -13,8 +13,11 @@ func Parallel() {
 	for db, _ := range consumers {
 		for t, v := range topic {
 			for p, _ := range v {
-				go toDb(db, t, int32(p), alertType(t))
-				Wg.Add(1)
+				if MYSQL == db && !intoMysql {
+				} else {
+					go toDb(db, t, int32(p), alertType(t))
+					Wg.Add(1)
+				}
 			}
 		}
 	}
