@@ -7,6 +7,10 @@ import (
 )
 
 type statusMsg struct {
+	Db int
+	K  KafkaInfo
+}
+type KafkaInfo struct {
 	Topic     string
 	Partition int32
 }
@@ -20,7 +24,7 @@ func RecordStatus() {
 	for {
 		select {
 		case msg := <-statusCh:
-			status[msg.Topic][msg.Partition]++
+			status[msg.Db][msg.K.Topic][msg.K.Partition]++
 		case <-ticker.C:
 			record()
 		}

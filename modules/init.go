@@ -8,7 +8,12 @@ import (
 )
 
 var topic = make(map[string][]string)
-var status = make(map[string][]int64)
+var status = make([]map[string][]int64, 2)
+var (
+	ES    = 0
+	MYSQL = 1
+)
+
 var conf *goini.Config
 var esNodes string
 var esIndex string
@@ -42,8 +47,11 @@ func parsePartition(topics map[string]string) {
 }
 
 func initStatus() {
-	for t, _ := range topic {
-		status[t] = make([]int64, 0)
+	for db, _ := range status {
+		status[db] = make(map[string][]int64)
+		for t, _ := range topic {
+			status[db][t] = make([]int64, 0)
+		}
 	}
 
 	if getStatus() {
@@ -54,20 +62,21 @@ func initStatus() {
 
 	bytes, err := json.Marshal(status)
 	if nil != err {
-		Log("ERR", "%s", "json.Marshal status err")
+		Log("ERR", "%s", "json.Marshal statusEs err")
 	}
 
 	Log("INF", "init status: %s", string(bytes))
 }
 
 func firstRunStatus() {
-	for t, v := range topic {
-		for k, _ := range v {
-			start, _ := offset(t, int32(k))
-			status[t] = append(status[t], start)
+	for db, _ := range status {
+		for t, v := range topic {
+			for k, _ := range v {
+				start, _ := offset(t, int32(k))
+				status[db][t] = append(status[db][t], start)
+			}
 		}
 	}
-
 }
 
 func getStatus() bool {
@@ -75,6 +84,7 @@ func getStatus() bool {
 	if ok {
 		err = json.Unmarshal(b, &status)
 		if nil != err {
+			Log("ERR", "%s", "json.Unmarshal(b, &status)")
 			return false
 		}
 	} else {

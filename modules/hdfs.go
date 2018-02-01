@@ -11,7 +11,7 @@ import (
 var HdfsClients = make(map[string][]*hdfs.Client)
 
 func InitHdfsClis() {
-	for t, v := range consumers {
+	for t, v := range consumers[0] {
 		for p, _ := range v {
 			InitHdfsCli(t, int32(p), nameNode)
 		}
