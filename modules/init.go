@@ -2,8 +2,6 @@ package modules
 
 import (
 	"encoding/json"
-	"io/ioutil"
-	"os"
 	"strings"
 
 	"github.com/widuu/goini"
@@ -22,6 +20,7 @@ func init() {
 	initCli()
 	initBroker()
 	InitLog()
+	InitEtcdCli()
 	initStatus()
 }
 
@@ -72,20 +71,14 @@ func firstRunStatus() {
 }
 
 func getStatus() bool {
-	fi, err := os.Open("status")
-	if err != nil {
-		Log("ERR", "%s", "open status")
-	}
-
-	defer fi.Close()
-
-	fd, err := ioutil.ReadAll(fi)
-	if nil != err {
-		Log("ERR", "%s", "read status")
-	}
-
-	err = json.Unmarshal(fd, &status)
-	if nil != err {
+	b, ok := EtcdGet("apt/kafka_to_db/status")
+	if ok {
+		err = json.Unmarshal(b, &status)
+		if nil != err {
+			return false
+		}
+	} else {
+		Log("ERR", "%s", "getStatusFromEtcd")
 		return false
 	}
 

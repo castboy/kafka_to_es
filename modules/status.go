@@ -3,8 +3,7 @@ package modules
 import (
 	"encoding/json"
 	//	"fmt"
-	"io/ioutil"
-	//	"time"
+	"time"
 )
 
 type statusMsg struct {
@@ -16,31 +15,23 @@ var statusCh = make(chan statusMsg, 100)
 var recordCh = make(chan bool)
 
 func RecordStatus() {
+	ticker := time.NewTicker(time.Second * time.Duration(3))
+
 	for {
 		select {
 		case msg := <-statusCh:
 			status[msg.Topic][msg.Partition]++
+		case <-ticker.C:
 			record()
-			//		case <-recordCh:
-			//			record()
 		}
 	}
 }
 
-//func SendRecordStatusMsg(seconds int) {
-//	ticker := time.NewTicker(time.Second * time.Duration(seconds))
-//	for _ = range ticker.C {
-//		recordCh <- true
-//	}
-//}
-
 func record() {
-	byte, err := json.Marshal(status)
+	b, err := json.Marshal(status)
 	if nil != err {
-		Log("ERR", "%s", "json.Marshal err in record()")
-	}
-	err = ioutil.WriteFile("status", byte, 0666)
-	if nil != err {
-		Log("ERR", "%s", "ioutil.WriteFile err in record()")
+		Log("ERR", "%s", "json.Marshal(status)")
+	} else {
+		EtcdSet("apt/kafka_to_db/status", string(b))
 	}
 }
