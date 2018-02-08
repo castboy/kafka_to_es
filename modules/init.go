@@ -9,6 +9,7 @@ import (
 )
 
 var topic = make(map[string][]string)
+var offsetReset = make(map[string][]string)
 var status = make([]map[string][]int64, 2)
 var (
 	ES    = 0
@@ -41,11 +42,19 @@ func getConf() {
 	intoMysql, _ = strconv.ParseBool(conf.GetValue("insertDb", "mysql"))
 
 	parsePartition(confList[0]["topic"])
+	parseOffset(confList[1]["offset"])
+
 }
 
 func parsePartition(topics map[string]string) {
 	for k, v := range topics {
 		topic[k] = strings.Split(v, ",")
+	}
+}
+
+func parseOffset(topics map[string]string) {
+	for k, v := range topics {
+		offsetReset[k] = strings.Split(v, ",")
 	}
 }
 
@@ -112,5 +121,12 @@ func statusCorrect(db int, topic string, partition int32, offset int64) {
 	start, end := Offset(topic, partition)
 	if offset < start || offset > end {
 		status[db][topic][partition] = start
+		Log("WRN", "%s is reset to start offset", topic)
+	}
+
+	oft, err := strconv.Atoi(offsetReset[topic][partition])
+	if nil != err && -1 != oft && start < int64(oft) && int64(oft) < end {
+		status[db][topic][partition] = int64(oft)
+		Log("INF", "%s is reset to conf offset", topic)
 	}
 }
