@@ -84,16 +84,18 @@ func Offset(topic string, partition int32) (start, end int64) {
 		start, err = broker.OffsetEarliest(topic, partition)
 		if nil != err {
 			Log("ERR", "get start offset err, %s", topic, partition)
-		} else {
 			time.Sleep(time.Duration(500) * time.Millisecond)
+		} else {
+			break
 		}
 	}
 	for {
 		end, err = broker.OffsetLatest(topic, partition)
 		if nil != err {
 			Log("ERR", "get end offset err, %s", topic, partition)
-		} else {
 			time.Sleep(time.Duration(500) * time.Millisecond)
+		} else {
+			break
 		}
 	}
 

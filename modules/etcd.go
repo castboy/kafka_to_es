@@ -15,7 +15,7 @@ var EtcdNodes = make(map[string]string)
 func InitEtcdCli() {
 	conf := goini.SetConfig("conf/conf.ini")
 	confList := conf.ReadList()
-	EtcdNodes = confList[1]["etcd"]
+	EtcdNodes = confList[2]["etcd"]
 
 	Log("INF", "%s", "InitEtcdCli")
 
