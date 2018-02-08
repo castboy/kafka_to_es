@@ -58,7 +58,7 @@ func initStatus() {
 	}
 
 	if getStatus() {
-
+		statusCheck()
 	} else {
 		firstRunStatus()
 	}
@@ -75,7 +75,7 @@ func firstRunStatus() {
 	for db, _ := range status {
 		for t, v := range topic {
 			for k, _ := range v {
-				start, _ := offset(t, int32(k))
+				start, _ := Offset(t, int32(k))
 				status[db][t] = append(status[db][t], start)
 			}
 		}
@@ -96,4 +96,21 @@ func getStatus() bool {
 	}
 
 	return true
+}
+
+func statusCheck() {
+	for db, topics := range status {
+		for t, v := range topics {
+			for p, o := range v {
+				statusCorrect(db, t, int32(p), o)
+			}
+		}
+	}
+}
+
+func statusCorrect(db int, topic string, partition int32, offset int64) {
+	start, end := Offset(topic, partition)
+	if offset < start || offset > end {
+		status[db][topic][partition] = start
+	}
 }

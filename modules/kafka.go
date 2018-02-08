@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"strings"
 
+	"time"
+
 	"github.com/optiopay/kafka"
 )
 
@@ -48,10 +50,9 @@ func initConsumers() {
 		}
 	}
 
-	for db, _ := range status {
-		for t, v := range topic {
+	for db, topics := range status {
+		for t, v := range topics {
 			for p, s := range v {
-				s, _ := strconv.Atoi(s)
 				c, _ := initConsumer(t, int32(p), int64(s))
 				consumers[db][t] = append(consumers[db][t], c)
 			}
@@ -78,9 +79,23 @@ func brokerAddrs(brokers string) []string {
 	return s
 }
 
-func offset(topic string, partition int32) (int64, int64) {
-	start, _ := broker.OffsetEarliest(topic, partition)
-	end, _ := broker.OffsetLatest(topic, partition)
+func Offset(topic string, partition int32) (start, end int64) {
+	for {
+		start, err = broker.OffsetEarliest(topic, partition)
+		if nil != err {
+			Log("ERR", "get start offset err, %s", topic, partition)
+		} else {
+			time.Sleep(time.Duration(500) * time.Millisecond)
+		}
+	}
+	for {
+		end, err = broker.OffsetLatest(topic, partition)
+		if nil != err {
+			Log("ERR", "get end offset err, %s", topic, partition)
+		} else {
+			time.Sleep(time.Duration(500) * time.Millisecond)
+		}
+	}
 
 	return start, end
 }
