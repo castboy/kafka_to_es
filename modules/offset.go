@@ -8,7 +8,7 @@ import (
 )
 
 func ResetOffsetInConfFile() {
-	conf := "conf.ini"
+	conf := "conf/conf.ini"
 
 	line := fmt.Sprintf("sed -n '/offset/=' %s", conf)
 	out, err := exec.Command("sh", "-c", line).Output()
