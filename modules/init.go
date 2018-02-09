@@ -125,7 +125,7 @@ func statusCorrect(db int, topic string, partition int32, offset int64) {
 	}
 
 	oft, err := strconv.Atoi(offsetReset[topic][partition])
-	if nil != err && -1 != oft && start < int64(oft) && int64(oft) < end {
+	if nil == err && -1 != oft && start < int64(oft) && int64(oft) < end {
 		status[db][topic][partition] = int64(oft)
 		Log("INF", "%s is reset to conf offset", topic)
 	}
