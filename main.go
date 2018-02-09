@@ -16,5 +16,7 @@ func main() {
 	modules.Mysql()
 	modules.Parallel()
 
+	modules.ResetOffsetInConfFile()
+
 	modules.Wg.Wait()
 }
