@@ -19,7 +19,7 @@ func ResetOffsetInConfFile() {
 	waf := i + 2
 	ids := i + 3
 
-	r := fmt.Sprintf("sed -i '%dc vds = -1' %s", vds, conf)
+	r := fmt.Sprintf("sed -i '%dc vds-alert = -1' %s", vds, conf)
 	out, err = exec.Command("sh", "-c", r).Output()
 	if nil != err {
 		Log("WRN", "reset vds = -1 err, %s", err.Error())
@@ -27,7 +27,7 @@ func ResetOffsetInConfFile() {
 		Log("INF", "reset vds = -1 ok")
 	}
 
-	r = fmt.Sprintf("sed -i '%dc waf = -1' %s", waf, conf)
+	r = fmt.Sprintf("sed -i '%dc waf-alert = -1' %s", waf, conf)
 	out, err = exec.Command("sh", "-c", r).Output()
 	if nil != err {
 		Log("WRN", "reset waf = -1 err, %s", err.Error())
@@ -35,7 +35,7 @@ func ResetOffsetInConfFile() {
 		Log("INF", "reset waf = -1 ok")
 	}
 
-	r = fmt.Sprintf("sed -i '%dc ids = -1' %s", ids, conf)
+	r = fmt.Sprintf("sed -i '%dc ids-alert = -1' %s", ids, conf)
 	out, err = exec.Command("sh", "-c", r).Output()
 	if nil != err {
 		Log("WRN", "reset ids = -1 err, %s", err.Error())
