@@ -20,33 +20,33 @@ select id into count_id from waf_count_day where time = count_time;
 if count_id is not null then
 		case alert
 			when "disclosure" then
-					update waf_count_day set disclosure = disclosure  + 1 where time = count_time;
+					update waf_count_day set disclosure = disclosure  + 1 where id = count_id and time = count_time;
 			when "ddos" then
-					update waf_count_day set ddos = ddos + 1 where time = count_time;
+					update waf_count_day set ddos = ddos + 1 where id = count_id and time = count_time;
 			when "reputation_ip" then
-					update waf_count_day set reputation_ip = reputation_ip + 1 where time = count_time;
+					update waf_count_day set reputation_ip = reputation_ip + 1 where id = count_id and time = count_time;
 			when "lfi" then
-					update waf_count_day set lfi = lfi + 1 where time = count_time;
+					update waf_count_day set lfi = lfi + 1 where id = count_id and time = count_time;
 			when "sqli" then
-					update waf_count_day set sqli = sqli + 1 where time = count_time;
+					update waf_count_day set sqli = sqli + 1 where id = count_id and time = count_time;
 			when "xss" then
-					update waf_count_day set xss = xss + 1 where time = count_time;
+					update waf_count_day set xss = xss + 1 where id = count_id and time = count_time;
 			when "injection_php" then
-					update waf_count_day set injection_php = injection_php + 1 where time = count_time;
+					update waf_count_day set injection_php = injection_php + 1 where id = count_id and time = count_time;
 			when "generic" then
-					update waf_count_day set generic = generic + 1 where time = count_time;
+					update waf_count_day set generic = generic + 1 where id = count_id and time = count_time;
 			when "rce" then
-					update waf_count_day set rce = rce + 1 where time = count_time;
+					update waf_count_day set rce = rce + 1 where id = count_id and time = count_time;
 			when "protocol" then
-					update waf_count_day set protocol = protocol + 1 where time = count_time;
+					update waf_count_day set protocol = protocol + 1 where id = count_id and time = count_time;
 			when "rfi" then
-					update waf_count_day set rfi = rfi + 1 where time = count_time;
+					update waf_count_day set rfi = rfi + 1 where id = count_id and time = count_time;
 			when "fixation" then
-					update waf_count_day set fixation = fixation + 1 where time = count_time;
+					update waf_count_day set fixation = fixation + 1 where id = count_id and time = count_time;
 			when "scaning" then
-					update waf_count_day set scaning = scaning + 1 where time = count_time;
+					update waf_count_day set scaning = scaning + 1 where id = count_id and time = count_time;
 			else
-					update waf_count_day set other = other + 1  where time = count_time;
+					update waf_count_day set other = other + 1  where id = count_id and time = count_time;
 		end case;
 else
 		case alert
@@ -92,6 +92,10 @@ DROP TRIGGER IF EXISTS `insert_waf`;
 DELIMITER ;;
 CREATE TRIGGER `insert_waf` AFTER INSERT ON `alert_waf` FOR EACH ROW BEGIN
 	call alert_waf_count_day(NEW.time, NEW.attack);
+	IF new.attack IN ('sqli','xss','rfi','injection_php') AND new.severity IN (0,1,2) THEN 
+        INSERT INTO urgencymold(time,src_ip,src_port,dest_ip,dest_port,proto,attack_type,severity) 
+        VALUE(new.time,new.src_ip,new.src_port,new.dest_ip,new.dest_port,new.proto,new.attack,new.severity);
+    END IF;
 END
 ;;
 DELIMITER ;
@@ -119,29 +123,29 @@ select id into count_id from vds_count_day where time = count_time;
 if count_id is not null then
 		case alert
 			when "backdoor" then
-					update vds_count_day set backdoor = backdoor  + 1 where time = count_time;
+					update vds_count_day set backdoor = backdoor  + 1 where id = count_id and time = count_time;
 			when "trojan" then
-					update vds_count_day set trojan = trojan + 1 where time = count_time;
+					update vds_count_day set trojan = trojan + 1 where id = count_id and time = count_time;
 			when "risktool" then
-					update vds_count_day set risktool = risktool + 1 where time = count_time;
+					update vds_count_day set risktool = risktool + 1 where id = count_id and time = count_time;
 			when "spyware" then
-					update vds_count_day set spyware = spyware + 1 where time = count_time;
+					update vds_count_day set spyware = spyware + 1 where id = count_id and time = count_time;
 			when "malware" then
-					update vds_count_day set malware = malware + 1 where time = count_time;
+					update vds_count_day set malware = malware + 1 where id = count_id and time = count_time;
 			when "virus" then
-					update vds_count_day set virus = virus + 1 where time = count_time;
+					update vds_count_day set virus = virus + 1 where id = count_id and time = count_time;
 			when "worm" then
-					update vds_count_day set worm = worm + 1 where time = count_time;
+					update vds_count_day set worm = worm + 1 where id = count_id and time = count_time;
 			when "joke" then
-					update vds_count_day set joke = joke + 1 where time = count_time;
+					update vds_count_day set joke = joke + 1 where id = count_id and time = count_time;
 			when "adware" then
-					update vds_count_day set adware = adware + 1 where time = count_time;
+					update vds_count_day set adware = adware + 1 where id = count_id and time = count_time;
 			when "hacktool" then
-					update vds_count_day set hacktool = hacktool + 1 where time = count_time;
+					update vds_count_day set hacktool = hacktool + 1 where id = count_id and time = count_time;
 			when "exploit" then
-					update vds_count_day set exploit = exploit + 1 where time = count_time;
+					update vds_count_day set exploit = exploit + 1 where id = count_id and time = count_time;
 			else
-					update vds_count_day set other = other + 1  where time = count_time;
+					update vds_count_day set other = other + 1  where id = count_id and time = count_time;
 		end case;
 else
 		case alert
@@ -210,23 +214,23 @@ select id into count_id from byzoro_ids_count where time = count_time;
 if count_id is not null then
 		case alert
 			when "privilege_gain" then
-					update byzoro_ids_count set privilege_gain = privilege_gain  + 1 where time = count_time;
+					update byzoro_ids_count set privilege_gain = privilege_gain  + 1 where id = count_id and time = count_time;
 			when "ddos" then
-					update byzoro_ids_count set ddos = ddos + 1 where time = count_time;
+					update byzoro_ids_count set ddos = ddos + 1 where id = count_id and time = count_time;
 			when "information_leak" then
-					update byzoro_ids_count set information_leak = information_leak + 1 where time = count_time;
+					update byzoro_ids_count set information_leak = information_leak + 1 where id = count_id and time = count_time;
 			when "web_attack" then
-					update byzoro_ids_count set web_attack = web_attack + 1 where time = count_time;
+					update byzoro_ids_count set web_attack = web_attack + 1 where id = count_id and time = count_time;
 			when "application_attack" then
-					update byzoro_ids_count set application_attack = application_attack + 1 where time = count_time;
+					update byzoro_ids_count set application_attack = application_attack + 1 where id = count_id and time = count_time;
 			when "candc" then
-					update byzoro_ids_count set candc = candc + 1 where time = count_time;
+					update byzoro_ids_count set candc = candc + 1 where id = count_id and time = count_time;
 			when "malware" then
-					update byzoro_ids_count set malware = malware + 1 where time = count_time;
+					update byzoro_ids_count set malware = malware + 1 where id = count_id and time = count_time;
 			when "misc_attack" then
-					update byzoro_ids_count set misc_attack = misc_attack + 1 where time = count_time;
+					update byzoro_ids_count set misc_attack = misc_attack + 1 where id = count_id and time = count_time;
 			else
-					update byzoro_ids_count set other = other + 1  where time = count_time;
+					update byzoro_ids_count set other = other + 1  where id = count_id and time = count_time;
 		end case;
 else
 		case alert
@@ -261,6 +265,26 @@ delimiter ; -- switch delimiters again
 DROP TRIGGER IF EXISTS `insert_ids`;
 DELIMITER ;;
 CREATE TRIGGER `insert_ids` AFTER INSERT ON `alert_ids` FOR EACH ROW BEGIN
+	
+	DECLARE getidip int;
+	DECLARE getidattack int;
+	SELECT id INTO getidattack FROM attack_ip_count_day WHERE time IN (FROM_UNIXTIME(new.time,'%Y-%m-%d')) for update;
+	SELECT id INTO getidip FROM attacker_list WHERE time IN (FROM_UNIXTIME(new.time,'%Y-%m-%d')) AND ip IN (new.src_ip) for update;
+    IF getidattack is NOT NULL THEN 
+        IF getidip is NOT NULL THEN 
+            UPDATE attack_ip_count_day SET attacknum=attacknum+1 WHERE id IN (getidattack);
+        ELSE 
+            INSERT INTO attacker_list(time,ip) VALUE(FROM_UNIXTIME(new.time,'%Y-%m-%d'),new.src_ip);
+            UPDATE attack_ip_count_day SET attacknum=attacknum+1,ipnum=ipnum+1 WHERE id IN (getidattack);
+        END IF;
+    ELSE 
+        IF getidip is NOT NULL THEN 
+            INSERT INTO attack_ip_count_day(time,attacknum) VALUE(FROM_UNIXTIME(new.time,'%Y-%m-%d'),1);
+        ELSE 
+            INSERT INTO attacker_list(time,ip) VALUE(FROM_UNIXTIME(new.time,'%Y-%m-%d'),new.src_ip);
+            INSERT INTO attack_ip_count_day(time,ipnum,attacknum) VALUE(FROM_UNIXTIME(new.time,'%Y-%m-%d'),1,1);
+        END IF;
+    END IF;
 	call alert_ids_count_day(NEW.time, NEW.byzoro_type);
 END
 ;;
