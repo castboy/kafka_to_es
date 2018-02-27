@@ -359,44 +359,53 @@ func xdrConnProto(p uint8) string {
 	return "udp"
 }
 
-func query(sql string) sql.Result {
+func query(sql string) (sql.Result, error) {
 	stmt, err := dbHdl.Prepare(sql)
 	if err != nil {
-		Log("ERR", "query db.Prepare err %s", err.Error())
+		Log("ERR", "query db.Prepare err %s, sql: %s", err.Error(), sql)
+		return nil, err
 	}
 
 	defer stmt.Close()
 
 	rs, err := stmt.Exec()
 	if err != nil {
-		Log("ERR", "query stmt.Exec err %s", err.Error())
+		Log("ERR", "query stmt.Exec err %s, sql: %s", err.Error(), sql)
+		return nil, err
 	}
 
-	return rs
+	return rs, nil
 }
 
 func vdsToMysql(alert VdsAlert, topic string, xdr BackendObj, alertType string) {
 	if isOffline(xdr) {
 		sql := vdsOfflineAlertSql(alert, xdr)
-		res := query(sql)
-		xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "offline")
+		res, err := query(sql)
+		if nil == err {
+			xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "offline")
+		}
 	} else {
 		sql := vdsAlertSql(alert, xdr)
-		res := query(sql)
-		xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "online")
+		res, err := query(sql)
+		if nil == err {
+			xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "online")
+		}
 	}
 }
 
 func wafToMysql(alert WafAlert, topic string, xdr BackendObj, alertType string) {
 	if isOffline(xdr) {
 		sql := wafOfflineAlertSql(alert, xdr, xdr.Offline_Tag)
-		res := query(sql)
-		xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "offline")
-
+		res, err := query(sql)
+		if nil == err {
+			xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "offline")
+		}
 	} else {
 		sql := wafAlertSql(alert, xdr)
-		res := query(sql)
-		xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "online")
+		res, err := query(sql)
+		if nil == err {
+			xdrToMysql(res, xdr, alertType, xdr.Offline_Tag, "online")
+		}
 	}
 }
 
