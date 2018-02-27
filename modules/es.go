@@ -352,7 +352,7 @@ func addEs(topic string, obj interface{}) {
 		BodyJson(obj).
 		Do(ctx)
 	if err != nil {
-		Log("CRT", "to es failed topic:%s, %s", esType(topic), err.Error())
+		Log("ERR", "to es failed topic:%s, %s", esType(topic), err.Error())
 	} else {
 		Log("INF", "success to es %s", esType(topic))
 	}
@@ -373,6 +373,6 @@ func esType(topic string) string {
 
 func toEs(msg []byte, alert interface{}, xdr BackendObj, topic string, partition int32) {
 	obj := esObj(msg, alert, xdr, topic, partition)
-	json.Marshal(obj)
+	//	json.Marshal(obj)
 	addEs(topic, obj)
 }
