@@ -199,6 +199,7 @@ func alertWaf(v *WafAlert, s []BackendObj, topic string, partition int32) WafAle
 	v.Xdr = s
 	v.Type = "waf"
 	v.TimeIntoDb = millisTimestramp()
+	v.Client = clientFormat(v.Client)
 
 	if t, ok := attackTypeFormat[v.Attack]; ok {
 		v.Attack = t
@@ -341,6 +342,12 @@ func attackFormat(s string) string {
 	}
 
 	return s
+}
+
+func clientFormat(s string) string {
+	ipPattern := "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)"
+	reg := regexp.MustCompile(ipPattern)
+	return reg.FindString(s)
 }
 
 func addEs(topic string, obj interface{}) {
