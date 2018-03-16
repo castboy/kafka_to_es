@@ -346,7 +346,7 @@ func esType(topic string) string {
 func bulkIndexUrlBucket() []string {
 	urlBucket := make([]string, 0)
 	for _, host := range strings.Split(esNodes, ",") {
-		urlBucket = append(urlBucket, fmt.Sprintf("http://%s:%d/_bulk", host, port))
+		urlBucket = append(urlBucket, fmt.Sprintf("http://%s:%s/_bulk", host, port))
 	}
 
 	return urlBucket

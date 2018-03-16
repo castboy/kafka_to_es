@@ -65,7 +65,7 @@ func prepareBulkEsObj(db int, topic string, partition int32, alertType string) (
 }
 
 func esBulkIndexHeader(topic string) string {
-	return `{ "index" : { "_index" : "test", "_type" : "` + esType(topic) + `"}}`
+	return `{ "index" : { "_index" : "apt", "_type" : "` + esType(topic) + `"}}`
 }
 
 func bulkIndexItem(header, body string) string {
