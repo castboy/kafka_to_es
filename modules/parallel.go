@@ -36,8 +36,8 @@ func alertType(topic string) string {
 	return ""
 }
 
-func prepareBulkEsObj(db int, topic string, partition int32, alertType string) ([]string, int) {
-	var objBucket = make([]string, 0)
+func prepareBulkEsObj(db int, topic string, partition int32, alertType string) ([][]byte, int) {
+	var objBucket = make([][]byte, 0)
 	var num int
 
 	for i := 0; i < bulkBlock; i++ {
@@ -53,7 +53,7 @@ func prepareBulkEsObj(db int, topic string, partition int32, alertType string) (
 				if nil != err {
 					Log("ERR", "json.Marshal(esObj): %s", err)
 				} else {
-					objBucket = append(objBucket, string(byte))
+					objBucket = append(objBucket, byte)
 				}
 			} else {
 				Log("ERR", "parseXdrAlert: %s", err)
@@ -68,14 +68,14 @@ func esBulkIndexHeader(topic string) string {
 	return `{ "index" : { "_index" : "apt", "_type" : "` + esType(topic) + `"}}`
 }
 
-func bulkIndexItem(header, body string) string {
-	return header + "\n" + body + "\n"
+func bulkIndexItem(header string, body []byte) []byte {
+	return append(append([]byte(header+"\n"), body...), byte('\n'))
 }
 
-func bulkIndexContent(objBucket []string, topic string) (data string) {
+func bulkIndexContent(objBucket [][]byte, topic string) (data []byte) {
 	header := esBulkIndexHeader(topic)
 	for _, body := range objBucket {
-		data += bulkIndexItem(header, body)
+		data = append(data, bulkIndexItem(header, body)...)
 	}
 
 	return

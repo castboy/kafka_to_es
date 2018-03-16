@@ -353,11 +353,11 @@ func bulkIndexUrlBucket() []string {
 
 }
 
-func toEs(cont, topic string) {
+func toEs(cont []byte, topic string) {
 	allToEs := false
 	urlBucket := bulkIndexUrlBucket()
 	for _, url := range urlBucket {
-		b := bytes.NewBuffer([]byte(cont))
+		b := bytes.NewBuffer(cont)
 		res, err := http.Post(url, "application/json;charset=utf-8", b)
 		if nil == err {
 			result, err := ioutil.ReadAll(res.Body)
