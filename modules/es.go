@@ -1,14 +1,15 @@
 package modules
 
 import (
-	"context"
+	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 	"regexp"
 	"strings"
 	"time"
-
-	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 var err error = errors.New("Err")
@@ -44,27 +45,6 @@ var attackTypeFormat = map[string]string{
 	"abnormal_connection": "异常连接",
 	"scaning":             "扫描探测",
 	"other":               "其他",
-}
-
-var client *elastic.Client
-
-func esUrls(esNodes string) []string {
-	s := make([]string, 0)
-	for _, v := range strings.Split(esNodes, ",") {
-		s = append(s, "http://"+v+":"+port)
-	}
-
-	return s
-}
-
-func initCli() {
-	var err error
-	urls := esUrls(esNodes)
-	client, err = elastic.NewClient(elastic.SetURL(urls...))
-
-	if err != nil {
-		Log("CRT", "can not connec es, %s", err.Error())
-	}
 }
 
 func millisTimestramp() int64 {
@@ -152,7 +132,7 @@ func parseXdrAlert(bytes []byte, alertType string) (interface{}, BackendObj, err
 	return nil, BackendObj{}, errors.New("parseXdrAlert Err")
 }
 
-func esObj(msg []byte, alert interface{}, xdr BackendObj, topic string, partition int32) interface{} {
+func esObj(alert interface{}, xdr BackendObj, topic string, partition int32) interface{} {
 	var xdrSlice = make([]BackendObj, 0)
 	xdrSlice = append(xdrSlice, xdr)
 	switch rt := alert.(type) {
@@ -350,21 +330,6 @@ func clientFormat(s string) string {
 	return reg.FindString(s)
 }
 
-func addEs(topic string, obj interface{}) {
-	ctx := context.Background()
-
-	_, err := client.Index().
-		Index(esIndex).
-		Type(esType(topic)).
-		BodyJson(obj).
-		Do(ctx)
-	if err != nil {
-		Log("ERR", "to es failed topic:%s, %s", esType(topic), err.Error())
-	} else {
-		Log("INF", "success to es %s", esType(topic))
-	}
-}
-
 func esType(topic string) string {
 	switch topic {
 	case "waf-alert":
@@ -378,8 +343,39 @@ func esType(topic string) string {
 	return ""
 }
 
-func toEs(msg []byte, alert interface{}, xdr BackendObj, topic string, partition int32) {
-	obj := esObj(msg, alert, xdr, topic, partition)
-	//	json.Marshal(obj)
-	addEs(topic, obj)
+func bulkIndexUrlBucket() []string {
+	urlBucket := make([]string, 0)
+	for _, host := range strings.Split(esNodes, ",") {
+		urlBucket = append(urlBucket, fmt.Sprintf("http://%s:%d/_bulk", host, port))
+	}
+
+	return urlBucket
+
+}
+
+func toEs(cont, topic string) {
+	allToEs := false
+	urlBucket := bulkIndexUrlBucket()
+	for _, url := range urlBucket {
+		b := bytes.NewBuffer([]byte(cont))
+		res, err := http.Post(url, "application/json;charset=utf-8", b)
+		if nil == err {
+			result, err := ioutil.ReadAll(res.Body)
+			if nil == err {
+				allToEs = bulkIndexRes(result)
+			}
+			res.Body.Close()
+			break
+		}
+	}
+
+	if allToEs {
+		Log("INF", "%s", "all into es")
+	} else {
+		Log("ERR", "part into es")
+	}
+}
+
+func bulkIndexRes(res []byte) bool {
+	return true
 }

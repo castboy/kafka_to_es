@@ -19,13 +19,13 @@ var (
 var conf *goini.Config
 var esNodes string
 var esIndex string
+var bulkBlock int
 var port string
 var nameNode string
 var intoMysql bool
 
 func init() {
 	getConf()
-	initCli()
 	initBroker()
 	InitLog()
 	InitEtcdCli()
@@ -38,6 +38,10 @@ func getConf() {
 	esNodes = conf.GetValue("elasticsearch", "nodes")
 	port = conf.GetValue("elasticsearch", "port")
 	esIndex = conf.GetValue("elasticsearch", "index")
+	bulkBlock, err = strconv.Atoi(conf.GetValue("elasticsearch", "bulkBlock"))
+	if nil != err {
+		bulkBlock = 200
+	}
 	nameNode = conf.GetValue("hdfs", "nameNode")
 	intoMysql, _ = strconv.ParseBool(conf.GetValue("insertDb", "mysql"))
 
